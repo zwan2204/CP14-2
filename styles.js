@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
 
   logo: {
-    marginBottom: 100
+    margin: 100
   },
 
   inputView:{
