@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import { styles } from '../styles.js';
 import axios from 'axios';
 
@@ -8,13 +9,18 @@ export default class LoginScreen extends React.Component {
     state = {
       username: "",
       password: "",
+      role: ""
     }
-    
+
+    pickRole = (role) => {
+        this.setState({ role: role})
+    }
+     
     userSignup = () => {
-      axios.post('http://localhost:3032/api/users', {
+      axios.post('http://localhost:10022/api/users', {
         username: this.state.username,
         password: this.state.password,
-        "role": "11"
+        role: this.state.role
       }).then((response) => {
         console.log(response);
       }, (error) => {
@@ -30,12 +36,21 @@ export default class LoginScreen extends React.Component {
       }, (error) => {
         console.log(error);
       })};  
-  
+
     render() {
       return (
         <View style={styles.container}>
   
           <Text style={styles.logo}>Capstone</Text>
+
+          <View>
+            <Picker selectedValue = {this.state.role} onValueChange = {this.pickRole}>
+               <Picker.Item label = "Participant" value = "Participant" />
+               <Picker.Item label = "Health Care Workers" value = "Health Care Workers" />
+               <Picker.Item label = "Administrator" value = "Admin" />
+            </Picker>
+            <Text style = {styles.text}>{this.state.user}</Text>
+         </View>
   
           <View style={styles.inputView} >
             <TextInput  
