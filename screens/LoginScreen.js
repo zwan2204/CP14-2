@@ -19,7 +19,7 @@ export default class LoginScreen extends React.Component {
     }
   
     userLogin = () => {
-      axios.post('http://localhost:3032/api/auth', {
+      axios.post('http://localhost:12345/api/auth', {
         username: this.state.username,
         password: this.state.password
       }).then((response) => {

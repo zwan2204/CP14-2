@@ -20,7 +20,7 @@ export default class SignupScreen extends React.Component {
     }
      
     userSignup = () => {
-      axios.post('http://localhost:10022/api/users', {
+      axios.post('http://localhost:12345/api/users', {
         username: this.state.username,
         password: this.state.password,
         role: this.state.role
@@ -31,7 +31,7 @@ export default class SignupScreen extends React.Component {
       })};
   
     userLogin = () => {
-      axios.post('http://localhost:3032/api/auth', {
+      axios.post('http://localhost:12345/api/auth', {
         username: this.state.username,
         password: this.state.password
       }).then((response) => {
