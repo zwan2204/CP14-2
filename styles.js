@@ -8,27 +8,31 @@ export const styles = StyleSheet.create({
   },
 
   logo: {
-    margin: 100
+    margin: 80
+  },
+
+  picker: {
+    margin: 50
   },
 
   inputView:{
-    width:"20%",
-    backgroundColor:"#465881",
-    borderRadius:25,
-    height:50,
+    borderRadius:5,
+    borderWidth:2,
+    borderColor: "rgb(30, 50, 120)",
+    height:10,
     marginBottom:20,
     justifyContent:"center",
-    padding:20
+    padding:15
   },
 
   inputText:{
     height:50,
-    color:"white"
+    color:"black"
   },
 
   loginBtn:{
     width:"20%",
-    backgroundColor:"#fb5b5a",
+    backgroundColor:"rgb(224, 35, 68)",
     borderRadius:25,
     height:50,
     alignItems:"center",
