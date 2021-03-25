@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
 import { styles } from '../styles.js';
 import axios from 'axios';
 
@@ -9,10 +8,10 @@ export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          email: "",
-          password: ""
+            email: "",
+            password: ""
         }
-      }
+    }
 
     pickRole = (role) => {
         this.setState({ role: role})
