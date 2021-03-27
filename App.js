@@ -7,9 +7,11 @@ import CriteriaUploading from "./screens/CriteriaUploading";
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        {/* <AppNavigator /> */}
-        <CriteriaUploading />
+      <View
+      // style={{ flex: 1 }}
+      >
+        <AppNavigator />
+        {/* <CriteriaUploading /> */}
       </View>
     );
   }
