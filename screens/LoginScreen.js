@@ -19,7 +19,7 @@ export default class LoginScreen extends React.Component {
   
     userLogin = () => {
       axios.post('http://localhost:12345/api/auth', {
-        username: this.state.username,
+        email: this.state.email,
         password: this.state.password
       }).then((response) => {
         console.log(response);
@@ -31,28 +31,26 @@ export default class LoginScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
         <View style = {styles.container}>
-            <Text style = {styles.logo}>Capstone</Text>
+            <Text style = {styles.logo}> Please login to your account first </Text>
             <View style = {styles.inputView}>
                 <TextInput style = {styles.inputText} 
-                placeholder = "Username" placeholderTextColor = "grey" 
-                onChangeText = {text => this.setState({username:text})}/>
+                placeholder = "Email" placeholderTextColor = "grey" 
+                onChangeText = {text => this.setState({email: text})}/>
             </View>
             
             <View style = {styles.inputView}>
                 <TextInput style = {styles.inputText} 
                 placeholder = "Password" placeholderTextColor = "grey"
-                onChangeText={text => this.setState({password:text})}/>
+                onChangeText = {text => this.setState({password: text})}/>
             </View>
             
-            <TouchableOpacity style={styles.loginBtn} onPress = {this.userLogin}>
-                <Text style={styles.loginText}>LOGIN</Text>
+            <TouchableOpacity style = {styles.loginBtn} onPress = {this.userLogin}>
+                <Text style = {styles.loginText}> LOGIN </Text>
             </TouchableOpacity>
             
             <TouchableOpacity onPress = {() => navigate("Signup")}>
-                <Text style={styles.loginText}>Signup</Text>
+                <Text style = {styles.loginText}> Signup </Text>
             </TouchableOpacity>
-  
-    
         </View>
       );
     }
