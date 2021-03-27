@@ -7,8 +7,9 @@ import {
   ScrollView,
   Platform,
   FlatList,
+  TextInput as NativeTextInput,
 } from "react-native";
-import { Avatar, Button, Card } from "react-native-paper";
+import { Button, Card, TextInput } from "react-native-paper";
 
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -17,7 +18,15 @@ const CriteriaUploading = () => {
   const [QuestionPrefix, setQuestionPrefix] = useState("");
   const [CriteriaDetail, setCriteriaDetail] = useState("");
   const [OtherInfo, setOtherInfo] = useState("");
-
+  const [Title, setTitle] = useState("");
+  const [Description, setDescription] = useState("");
+  const [Location, setLocation] = useState("");
+  const [SubjectNo, setSubjectNo] = useState("");
+  const [Duration, setDuration] = useState("");
+  const [Date, setDate] = useState("");
+  {
+    /* Hard code question preview for testing*/
+  }
   const data = [
     {
       id: "1",
@@ -112,6 +121,85 @@ const CriteriaUploading = () => {
           >
             Cancel
           </Button>
+        </View>
+
+        {/*Project basic information upload area*/}
+        <View
+          style={{
+            height: 400,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.subTitle}>Project titile: </Text>
+            <TextInput
+              value={Title}
+              style={{ width: 800, height: 35, marginLeft: 10 }}
+              onChangeText={(text) => setTitle(text)}
+            />
+          </View>
+          <View style={{ flex: 6, flexDirection: "row" }}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.subTitle}>Project description: </Text>
+              <TextInput
+                mode="outlined"
+                multiline="true"
+                textAlignVertical="top"
+                value={Description}
+                //dense="true"
+                style={{
+                  height: 240,
+                  marginHorizontal: 10,
+                }}
+                render={(innerProps) => (
+                  <NativeTextInput
+                    {...innerProps}
+                    style={[
+                      innerProps.style,
+                      {
+                        paddingTop: 8,
+                        paddingBottom: 8,
+                      },
+                    ]}
+                  />
+                )}
+                onChangeText={(text) => setDescription(text)}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.subTitle}>Location: </Text>
+              <TextInput
+                value={Location}
+                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                onChangeText={(text) => setLocation(text)}
+              />
+              <Text style={styles.subTitle}>Number of Subjects: </Text>
+              <TextInput
+                value={SubjectNo}
+                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                onChangeText={(text) => setSubjectNo(text)}
+              />
+              <Text style={styles.subTitle}>Study Duration: </Text>
+              <TextInput
+                value={Duration}
+                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                onChangeText={(text) => setDuration(text)}
+              />
+              <Text style={styles.subTitle}>Start Date: </Text>
+              <TextInput
+                value={Date}
+                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                onChangeText={(text) => setDate(text)}
+              />
+            </View>
+            <View style={{ flex: 0.6 }}></View>
+          </View>
         </View>
 
         {/* Question input area*/}
@@ -239,7 +327,7 @@ const CriteriaUploading = () => {
                       color: "#00205B",
                     }}
                   >
-                    Quesion Preview:
+                    Question Preview:
                   </Text>
                   <Button
                     mode="contained"
@@ -334,7 +422,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 6,
   },
-
+  subTitle: {
+    fontSize: 20,
+    color: "#00205B",
+    marginLeft: 10,
+  },
   text: { fontSize: 20 },
 
   modalView: {
