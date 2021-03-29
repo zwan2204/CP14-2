@@ -28,7 +28,13 @@ export default class LoginScreen extends React.Component {
       .then(
         response => {
           console.log(response);
-          navigate("CriteriaUploading");
+          if (response.data.userRole === "Administrator") {
+            navigate("CriteriaUploading");
+          } else if (response.data.userRole === "Health Care Workers") {
+            navigate("WorkerPage");
+          } else {
+            navigate("ParticipantPage");
+          }
         },
         error => {
           console.log(error);
