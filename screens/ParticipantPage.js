@@ -12,6 +12,10 @@ export default class ParticipantPage extends React.Component {
   }
 
   render() {
-    return <View style={styles.container}>this is Participant page</View>;
+    return (
+      <View style={styles.container}>
+        <Text> this is Participant page </Text>
+      </View>
+    );
   }
 }

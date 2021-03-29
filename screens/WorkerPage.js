@@ -12,6 +12,10 @@ export default class WorkerPage extends React.Component {
   }
 
   render() {
-    return <View style={styles.container}>this is worker page</View>;
+    return (
+      <View style={styles.container}>
+        <Text> this is worker page </Text>
+      </View>
+    );
   }
 }
