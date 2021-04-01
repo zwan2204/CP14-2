@@ -24,41 +24,52 @@ const CriteriaUploading = () => {
   const [SubjectNo, setSubjectNo] = useState("");
   const [Duration, setDuration] = useState("");
   const [Date, setDate] = useState("");
+  const [Question, setQuestion] = useState([]);
   {
     /* Hard code question preview for testing*/
   }
-  const data = [
-    {
-      id: "1",
-      description: "do you smoking every day?",
-    },
-    {
-      id: "2",
-      description: "do you dancing every day?",
-    },
-    {
-      id: "3",
-      description: "are you age below 70?",
-    },
-    {
-      id: "4",
-      description: "are you age below 70?",
-    },
-    {
-      id: "5",
-      description: "are you age below 70?",
-    },
-  ];
 
-  const renderList = (item) => {
+  const addItem = (() => {
+    let key = Question.length;
+    return () => {
+      Question.unshift({
+        key,
+        description: `${CriteriaType} - ${QuestionPrefix} ${CriteriaDetail} ${OtherInfo} ?`,
+      });
+
+      setQuestion(Question.slice(0));
+      key++;
+    };
+  })();
+
+  const removeItem = (key) => {
+    setQuestion(Question.slice().filter((item) => item.key !== key));
+  };
+
+  // const renderList = (item) => {
+  //   return (
+  //     <Card style={styles.mycard} key={item.key}>
+  //       <View style={styles.cardView}>
+  //         <Text styl={styles.text}>{item.description}</Text>
+  //         <Card.Actions style={{ position: "absolute", right: 0 }}>
+  //           <Button onPress={() => removeItem(item.key)}>Delete</Button>
+  //         </Card.Actions>
+  //       </View>
+  //     </Card>
+  //   );
+  // };
+  const renderList = Question.map((item) => {
     return (
-      <Card style={styles.mycard} key={item.id}>
+      <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
           <Text styl={styles.text}>{item.description}</Text>
+          <Card.Actions style={{ position: "absolute", right: 0 }}>
+            <Button onPress={() => removeItem(item.key)}>Delete</Button>
+          </Card.Actions>
         </View>
       </Card>
     );
-  };
+  });
 
   return (
     <SafeAreaView style={styles.root}>
@@ -92,7 +103,7 @@ const CriteriaUploading = () => {
       </View>
 
       {/* View of Body*/}
-      <ScrollView style={{ padding: 35 }}>
+      <ScrollView style={{ margin: 35 }}>
         {/* View of "New Project and "Cancel Button*/}
         <View
           style={{
@@ -149,10 +160,9 @@ const CriteriaUploading = () => {
               <Text style={styles.subTitle}>Project description: </Text>
               <TextInput
                 mode="outlined"
-                multiline="true"
+                multiline={true}
                 textAlignVertical="top"
                 value={Description}
-                //dense="true"
                 style={{
                   height: 240,
                   marginHorizontal: 10,
@@ -278,6 +288,14 @@ const CriteriaUploading = () => {
                   label: "test",
                   value: "test",
                 },
+                {
+                  label: "smoker",
+                  value: "smoker",
+                },
+                {
+                  label: "pregnant",
+                  value: "pregnant",
+                },
               ]}
               placeholder="Criteria detail"
               containerStyle={{ height: 40, width: 200, marginRight: 10 }}
@@ -289,7 +307,9 @@ const CriteriaUploading = () => {
                 justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => setCriteriaDetail(item.value)}
+              onChangeItem={(item) => {
+                setCriteriaDetail(item.value);
+              }}
             />
 
             {/*Fourth input bar*/}
@@ -298,6 +318,10 @@ const CriteriaUploading = () => {
                 {
                   label: "test",
                   value: "test",
+                },
+                {
+                  label: "in Six month",
+                  value: "in Six month",
                 },
               ]}
               placeholder="Other Infomation"
@@ -314,7 +338,7 @@ const CriteriaUploading = () => {
             />
           </View>
 
-          <View style={{ flexDirection: "row", height: 600 }}>
+          <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 3 }}>
               <View style={{ flex: 1 }}>
                 <View style={{ height: 70 }}>
@@ -337,18 +361,20 @@ const CriteriaUploading = () => {
                       position: "absolute",
                       right: 0,
                     }}
-                    onPress={() => console.log("Pessed")}
+                    onPress={() => addItem()}
                   >
                     Add
                   </Button>
                 </View>
+                <View>{renderList}</View>
 
-                <FlatList
-                  data={data}
+                {/* <FlatList
+                  data={Question}
                   renderItem={({ item }) => {
                     return renderList(item);
                   }}
-                />
+                  keyExtractor={(item, index) => index.toString()}
+                /> */}
               </View>
             </View>
 
@@ -383,7 +409,7 @@ const CriteriaUploading = () => {
       <Button
         mode="contained"
         style={{ width: 100, alignSelf: "center", marginBottom: 20 }}
-        onPress={() => console.log("Pessed")}
+        onPress={() => console.log("kk")}
       >
         Save
       </Button>
@@ -420,6 +446,7 @@ const styles = StyleSheet.create({
   },
   cardView: {
     flexDirection: "row",
+    alignItems: "center",
     padding: 6,
   },
   subTitle: {
