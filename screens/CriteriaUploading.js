@@ -135,23 +135,20 @@ const CriteriaUploading = () => {
         </View>
 
         {/*Project basic information upload area*/}
-        <View
-          style={{
-            height: 400,
-          }}
-        >
+        <View>
           <View
             style={{
               flex: 1,
-
+              marginBottom: 10,
               flexDirection: "row",
               alignItems: "center",
             }}
           >
             <Text style={styles.subTitle}>Project titile: </Text>
             <TextInput
+              mode="outlined"
               value={Title}
-              style={{ width: 800, height: 35, marginLeft: 10 }}
+              style={{ width: 800, height: 30, marginLeft: 10 }}
               onChangeText={(text) => setTitle(text)}
             />
           </View>
@@ -185,31 +182,45 @@ const CriteriaUploading = () => {
             <View style={{ flex: 1 }}>
               <Text style={styles.subTitle}>Location: </Text>
               <TextInput
+                mode="outlined"
                 value={Location}
-                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
                 onChangeText={(text) => setLocation(text)}
               />
               <Text style={styles.subTitle}>Number of Subjects: </Text>
               <TextInput
+                mode="outlined"
                 value={SubjectNo}
-                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
                 onChangeText={(text) => setSubjectNo(text)}
               />
               <Text style={styles.subTitle}>Study Duration: </Text>
               <TextInput
+                mode="outlined"
                 value={Duration}
-                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
                 onChangeText={(text) => setDuration(text)}
               />
               <Text style={styles.subTitle}>Start Date: </Text>
               <TextInput
+                mode="outlined"
                 value={Date}
-                style={{ height: 35, marginHorizontal: 10, marginVertical: 6 }}
+                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
                 onChangeText={(text) => setDate(text)}
               />
             </View>
             <View style={{ flex: 0.6 }}></View>
           </View>
+          <Text
+            style={{
+              marginTop: 20,
+              marginBottom: 10,
+              fontSize: 20,
+              color: "#00205B",
+            }}
+          >
+            Criteria
+          </Text>
         </View>
 
         {/* Question input area*/}
