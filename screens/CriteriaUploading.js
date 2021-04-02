@@ -6,11 +6,11 @@ import {
   View,
   ScrollView,
   Platform,
-  FlatList,
   TextInput as NativeTextInput,
+  Alert,
 } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
-
+import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 
 const CriteriaUploading = () => {
@@ -25,9 +25,6 @@ const CriteriaUploading = () => {
   const [Duration, setDuration] = useState("");
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
-  {
-    /* Hard code question preview for testing*/
-  }
 
   const addItem = (() => {
     let key = Question.length;
@@ -41,6 +38,28 @@ const CriteriaUploading = () => {
       key++;
     };
   })();
+
+  const userSignup = () => {
+    axios
+      .post("http://localhost:12345/api/project", {
+        title: Title,
+        description: Description,
+        location: Location,
+        subjectNo: SubjectNo,
+        duration: Duration,
+        date: Date,
+        criteria: Question.description,
+      })
+      .then(
+        (response) => {
+          console.log(Question);
+          Alert.alert("nice");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
 
   const removeItem = (key) => {
     setQuestion(Question.slice().filter((item) => item.key !== key));
@@ -214,7 +233,7 @@ const CriteriaUploading = () => {
           <Text
             style={{
               marginTop: 20,
-              marginBottom: 10,
+
               fontSize: 20,
               color: "#00205B",
             }}
@@ -247,7 +266,12 @@ const CriteriaUploading = () => {
                 },
               ]}
               placeholder="Select Type"
-              containerStyle={{ height: 40, width: 140, marginRight: 10 }}
+              containerStyle={{
+                height: 40,
+                width: 140,
+                marginRight: 10,
+                marginTop: 8,
+              }}
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
                 color: "red",
@@ -279,7 +303,12 @@ const CriteriaUploading = () => {
                   value: "Are you symptomatic with",
                 },
               ]}
-              containerStyle={{ height: 40, width: 350, marginRight: 10 }}
+              containerStyle={{
+                height: 40,
+                width: 350,
+                marginTop: 8,
+                marginRight: 10,
+              }}
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
                 color: "#00205B",
@@ -292,60 +321,20 @@ const CriteriaUploading = () => {
               onChangeItem={(item) => setQuestionPrefix(item.value)}
             />
 
-            {/*Third input bar*/}
-            <DropDownPicker
-              items={[
-                {
-                  label: "test",
-                  value: "test",
-                },
-                {
-                  label: "smoker",
-                  value: "smoker",
-                },
-                {
-                  label: "pregnant",
-                  value: "pregnant",
-                },
-              ]}
+            <TextInput
+              mode="outlined"
+              value={CriteriaDetail}
               placeholder="Criteria detail"
-              containerStyle={{ height: 40, width: 200, marginRight: 10 }}
-              style={{ backgroundColor: "#fafafa" }}
-              selectedLabelStyle={{
-                color: "#00205B",
-              }}
-              itemStyle={{
-                justifyContent: "flex-start",
-              }}
-              dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => {
-                setCriteriaDetail(item.value);
-              }}
+              style={{ height: 40, width: 200, marginRight: 10, paddingTop: 0 }}
+              onChangeText={(text) => setCriteriaDetail(text)}
             />
 
-            {/*Fourth input bar*/}
-            <DropDownPicker
-              items={[
-                {
-                  label: "test",
-                  value: "test",
-                },
-                {
-                  label: "in Six month",
-                  value: "in Six month",
-                },
-              ]}
+            <TextInput
+              mode="outlined"
+              value={OtherInfo}
               placeholder="Other Infomation"
-              containerStyle={{ height: 40, width: 240, marginRight: 10 }}
-              style={{ backgroundColor: "#fafafa" }}
-              selectedLabelStyle={{
-                color: "#00205B",
-              }}
-              itemStyle={{
-                justifyContent: "flex-start",
-              }}
-              dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => setOtherInfo(item.value)}
+              style={{ height: 40, width: 200, marginRight: 10 }}
+              onChangeText={(text) => setOtherInfo(text)}
             />
           </View>
 
@@ -420,7 +409,7 @@ const CriteriaUploading = () => {
       <Button
         mode="contained"
         style={{ width: 100, alignSelf: "center", marginBottom: 20 }}
-        onPress={() => console.log("kk")}
+        onPress={() => userSignup()}
       >
         Save
       </Button>
