@@ -39,7 +39,13 @@ const CriteriaUploading = () => {
     };
   })();
 
-  const userSignup = () => {
+  const projectUpload = () => {
+    let tmpQuestion = [];
+
+    for (let i = 0; i < Question.length; i++) {
+      tmpQuestion.push(Question[i].description);
+    }
+
     axios
       .post("http://localhost:12345/api/project", {
         title: Title,
@@ -48,12 +54,11 @@ const CriteriaUploading = () => {
         subjectNo: SubjectNo,
         duration: Duration,
         date: Date,
-        criteria: Question.description,
+        criteria: tmpQuestion,
       })
       .then(
         (response) => {
-          console.log(Question);
-          Alert.alert("nice");
+          Alert.alert("successfully upload");
         },
         (error) => {
           console.log(error);
@@ -409,7 +414,7 @@ const CriteriaUploading = () => {
       <Button
         mode="contained"
         style={{ width: 100, alignSelf: "center", marginBottom: 20 }}
-        onPress={() => userSignup()}
+        onPress={() => projectUpload()}
       >
         Save
       </Button>
