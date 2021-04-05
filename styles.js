@@ -3,16 +3,16 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({ 
   container: { 
     flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center",
+
   },
 
   logo: {
-    margin: 80
+    margin:30,
   },
 
   picker: {
-    margin: 50
+    margin: 25,
+    width:190
   },
 
   inputView:{
@@ -43,6 +43,7 @@ export const styles = StyleSheet.create({
   loginText:{
     color:"black"
   }
+  
 
 
 })

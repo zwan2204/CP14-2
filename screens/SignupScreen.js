@@ -1,10 +1,11 @@
 /** @format */
 
 import React from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity,SafeAreaView } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 import axios from "axios";
+import { HelperText, TextInput } from 'react-native-paper';
 
 export default class SignupScreen extends React.Component {
   state = {
@@ -47,180 +48,168 @@ export default class SignupScreen extends React.Component {
   render() {
     if (this.state.role == "Participant") {
       return (
-        <View style={styles.container}>
-          <Text style={styles.logo}> Welcome, please signup </Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={this.state.role}
-              onValueChange={this.pickRole}
-            >
-              <Picker.Item label="Participant" value="Participant" />
-              <Picker.Item
-                label="Health Care Workers"
-                value="Health Care Workers"
-              />
-              <Picker.Item label="Administrator" value="Admin" />
-            </Picker>
-          </View>
+        <SafeAreaView style={styles.container}>
+          <View
+        style={{
+          height: 140,
+          backgroundColor: "#00205B",
+          flexDirection: "row",
+        }}>
 
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Full name"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ fullName: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Gender"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ gender: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="DOB dd/mm/yyyy"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ dob: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Email"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ email: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Password"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ password: text })}
-            />
-          </View>
-
-          <TouchableOpacity onPress={this.userSignup}>
-            <Text style={styles.loginText}>Signup</Text>
-          </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
         </View>
+      </View>
+
+          <View style={{ justifyContent: "center", alignItems: "center", margin: 50}}>
+            <Picker style={styles.picker} selectedValue={this.state.role} onValueChange={this.pickRole} >
+              <Picker.Item label="Participant" value="Participant" />
+              <Picker.Item label="Health Care Workers" value="Health Care Workers" />
+              <Picker.Item label="NSWHP staff" value="Admin" />
+            </Picker>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Full name" 
+              onChangeText={text => this.setState({ fullName: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Gender" 
+              onChangeText={text => this.setState({ gender: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="DOB dd/mm/yyyy" 
+              onChangeText={text => this.setState({ dob: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Email" 
+              onChangeText={text => this.setState({ email: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Password" 
+              onChangeText={text => this.setState({ password: text })}/>
+            
+            <TouchableOpacity style={{backgroundColor:"#00205B",
+            borderRadius:25,
+            height:50,
+            width: 100,
+            alignItems:"center",
+            justifyContent:"center"}}onPress={this.userSignup}>
+            <Text style={{color:"white"}}>
+              Signup
+            </Text>
+          </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       );
     } else if (this.state.role == "Health Care Workers") {
       return (
-        <View style={styles.container}>
-          <Text style={styles.logo}>Welcome, please signup</Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={this.state.role}
-              onValueChange={this.pickRole}
-            >
-              <Picker.Item label="Participant" value="Participant" />
-              <Picker.Item
-                label="Health Care Workers"
-                value="Health Care Workers"
-              />
-              <Picker.Item label="Administrator" value="Admin" />
-            </Picker>
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Full name"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ fullName: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Stafflink number"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ staffId: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Email"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ email: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Password"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ password: text })}
-            />
-          </View>
-
-          <TouchableOpacity onPress={this.userSignup}>
-            <Text style={styles.loginText}>Signup</Text>
-          </TouchableOpacity>
+        <SafeAreaView style={styles.container}>
+          <View
+        style={{
+          height: 140,
+          backgroundColor: "#00205B",
+          flexDirection: "row",
+        }}>
+        <View style={{ flex: 1, backgroundColor: "tomato" }} />
+        <View style={{ flex: 3, backgroundColor: "#00205B" }} />
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
         </View>
+      </View>
+      <View style={{ justifyContent: "center", alignItems: "center", margin: 50}}>
+            <Picker style={styles.picker} selectedValue={this.state.role} onValueChange={this.pickRole} >
+              <Picker.Item label="Participant" value="Participant" />
+              <Picker.Item label="Health Care Workers" value="Health Care Workers" />
+              <Picker.Item label="NSWHP staff" value="Admin" />
+            </Picker>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Full name" 
+              onChangeText={text => this.setState({ fullName: text })}/>
+              <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Stafflink number" 
+              onChangeText={text => this.setState({ staffId: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Email" 
+              onChangeText={text => this.setState({ email: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Password" 
+              onChangeText={text => this.setState({ password: text })}/>
+            
+            <TouchableOpacity style={{backgroundColor:"#00205B",
+            borderRadius:25,
+            height:50,
+            width: 100,
+            alignItems:"center",
+            justifyContent:"center"}}onPress={this.userSignup}>
+            <Text style={{color:"white"}}>
+              Signup
+            </Text>
+          </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       );
     } else {
       return (
-        <View style={styles.container}>
-          <Text style={styles.logo}>Welcome, please signup</Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={this.state.role}
-              onValueChange={this.pickRole}
-            >
-              <Picker.Item label="Participant" value="Participant" />
-              <Picker.Item
-                label="Health Care Workers"
-                value="Health Care Workers"
-              />
-              <Picker.Item label="Administrator" value="Admin" />
-            </Picker>
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Full name"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ fullName: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Email"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ email: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Password"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ password: text })}
-            />
-          </View>
-
-          <TouchableOpacity onPress={this.userSignup}>
-            <Text style={styles.loginText}>Signup</Text>
-          </TouchableOpacity>
+        <SafeAreaView style={styles.container}>
+          <View
+        style={{
+          height: 140,
+          backgroundColor: "#00205B",
+          flexDirection: "row",
+        }}>
+        <View style={{ flex: 1, backgroundColor: "tomato" }} />
+        <View style={{ flex: 3, backgroundColor: "#00205B" }} />
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
         </View>
+      </View>
+      <View style={{ justifyContent: "center", alignItems: "center", margin: 50}}>
+            <Picker style={styles.picker} selectedValue={this.state.role} onValueChange={this.pickRole} >
+              <Picker.Item label="Participant" value="Participant" />
+              <Picker.Item label="Health Care Workers" value="Health Care Workers" />
+              <Picker.Item label="NSWHP staff" value="Admin" />
+            </Picker>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Full name" 
+              onChangeText={text => this.setState({ fullName: text })}/>
+              <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Stafflink number" 
+              onChangeText={text => this.setState({ staffId: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Email" 
+              onChangeText={text => this.setState({ email: text })}/>
+            <TextInput 
+              style={{ height: 45, margin: 10 }}
+              label="Password" 
+              onChangeText={text => this.setState({ password: text })}/>
+            <TouchableOpacity style={{backgroundColor:"#00205B",
+            borderRadius:25,
+            height:50,
+            width: 100,
+            alignItems:"center",
+            justifyContent:"center"}}onPress={this.userSignup}>
+            <Text style={{color:"white"}}>
+              Signup
+            </Text>
+          </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       );
     }
   }

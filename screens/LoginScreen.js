@@ -1,15 +1,18 @@
 /** @format */
 
 import React from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Image, Text, View, SafeAreaView } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
+import { HelperText, TextInput, Button } from 'react-native-paper';
+
+
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: "@",
       password: ""
     };
   }
@@ -42,37 +45,82 @@ export default class LoginScreen extends React.Component {
       );
   };
 
+  hasErrors() {
+    return !this.state.email.includes('@');
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
-        <Text style={styles.logo}> Please login to your account first </Text>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.inputText}
-            placeholder="Email"
-            placeholderTextColor="grey"
-            onChangeText={text => this.setState({ email: text })}
-          />
+      <SafeAreaView style={styles.container}>
+
+        {/* Header color */}
+        <View style={{height: 140,backgroundColor: "#00205B",flexDirection: "row"}}></View>
+        <View >
+          <Image source={require('../assets/header.png')}/>
+        </View>
+        {/* Body */}
+        <View style={{
+          flex: 1,
+          flexDirection: "column",
+          alignItems: "center"}}>
+
+        
+          
+        <View 
+          style={{
+            justifyContent: "center", 
+            textAlign: "center",
+            alignItems: "center",
+            marginTop: 80}}>
+
+            <Text style={{color:"#00205B", fontSize:20, fontWeight: "bold", paddingBottom:70}}>Log In</Text>
+
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <Text style={{ justifyContent: "flex-start"}} >Email: </Text>
+              <TextInput mode="outlined" style={{ height: 30, alignSelf: "flex-end"}} 
+              onChangeText={text => this.setState({ email: text })}/>
+          </View>
+          <HelperText type="error" visible={this.hasErrors()}>Email address is invalid!</HelperText>
+
+          <View style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+            <Text style={{alignItems:"flex-start"}}>Password: </Text>
+            <TextInput mode="outlined" style={{ height: 30}}
+              onChangeText={text => this.setState({ password: text })}
+            />
+          </View>
+          </View>
+
+
+          <Button mode="contained" onPress={this.userLogin} style={{marginTop:40}}>LOGIN</Button>
+          <Button mode="text" onPress={() => navigate("Signup")}>Signup</Button>
         </View>
 
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.inputText}
-            placeholder="Password"
-            placeholderTextColor="grey"
-            onChangeText={text => this.setState({ password: text })}
-          />
-        </View>
-
-        <TouchableOpacity style={styles.loginBtn} onPress={this.userLogin}>
-          <Text style={styles.loginText}> LOGIN </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigate("Signup")}>
-          <Text style={styles.loginText}> Signup </Text>
-        </TouchableOpacity>
-      </View>
+        {/* <View
+          style={{
+            height: 60,
+            width:"100%",
+            backgroundColor: "#00205B",
+            justifyContent: "center",
+            position: 'absolute',
+            bottom: 0
+          }}>
+          <Text style={{ color: "white", fontSize: 17}}>
+            NSW Health website | Disclaimer | Privacy | Copyright | Accessibility
+            | Site map
+          </Text>
+        </View> */}
+      
+      </SafeAreaView>
     );
   }
 }
