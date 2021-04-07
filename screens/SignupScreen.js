@@ -40,6 +40,7 @@ export default class SignupScreen extends React.Component {
         },
         error => {
           console.log(error);
+          alert("Email has already been taken");
         }
       );
   };
