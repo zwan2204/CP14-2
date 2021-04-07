@@ -105,6 +105,7 @@ export default class SignupScreen extends React.Component {
               style={styles.inputText}
               placeholder="Password"
               placeholderTextColor="grey"
+              secureTextEntry={true}
               onChangeText={text => this.setState({ password: text })}
             />
           </View>

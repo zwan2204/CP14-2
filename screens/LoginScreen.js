@@ -60,6 +60,7 @@ export default class LoginScreen extends React.Component {
           <TextInput
             style={styles.inputText}
             placeholder="Password"
+            secureTextEntry={true}
             placeholderTextColor="grey"
             onChangeText={text => this.setState({ password: text })}
           />
