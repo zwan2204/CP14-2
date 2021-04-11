@@ -12,8 +12,8 @@ import ParticipantInfoScreen from "../screens/ParticipantInfoScreen"
 
 export default createAppContainer(
   createSwitchNavigator({
-    Signup: Signup,
     Login: Login,
+    Signup: Signup,
     CriteriaUploading: CriteriaUploading,
     WorkerPage: WorkerPage,
     ParticipantPage: ParticipantPage,
