@@ -3,31 +3,43 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({ 
   container: { 
     flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center",
+
   },
 
   logo: {
-    margin: 80
+    margin:30,
   },
 
   picker: {
-    margin: 50
+    margin: 25,
+    width:190
   },
 
   inputView:{
-    borderRadius:5,
-    borderWidth:2,
+    borderRadius:2,
+    borderWidth:1,
     borderColor: "rgb(30, 50, 120)",
     height:10,
+    width: 190,
     marginBottom:20,
     justifyContent:"center",
-    padding:15
+    padding:10
   },
-
+ 
   inputText:{
     height:50,
     color:"black"
+  },
+
+  partDropdown: {
+    padding: 20
+  },
+  partPiker: {
+    width: 150,
+  },
+  checkBox: {
+    paddingRight: 15,
+    paddingLeft: 20
   },
 
   loginBtn:{
@@ -43,6 +55,7 @@ export const styles = StyleSheet.create({
   loginText:{
     color:"black"
   }
+  
 
 
 })
