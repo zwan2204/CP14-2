@@ -50,72 +50,9 @@ export default class SignupScreen extends React.Component {
     const { navigate } = this.props.navigation;
     if (this.state.role == "Participant") {
       return (
-<<<<<<< HEAD
-        <View style={styles.container}>
-          <Text style={styles.logo}> Welcome, please signup </Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={this.state.role}
-              onValueChange={this.pickRole}
-            >
-              <Picker.Item label="Participant" value="Participant" />
-              <Picker.Item
-                label="Health Care Workers"
-                value="Health Care Workers"
-              />
-              <Picker.Item label="Administrator" value="Admin" />
-            </Picker>
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Full name"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ fullName: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Gender"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ gender: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="DOB dd/mm/yyyy"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ dob: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Email"
-              placeholderTextColor="grey"
-              onChangeText={text => this.setState({ email: text })}
-            />
-          </View>
-
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Password"
-              placeholderTextColor="grey"
-              secureTextEntry={true}
-              onChangeText={text => this.setState({ password: text })}
-            />
-=======
         <SafeAreaView style={styles.container}>
           <View style={{ height: 140, backgroundColor: "#00205B", flexDirection: "row" }}>
             <Image style={{ width: 200, height: 100, left: 100, top: 20 }} source={require('../assets/header.png')} />
->>>>>>> loginui
           </View>
 
           <View style={{ alignItems: "center", flexDirection: "column", flex: 1 }}>

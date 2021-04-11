@@ -54,20 +54,9 @@ export default class LoginScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
 
-<<<<<<< HEAD
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.inputText}
-            placeholder="Password"
-            secureTextEntry={true}
-            placeholderTextColor="grey"
-            onChangeText={text => this.setState({ password: text })}
-          />
-=======
         {/* Header color */}
         <View style={{height: 140,backgroundColor: "#00205B",flexDirection: "row"}}>
         <Image style={{width: 200, height: 100, left:100, top: 20}} source={require('../assets/header.png')}/>
->>>>>>> loginui
         </View>
 
         {/* Body */}
