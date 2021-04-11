@@ -8,13 +8,15 @@ import Signup from "../screens/SignupScreen";
 import CriteriaUploading from "../screens/CriteriaUploading";
 import ParticipantPage from "../screens/ParticipantPage";
 import WorkerPage from "../screens/WorkerPage";
+import ParticipantInfoScreen from "../screens/ParticipantInfoScreen"
 
 export default createAppContainer(
   createSwitchNavigator({
-    Login: Login,
     Signup: Signup,
+    Login: Login,
     CriteriaUploading: CriteriaUploading,
     WorkerPage: WorkerPage,
-    ParticipantPage: ParticipantPage
+    ParticipantPage: ParticipantPage,
+    ParticipantInfoScreen: ParticipantInfoScreen
   })
 );

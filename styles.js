@@ -16,18 +16,30 @@ export const styles = StyleSheet.create({
   },
 
   inputView:{
-    borderRadius:5,
-    borderWidth:2,
+    borderRadius:2,
+    borderWidth:1,
     borderColor: "rgb(30, 50, 120)",
     height:10,
+    width: 190,
     marginBottom:20,
     justifyContent:"center",
-    padding:15
+    padding:10
   },
-
+ 
   inputText:{
     height:50,
     color:"black"
+  },
+
+  partDropdown: {
+    padding: 20
+  },
+  partPiker: {
+    width: 150,
+  },
+  checkBox: {
+    paddingRight: 15,
+    paddingLeft: 20
   },
 
   loginBtn:{
