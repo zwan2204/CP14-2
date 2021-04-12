@@ -4,9 +4,7 @@ import React from "react";
 import { Image, Text, View, SafeAreaView } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import { HelperText, TextInput, Button } from 'react-native-paper';
-
-
+import { HelperText, TextInput, Button } from "react-native-paper";
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -46,61 +44,99 @@ export default class LoginScreen extends React.Component {
   };
 
   hasErrors() {
-    return !this.state.email.includes('@');
+    return !this.state.email.includes("@");
   }
 
   render() {
     const { navigate } = this.props.navigation;
     return (
       <SafeAreaView style={styles.container}>
-
         {/* Header color */}
-        <View style={{height: 140,backgroundColor: "#00205B",flexDirection: "row"}}>
-        <Image style={{width: 200, height: 100, left:100, top: 20}} source={require('../assets/header.png')}/>
+        <View
+          style={{
+            height: 140,
+            backgroundColor: "#00205B",
+            flexDirection: "row"
+          }}
+        >
+          <Image
+            style={{ width: 200, height: 100, left: 100, top: 20 }}
+            source={require("../assets/header.png")}
+          />
         </View>
 
         {/* Body */}
-        <View style={{
-          flex: 1,
-          flexDirection: "column",
-          alignItems: "center"}}>
-
-        <View 
+        <View
           style={{
-            justifyContent: "center", 
-            textAlign: "center",
-            alignItems: "center",
-            marginTop: 80}}>
-
-            <Text style={{color:"#00205B", fontSize:20, fontWeight: "bold", paddingBottom:70}}>Log In</Text>
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "center"
+          }}
+        >
+          <View
+            style={{
+              justifyContent: "center",
+              textAlign: "center",
+              alignItems: "center",
+              marginTop: 80
+            }}
+          >
+            <Text
+              style={{
+                color: "#00205B",
+                fontSize: 20,
+                fontWeight: "bold",
+                paddingBottom: 70
+              }}
+            >
+              Log In
+            </Text>
 
             <View
               style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center",
-              }}>
-              <Text style={{ justifyContent: "flex-start"}} >Email: </Text>
-              <TextInput mode="outlined" style={{ height: 30, alignSelf: "flex-end"}} 
-              onChangeText={text => this.setState({ email: text })}/>
-          </View>
-          <HelperText type="error" visible={this.hasErrors()}>Email address is invalid!</HelperText>
+                alignItems: "center"
+              }}
+            >
+              <Text style={{ justifyContent: "flex-start" }}>Email: </Text>
+              <TextInput
+                mode="outlined"
+                style={{ height: 30, alignSelf: "flex-end" }}
+                onChangeText={text => this.setState({ email: text })}
+              />
+            </View>
+            <HelperText type="error" visible={this.hasErrors()}>
+              Email address is invalid!
+            </HelperText>
 
-          <View style={{
+            <View
+              style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center",
-              }}>
-            <Text style={{alignItems:"flex-start"}}>Password: </Text>
-            <TextInput mode="outlined" style={{ height: 30}}
-              onChangeText={text => this.setState({ password: text })}
-            />
-          </View>
+                alignItems: "center"
+              }}
+            >
+              <Text style={{ alignItems: "flex-start" }}>Password: </Text>
+              <TextInput
+                mode="outlined"
+                style={{ height: 30 }}
+                secureTextEntry={true}
+                onChangeText={text => this.setState({ password: text })}
+              />
+            </View>
           </View>
 
-
-          <Button mode="contained" onPress={this.userLogin} style={{marginTop:40}}>LOGIN</Button>
-          <Button mode="text" onPress={() => navigate("Signup")}>Signup</Button>
+          <Button
+            mode="contained"
+            onPress={this.userLogin}
+            style={{ marginTop: 40 }}
+          >
+            LOGIN
+          </Button>
+          <Button mode="text" onPress={() => navigate("Signup")}>
+            Signup
+          </Button>
         </View>
 
         {/* <View
@@ -117,7 +153,6 @@ export default class LoginScreen extends React.Component {
             | Site map
           </Text>
         </View> */}
-      
       </SafeAreaView>
     );
   }
