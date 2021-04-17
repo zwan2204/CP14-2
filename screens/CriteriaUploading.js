@@ -23,7 +23,6 @@ const CriteriaUploading = () => {
   const [CriteriaType, setCriteriaType] = useState("");
   const [QuestionPrefix, setQuestionPrefix] = useState("");
   const [CriteriaDetail, setCriteriaDetail] = useState("");
-  const [OtherInfo, setOtherInfo] = useState("");
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Location, setLocation] = useState("");
@@ -31,6 +30,8 @@ const CriteriaUploading = () => {
   const [Duration, setDuration] = useState("");
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
+
+  const [exclusionQuesion, setExclusionQuestion] = useState([]);
 
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
@@ -67,16 +68,43 @@ const CriteriaUploading = () => {
   };
 
   const addItem = (() => {
-    let key = Question.length;
-    return () => {
-      Question.unshift({
-        key,
-        description: `${CriteriaType} - ${QuestionPrefix} ${CriteriaDetail} ${OtherInfo} ?`,
-      });
+    if (CriteriaType == "INCLUSION") {
+      let key = Question.length;
+      let type = "";
+      if (workerChecked) {
+        type = "Worker Need";
+      } else if (generalChecked) {
+        type = "General";
+      }
+      return () => {
+        Question.unshift({
+          key,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+        });
 
-      setQuestion(Question.slice(0));
-      key++;
-    };
+        setQuestion(Question.slice(0));
+        key++;
+      };
+    } else if (CriteriaType == "EXCLUSION") {
+      let type = "";
+      if (workerChecked) {
+        type = "Worker Need";
+      } else if (generalChecked) {
+        type = "General";
+      }
+      let key = exclusionQuesion.length;
+      return () => {
+        exclusionQuesion.unshift({
+          key,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+        });
+
+        setExclusionQuestion(exclusionQuesion.slice(0));
+        key++;
+      };
+    } else {
+      return () => {};
+    }
   })();
 
   const projectUpload = () => {
@@ -110,18 +138,12 @@ const CriteriaUploading = () => {
     setQuestion(Question.slice().filter((item) => item.key !== key));
   };
 
-  // const renderList = (item) => {
-  //   return (
-  //     <Card style={styles.mycard} key={item.key}>
-  //       <View style={styles.cardView}>
-  //         <Text styl={styles.text}>{item.description}</Text>
-  //         <Card.Actions style={{ position: "absolute", right: 0 }}>
-  //           <Button onPress={() => removeItem(item.key)}>Delete</Button>
-  //         </Card.Actions>
-  //       </View>
-  //     </Card>
-  //   );
-  // };
+  const removeExclusion = (key) => {
+    setExclusionQuestion(
+      exclusionQuesion.slice().filter((item) => item.key !== key)
+    );
+  };
+
   const renderList = Question.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
@@ -129,6 +151,19 @@ const CriteriaUploading = () => {
           <Text styl={styles.text}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeItem(item.key)}>Delete</Button>
+          </Card.Actions>
+        </View>
+      </Card>
+    );
+  });
+
+  const renderExclusonList = exclusionQuesion.map((item) => {
+    return (
+      <Card style={styles.mycard} key={item.key}>
+        <View style={styles.cardView}>
+          <Text styl={styles.text}>{item.description}</Text>
+          <Card.Actions style={{ position: "absolute", right: 0 }}>
+            <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
           </Card.Actions>
         </View>
       </Card>
@@ -451,16 +486,46 @@ const CriteriaUploading = () => {
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
-              style={{ height: 40, width: 200, marginRight: 10, paddingTop: 0 }}
+              style={{ height: 40, width: 300, marginRight: 10, paddingTop: 0 }}
               onChangeText={(text) => setCriteriaDetail(text)}
             />
 
-            <TextInput
-              mode="outlined"
-              value={OtherInfo}
-              placeholder="Other Infomation"
-              style={{ height: 40, width: 200, marginRight: 10 }}
-              onChangeText={(text) => setOtherInfo(text)}
+            <DropDownPicker
+              items={[
+                {
+                  label: "smoking in 6 month?",
+                  value: "smoking in 6 month?",
+                },
+                {
+                  label: "older than 18?",
+                  value: "older than 18?",
+                },
+                {
+                  label: "preganant in 4 month?",
+                  value: "preganant in 4 month?",
+                },
+                {
+                  label: "leg pain",
+                  value: "leg pain",
+                },
+              ]}
+              searchable={true}
+              searchablePlaceholder="Search for an item"
+              searchablePlaceholderTextColor="gray"
+              searchableError={() => <Text>Not Found</Text>}
+              placeholder="Question Bank"
+              containerStyle={{
+                height: 40,
+                width: 140,
+                marginRight: 10,
+                marginTop: 8,
+              }}
+              style={{ backgroundColor: "#fafafa" }}
+              itemStyle={{
+                justifyContent: "flex-start",
+              }}
+              dropDownStyle={{ backgroundColor: "#fafafa" }}
+              onChangeItem={(item) => setCriteriaDetail(item.value)}
             />
           </View>
 
@@ -500,7 +565,7 @@ const CriteriaUploading = () => {
                       position: "absolute",
                       left: 0,
                       top: 30,
-                      fontSize: 20,
+                      fontSize: 30,
                       color: "#00205B",
                     }}
                   >
@@ -519,7 +584,32 @@ const CriteriaUploading = () => {
                     Add
                   </Button>
                 </View>
-                <View>{renderList}</View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      color: "#00205B",
+                    }}
+                  >
+                    Inclusion Quetsions:
+                  </Text>
+                  <View>{renderList}</View>
+                </View>
+
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      marginTop: 30,
+                      color: "#00205B",
+                    }}
+                  >
+                    Exclusion Quetsions:
+                  </Text>
+                  <View>{renderExclusonList}</View>
+                </View>
 
                 {/* <FlatList
                   data={Question}
