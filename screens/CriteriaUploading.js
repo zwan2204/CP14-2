@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,8 +12,14 @@ import {
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
+import * as DocumentPicker from "expo-document-picker";
+import { CheckBox } from "react-native-elements";
 
 const CriteriaUploading = () => {
+  const [image, setImage] = useState("");
+  const [workerChecked, setWorkerChecked] = React.useState(false);
+  const [generalChecked, setGeneralChecked] = React.useState(false);
+  const [ApprovalNumber, setApprovalNumber] = useState("");
   const [CriteriaType, setCriteriaType] = useState("");
   const [QuestionPrefix, setQuestionPrefix] = useState("");
   const [CriteriaDetail, setCriteriaDetail] = useState("");
@@ -25,6 +31,40 @@ const CriteriaUploading = () => {
   const [Duration, setDuration] = useState("");
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
+
+  const pickImage = async () => {
+    let result = await DocumentPicker.getDocumentAsync({
+      type: "application/pdf",
+    });
+    if (result.type == "success") {
+      let newfile = {
+        uri: result.uri,
+        type: `test/${result.name.split(".")[1]}`,
+        name: `test.${result.name.split(".")[1]}`,
+      };
+      handleUpload(newfile);
+    }
+  };
+
+  const handleUpload = (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "employeeapp");
+    data.append("cloud_name", "dzjg12m3b");
+
+    console.log(data);
+    fetch("https://api.cloudinary.com/v1_1/dzjg12m3b/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setImage(data.uri);
+      })
+      .catch((err) => {
+        console.log("upload false");
+      });
+  };
 
   const addItem = (() => {
     let key = Question.length;
@@ -94,6 +134,24 @@ const CriteriaUploading = () => {
       </Card>
     );
   });
+
+  const workerCheck = () => {
+    if (generalChecked) {
+      setGeneralChecked(!generalChecked);
+      setWorkerChecked(!workerChecked);
+    } else {
+      setWorkerChecked(!workerChecked);
+    }
+  };
+
+  const generalCheck = () => {
+    if (workerChecked) {
+      setGeneralChecked(!generalChecked);
+      setWorkerChecked(!workerChecked);
+    } else {
+      setGeneralChecked(!generalChecked);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.root}>
@@ -185,7 +243,7 @@ const CriteriaUploading = () => {
                 textAlignVertical="top"
                 value={Description}
                 style={{
-                  height: 240,
+                  height: 180,
                   marginHorizontal: 10,
                 }}
                 render={(innerProps) => (
@@ -202,38 +260,101 @@ const CriteriaUploading = () => {
                 )}
                 onChangeText={(text) => setDescription(text)}
               />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 15,
+                }}
+              >
+                <Text style={styles.subTitle}>
+                  Ethics Approval Number/ Governance Approval Number:{" "}
+                </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Title}
+                  style={{ width: 125, height: 30, margin: 10 }}
+                  onChangeText={(text) => setApprovalNumber(text)}
+                />
+              </View>
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.subTitle}>Location: </Text>
-              <TextInput
-                mode="outlined"
-                value={Location}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setLocation(text)}
-              />
-              <Text style={styles.subTitle}>Number of Subjects: </Text>
-              <TextInput
-                mode="outlined"
-                value={SubjectNo}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setSubjectNo(text)}
-              />
-              <Text style={styles.subTitle}>Study Duration: </Text>
-              <TextInput
-                mode="outlined"
-                value={Duration}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setDuration(text)}
-              />
-              <Text style={styles.subTitle}>Start Date: </Text>
-              <TextInput
-                mode="outlined"
-                value={Date}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setDate(text)}
-              />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={styles.subTitle}>Location: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Location}
+                  style={{
+                    height: 30,
+                    margin: 10,
+                    flex: 1,
+                  }}
+                  onChangeText={(text) => setLocation(text)}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Number of Subjects: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={SubjectNo}
+                  style={{
+                    height: 30,
+                    margin: 10,
+                    flex: 1,
+                  }}
+                  onChangeText={(text) => setSubjectNo(text)}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Study Duration: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Duration}
+                  style={{ height: 30, margin: 10, flex: 1 }}
+                  onChangeText={(text) => setDuration(text)}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Start Date: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Date}
+                  style={{
+                    height: 30,
+                    margin: 10,
+                    flex: 1,
+                  }}
+                  onChangeText={(text) => setDate(text)}
+                />
+              </View>
+              <Button
+                icon={image == "" ? "upload" : "check"}
+                mode="contained"
+                style={{ margin: 10 }}
+                onPress={() => pickImage()}
+              >
+                File Upload
+              </Button>
             </View>
-            <View style={{ flex: 0.6 }}></View>
           </View>
           <Text
             style={{
@@ -343,6 +464,33 @@ const CriteriaUploading = () => {
             />
           </View>
 
+          <View
+            style={{
+              flexDirection: "row",
+              marginVertical: 20,
+            }}
+          >
+            <CheckBox
+              title="This question requires a healthcare worker to answer it
+              "
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={workerChecked}
+              onPress={() => {
+                workerCheck();
+              }}
+            />
+
+            <CheckBox
+              title="This question is a general question"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={generalChecked}
+              onPress={() => {
+                generalCheck();
+              }}
+            />
+          </View>
           <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 3 }}>
               <View style={{ flex: 1 }}>
