@@ -43,6 +43,7 @@ const CriteriaUploading = () => {
         type: `test/${result.name.split(".")[1]}`,
         name: `test.${result.name.split(".")[1]}`,
       };
+
       handleUpload(newfile);
     }
   };
@@ -53,14 +54,14 @@ const CriteriaUploading = () => {
     data.append("upload_preset", "employeeapp");
     data.append("cloud_name", "dzjg12m3b");
 
-    console.log(data);
     fetch("https://api.cloudinary.com/v1_1/dzjg12m3b/image/upload", {
       method: "post",
       body: data,
     })
       .then((res) => res.json())
       .then((data) => {
-        setImage(data.uri);
+        console.log(data.url);
+        setImage(data.url);
       })
       .catch((err) => {
         console.log("upload false");
@@ -114,6 +115,11 @@ const CriteriaUploading = () => {
       tmpQuestion.push(Question[i].description);
     }
 
+    let tmpExclusionQuestion = [];
+
+    for (let i = 0; i < exclusionQuesion.length; i++) {
+      tmpExclusionQuestion.push(exclusionQuesion[i].description);
+    }
     axios
       .post("http://localhost:12345/api/project", {
         title: Title,
@@ -122,7 +128,11 @@ const CriteriaUploading = () => {
         subjectNo: SubjectNo,
         duration: Duration,
         date: Date,
-        criteria: tmpQuestion,
+
+        InclusionCriteria: tmpQuestion,
+        ExclusionCriteria: tmpExclusionQuestion,
+        approvalNumber: ApprovalNumber,
+        fileUpload: image,
       })
       .then(
         (response) => {
@@ -304,11 +314,11 @@ const CriteriaUploading = () => {
                 }}
               >
                 <Text style={styles.subTitle}>
-                  Ethics Approval Number/ Governance Approval Number:{" "}
+                  Ethics Approval Number/ Governance Approval Number:
                 </Text>
                 <TextInput
                   mode="outlined"
-                  value={Title}
+                  value={ApprovalNumber}
                   style={{ width: 125, height: 30, margin: 10 }}
                   onChangeText={(text) => setApprovalNumber(text)}
                 />
