@@ -60,7 +60,6 @@ const CriteriaUploading = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.url);
         setImage(data.url);
       })
       .catch((err) => {
@@ -71,6 +70,10 @@ const CriteriaUploading = () => {
   const addItem = (() => {
     if (CriteriaType == "INCLUSION") {
       let key = Question.length;
+      if (Question.length != 0) {
+        key = Question[Question.length - 1].key + 1;
+      }
+
       let type = "";
       if (workerChecked) {
         type = "Worker Need";
@@ -78,7 +81,7 @@ const CriteriaUploading = () => {
         type = "General";
       }
       return () => {
-        Question.unshift({
+        Question.push({
           key,
           description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
         });
@@ -94,8 +97,11 @@ const CriteriaUploading = () => {
         type = "General";
       }
       let key = exclusionQuesion.length;
+      if (exclusionQuesion.length != 0) {
+        key = exclusionQuesion[exclusionQuesion.length - 1].key + 1;
+      }
       return () => {
-        exclusionQuesion.unshift({
+        exclusionQuesion.push({
           key,
           description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
         });
