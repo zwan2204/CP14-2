@@ -294,7 +294,7 @@ const CriteriaUploading = () => {
                 textAlignVertical="top"
                 value={Description}
                 style={{
-                  height: 180,
+                  height: 130,
                   marginHorizontal: 10,
                 }}
                 render={(innerProps) => (
@@ -320,12 +320,29 @@ const CriteriaUploading = () => {
                 }}
               >
                 <Text style={styles.subTitle}>
-                  Ethics Approval Number/ Governance Approval Number:
+                  Ethics Approval Numbe:
                 </Text>
                 <TextInput
                   mode="outlined"
                   value={ApprovalNumber}
-                  style={{ width: 125, height: 30, margin: 10 }}
+                  style={{flex: 1, height: 30, marginHorizontal:10 }}
+                  onChangeText={(text) => setApprovalNumber(text)}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 15,
+                }}
+              >
+                <Text style={styles.subTitle}>
+                  Governance Approval Number:
+                </Text>
+                <TextInput
+                  mode="outlined"
+                  value={ApprovalNumber}
+                  style={{flex: 1, height: 30, marginHorizontal:10 }}
                   onChangeText={(text) => setApprovalNumber(text)}
                 />
               </View>
