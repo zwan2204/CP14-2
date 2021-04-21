@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,8 +10,6 @@ import {
   TextInput as NativeTextInput,
   Alert,
 } from "react-native";
-
-
 
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
@@ -24,7 +22,7 @@ const CriteriaUploading = () => {
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
   const [ApprovalNumber, setApprovalNumber] = useState("");
-  const [Governance , setGovernanceNumber] = useState("");
+  const [Governance, setGovernanceNumber] = useState("");
   const [CriteriaType, setCriteriaType] = useState("");
   const [QuestionPrefix, setQuestionPrefix] = useState("");
   const [CriteriaDetail, setCriteriaDetail] = useState("");
@@ -36,8 +34,8 @@ const CriteriaUploading = () => {
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
-  const [data, setdata] = useState([])
-
+  const [data, setdata] = useState([]);
+  const [questionBank, setQuestionBank] = useState([]);
 
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
@@ -54,39 +52,37 @@ const CriteriaUploading = () => {
     }
   };
 
+  useEffect(() => {
+    getQuestion();
+  }, []);
   const storeData = async () => {
     const data = {
       title: Title,
-        description: Description,
-        location: Location,
-        subjectNo: SubjectNo,
-        duration: Duration,
-        date: Date,
-        InclusionCriteria: Question,
-        ExclusionCriteria: exclusionQuesion,
-        approvalNumber: ApprovalNumber,
-        fileUpload: image,
+      description: Description,
+      location: Location,
+      subjectNo: SubjectNo,
+      duration: Duration,
+      date: Date,
+      InclusionCriteria: Question,
+      ExclusionCriteria: exclusionQuesion,
+      approvalNumber: ApprovalNumber,
+      fileUpload: image,
     };
 
-
     try {
-      const jsonValue = JSON.stringify(data)
-      await AsyncStorage.setItem('@storage_Key', jsonValue)
-    } catch (e) {
-      console.log("has")
-    }
-  }
+      const jsonValue = JSON.stringify(data);
+      await AsyncStorage.setItem("@storage_Key", jsonValue);
+    } catch (e) {}
+  };
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@storage_Key')
-      console.log(jsonValue)
+      const jsonValue = await AsyncStorage.getItem("@storage_Key");
       return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch(e) {
+    } catch (e) {
       // error reading value
     }
-  }
-  
+  };
 
   const handleUpload = (image) => {
     const data = new FormData();
@@ -190,21 +186,24 @@ const CriteriaUploading = () => {
       );
   };
 
-
   const getQuestion = () => {
-    
-    axios
-      .get("http://localhost:12345/api/question", {
-        
-      })
-      .then(
-        (response) => {
-          console.log(response)
-        },
-        (error) => {
-          console.log(error);
+    let questions = [];
+    axios.get("http://localhost:12345/api/question", {}).then(
+      (response) => {
+        for (let i = 0; i < Object.keys(response.data).length; i++) {
+          let question = {
+            label: response.data[i].name,
+            value: response.data[i].name,
+          };
+          questions.push(question);
         }
-      );
+
+        setQuestionBank(questions);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   const removeItem = (key) => {
@@ -376,13 +375,11 @@ const CriteriaUploading = () => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>
-                  Ethics Approval Numbe:
-                </Text>
+                <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
                 <TextInput
                   mode="outlined"
                   value={ApprovalNumber}
-                  style={{flex: 1, height: 30, marginHorizontal:10 }}
+                  style={{ flex: 1, height: 30, marginHorizontal: 10 }}
                   onChangeText={(text) => setApprovalNumber(text)}
                 />
               </View>
@@ -393,13 +390,11 @@ const CriteriaUploading = () => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>
-                  Governance Approval Number:
-                </Text>
+                <Text style={styles.subTitle}>Governance Approval Number:</Text>
                 <TextInput
                   mode="outlined"
                   value={Governance}
-                  style={{flex: 1, height: 30, marginHorizontal:10 }}
+                  style={{ flex: 1, height: 30, marginHorizontal: 10 }}
                   onChangeText={(text) => setGovernanceNumber(text)}
                 />
               </View>
@@ -526,7 +521,6 @@ const CriteriaUploading = () => {
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
                 color: "red",
-                
               }}
               itemStyle={{
                 justifyContent: "flex-start",
@@ -561,7 +555,6 @@ const CriteriaUploading = () => {
                 marginTop: 8,
                 marginRight: 10,
               }}
-              
               selectedLabelStyle={{
                 color: "#00205B",
               }}
@@ -572,26 +565,9 @@ const CriteriaUploading = () => {
               dropDownStyle={{ backgroundColor: "#fafafa" }}
               onChangeItem={(item) => setQuestionPrefix(item.value)}
             />
-            
+
             <DropDownPicker
-              items={[
-                {
-                  label: "smoking in 6 month?",
-                  value: "smoking in 6 month?",
-                },
-                {
-                  label: "older than 18?",
-                  value: "older than 18?",
-                },
-                {
-                  label: "preganant in 4 month?",
-                  value: "preganant in 4 month?",
-                },
-                {
-                  label: "leg pain",
-                  value: "leg pain",
-                },
-              ]}
+              items={questionBank}
               searchable={true}
               searchablePlaceholder="Search for an item"
               searchablePlaceholderTextColor="gray"
@@ -602,16 +578,15 @@ const CriteriaUploading = () => {
                 width: 40,
                 marginTop: 8,
               }}
-             
-              defaultValue = ""
+              defaultValue=""
               itemStyle={{
                 justifyContent: "flex-start",
               }}
               selectedLabelStyle={{
                 display: "none",
               }}
-              dropDownStyle={{ width:340}}
-              dropDownMaxHeight = {300}
+              dropDownStyle={{ width: 340 }}
+              dropDownMaxHeight={300}
               onChangeItem={(item) => setCriteriaDetail(item.value)}
             />
             <TextInput
@@ -621,8 +596,6 @@ const CriteriaUploading = () => {
               style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
               onChangeText={(text) => setCriteriaDetail(text)}
             />
-
-            
           </View>
 
           <View
@@ -744,23 +717,22 @@ const CriteriaUploading = () => {
           </View>
         </View>
       </ScrollView>
-      <View style = {{flexDirection:"row", justifyContent:"center"}}>
-      <Button
-        mode="contained"
-        style={{ width: 150, alignSelf: "center", margin: 20 }}
-        onPress={() =>storeData()}
-      >
-        Save Draft
-      </Button>
-      <Button
-        mode="contained"
-        style={{ width: 100, alignSelf: "center", margin: 20 }}
-        onPress={() => getQuestion()}
-      >
-        Create
-      </Button>
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <Button
+          mode="contained"
+          style={{ width: 150, alignSelf: "center", margin: 20 }}
+          onPress={() => getQuestion()}
+        >
+          Save Draft
+        </Button>
+        <Button
+          mode="contained"
+          style={{ width: 100, alignSelf: "center", margin: 20 }}
+          onPress={() => projectUpload()}
+        >
+          Create
+        </Button>
       </View>
-        
 
       {/* View of Footer*/}
       <View
