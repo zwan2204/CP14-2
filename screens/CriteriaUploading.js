@@ -452,6 +452,7 @@ const CriteriaUploading = () => {
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
                 color: "red",
+                
               }}
               itemStyle={{
                 justifyContent: "flex-start",
@@ -482,30 +483,22 @@ const CriteriaUploading = () => {
               ]}
               containerStyle={{
                 height: 40,
-                width: 350,
+                width: 300,
                 marginTop: 8,
                 marginRight: 10,
               }}
-              style={{ backgroundColor: "#fafafa" }}
+              
               selectedLabelStyle={{
                 color: "#00205B",
               }}
-              placeholder="Enter/Select Question Word/Phrase"
+              placeholder="Select Question prefix"
               itemStyle={{
                 justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
               onChangeItem={(item) => setQuestionPrefix(item.value)}
             />
-
-            <TextInput
-              mode="outlined"
-              value={CriteriaDetail}
-              placeholder="Criteria detail"
-              style={{ height: 40, width: 300, marginRight: 10, paddingTop: 0 }}
-              onChangeText={(text) => setCriteriaDetail(text)}
-            />
-
+            
             <DropDownPicker
               items={[
                 {
@@ -529,20 +522,33 @@ const CriteriaUploading = () => {
               searchablePlaceholder="Search for an item"
               searchablePlaceholderTextColor="gray"
               searchableError={() => <Text>Not Found</Text>}
-              placeholder="Question Bank"
+              placeholder=""
               containerStyle={{
                 height: 40,
-                width: 140,
-                marginRight: 10,
+                width: 40,
                 marginTop: 8,
               }}
-              style={{ backgroundColor: "#fafafa" }}
+             
+              defaultValue = ""
               itemStyle={{
                 justifyContent: "flex-start",
               }}
-              dropDownStyle={{ backgroundColor: "#fafafa" }}
+              selectedLabelStyle={{
+                display: "none",
+              }}
+              dropDownStyle={{ width:340}}
+              dropDownMaxHeight = {300}
               onChangeItem={(item) => setCriteriaDetail(item.value)}
             />
+            <TextInput
+              mode="outlined"
+              value={CriteriaDetail}
+              placeholder="Criteria detail"
+              style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
+              onChangeText={(text) => setCriteriaDetail(text)}
+            />
+
+            
           </View>
 
           <View
