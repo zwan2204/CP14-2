@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,6 +10,9 @@ import {
   TextInput as NativeTextInput,
   Alert,
 } from "react-native";
+
+
+
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -20,6 +24,7 @@ const CriteriaUploading = () => {
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
   const [ApprovalNumber, setApprovalNumber] = useState("");
+  const [Governance , setGovernanceNumber] = useState("");
   const [CriteriaType, setCriteriaType] = useState("");
   const [QuestionPrefix, setQuestionPrefix] = useState("");
   const [CriteriaDetail, setCriteriaDetail] = useState("");
@@ -30,8 +35,9 @@ const CriteriaUploading = () => {
   const [Duration, setDuration] = useState("");
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
-
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
+  const [data, setdata] = useState([])
+
 
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
@@ -47,6 +53,40 @@ const CriteriaUploading = () => {
       handleUpload(newfile);
     }
   };
+
+  const storeData = async () => {
+    const data = {
+      title: Title,
+        description: Description,
+        location: Location,
+        subjectNo: SubjectNo,
+        duration: Duration,
+        date: Date,
+        InclusionCriteria: Question,
+        ExclusionCriteria: exclusionQuesion,
+        approvalNumber: ApprovalNumber,
+        fileUpload: image,
+    };
+
+
+    try {
+      const jsonValue = JSON.stringify(data)
+      await AsyncStorage.setItem('@storage_Key', jsonValue)
+    } catch (e) {
+      console.log("has")
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      console.log(jsonValue)
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      // error reading value
+    }
+  }
+  
 
   const handleUpload = (image) => {
     const data = new FormData();
@@ -143,6 +183,23 @@ const CriteriaUploading = () => {
       .then(
         (response) => {
           Alert.alert("successfully upload");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+
+  const getQuestion = () => {
+    
+    axios
+      .get("http://localhost:12345/api/question", {
+        
+      })
+      .then(
+        (response) => {
+          console.log(response)
         },
         (error) => {
           console.log(error);
@@ -341,9 +398,9 @@ const CriteriaUploading = () => {
                 </Text>
                 <TextInput
                   mode="outlined"
-                  value={ApprovalNumber}
+                  value={Governance}
                   style={{flex: 1, height: 30, marginHorizontal:10 }}
-                  onChangeText={(text) => setApprovalNumber(text)}
+                  onChangeText={(text) => setGovernanceNumber(text)}
                 />
               </View>
             </View>
@@ -687,14 +744,23 @@ const CriteriaUploading = () => {
           </View>
         </View>
       </ScrollView>
-
+      <View style = {{flexDirection:"row", justifyContent:"center"}}>
       <Button
         mode="contained"
-        style={{ width: 100, alignSelf: "center", marginBottom: 20 }}
-        onPress={() => projectUpload()}
+        style={{ width: 150, alignSelf: "center", margin: 20 }}
+        onPress={() =>storeData()}
       >
-        Save
+        Save Draft
       </Button>
+      <Button
+        mode="contained"
+        style={{ width: 100, alignSelf: "center", margin: 20 }}
+        onPress={() => getQuestion()}
+      >
+        Create
+      </Button>
+      </View>
+        
 
       {/* View of Footer*/}
       <View
