@@ -5,7 +5,7 @@ import { Image, Text, View, SafeAreaView } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
 import { HelperText, TextInput, Button } from "react-native-paper";
-
+import { useHistory, Link } from "react-router-dom";
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -14,13 +14,12 @@ export default class LoginScreen extends React.Component {
       password: ""
     };
   }
-
   pickRole = role => {
     this.setState({ role: role });
   };
 
   userLogin = () => {
-    const { navigate } = this.props.navigation;
+    const { history } = this.props;
     axios
       .post("http://localhost:12345/api/auth", {
         email: this.state.email,
@@ -30,11 +29,11 @@ export default class LoginScreen extends React.Component {
         response => {
           console.log(response);
           if (response.data.userRole === "Admin") {
-            navigate("CriteriaUploading");
+            history.push("/projectUpload");
           } else if (response.data.userRole === "Health Care Workers") {
-            navigate("WorkerPage");
+            history.push("/worker");
           } else {
-            navigate("ParticipantPage");
+            history.push("/participant");
           }
         },
         error => {
@@ -48,7 +47,6 @@ export default class LoginScreen extends React.Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <SafeAreaView style={styles.container}>
         {/* Header color */}
@@ -134,9 +132,8 @@ export default class LoginScreen extends React.Component {
           >
             LOGIN
           </Button>
-          <Button mode="text" onPress={() => navigate("Signup")}>
-            Signup
-          </Button>
+
+          <Link to={"/register"}>Signup</Link>
         </View>
 
         {/* <View
