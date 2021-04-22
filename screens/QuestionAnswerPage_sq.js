@@ -10,11 +10,11 @@ import {
     ScrollView, 
     FlatList, 
     NativeModules,
-    Animated
 } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
 import Layout from "antd/lib/layout/layout";
+import { Link } from "react-router-dom";
 
 const DATA = [
     {
@@ -23,7 +23,6 @@ const DATA = [
         exclusionIDList: [1],
         stateYes: false,
         stateNo: false,
-        ani: false,
     },
 
     {
@@ -32,7 +31,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        ani: false,
     },
 
     {
@@ -41,7 +39,6 @@ const DATA = [
         exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
-        ani: false,
     },
 
     {
@@ -50,7 +47,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        ani: false,
     },
   ];
 
@@ -61,7 +57,6 @@ const DATA = [
         exclusionIDList: [1],
         stateYes: false,
         stateNo: false,
-        num: 0,
     },
 
     {
@@ -70,7 +65,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 1,
     },
 
     {
@@ -79,7 +73,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 2,
     },
 
     {
@@ -88,7 +81,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 3,
     },
 
     {
@@ -97,7 +89,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 4,
     },
 
     {
@@ -106,7 +97,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 5,
     },
 
     {
@@ -115,7 +105,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 5,
     },
 
     {
@@ -124,7 +113,6 @@ const DATA = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 5,
     },
     
   ];
@@ -148,6 +136,10 @@ const QuestionAnswerPage = () => {
 
     var availableProjects = [];
     var num = 0;
+
+    const a = () => {
+        console.log(location.filteredProjects);
+    };
 
     const handleClickLeft = (item) => {
         makeASelection(item, false);
@@ -333,7 +325,7 @@ const QuestionAnswerPage = () => {
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
-                        - General Questions
+                        - Specific Questions
                     </Text>
                 </View>
                 
@@ -403,9 +395,9 @@ const QuestionAnswerPage = () => {
                                 General Questions
                             </Text>
                         </View>
-                        <View style={[styles.processBarPole ,{backgroundColor:"white"}]}></View>
-                        <View style={[styles.processBarCircle , {backgroundColor:"white"}]}>                        
-                            <Text style={{color:"grey", paddingLeft:5}}>3</Text>
+                        <View style={[styles.processBarPole ,{backgroundColor:"#00205B"}]}></View>
+                        <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>                        
+                            <Text style={{color:"white", paddingLeft:5}}>3</Text>
                             <Text style={{position:"absolute", paddingLeft:30, color:"#00205B", top:-10}}>
                                 Specific Questions
                             </Text>
@@ -428,12 +420,12 @@ const QuestionAnswerPage = () => {
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={[styles.questionnaireButton, {backgroundColor:"#00205B"}]} 
-                            onPress={()=>console.log("maxum is: " + maxH, "currentH is: " + currentH, "contianer height is: " + containerHeight, "y off: " + yOffset)}>
-                            <Text style={{color:"white"}}>BACK</Text>
+                            onPress={()=>console.log("a")}>
+                            <Link to={"/questionnaire"} style={{color:"white", textDecoration:"none"}}>BACK</Link>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.questionnaireButton, {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]} 
-                            onPress={showingMessage ? null : () => console.log("clicked next")}>
+                            onPress={showingMessage ? null : a}>
                             <Text style={{color: "white"}}>NEXT</Text>
                         </TouchableOpacity>
                     </View>

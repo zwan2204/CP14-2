@@ -10,13 +10,9 @@ import Signup from "../screens/SignupScreen";
 import CriteriaUploading from "../screens/CriteriaUploading";
 import ParticipantPage from "../screens/ParticipantPage";
 import WorkerPage from "../screens/WorkerPage";
-<<<<<<< HEAD
 import ParticipantInfoScreen from "../screens/ParticipantInfoScreen"
-import QuestionAnswerPage from "../screens/QuestionAnswerPage"
+import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq"
 import QuestionPreLoadingPage from "../screens/QuestionPreLoadingPage"
-=======
-import ParticipantInfoScreen from "../screens/ParticipantInfoScreen";
->>>>>>> main
 
 export default createAppContainer(
   createSwitchNavigator({
