@@ -8,82 +8,90 @@ import axios from "axios";
 import { Button } from "react-native-paper";
 
 export default class ParticipantInfoScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      gender: "",
-      dob: "",
-      healthy: "",
-      english: "",
-      isPragnent: false,
-      isSmoking: false,
-      isLactating: false,
-      isPlanning: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            gender: "",
+            dob: "",
+            healthy: "",
+            english: "",
+            curLocation: "",
+            isPragnent: false,
+            isSmoking: false,
+            isLactating: false,
+            isPlanning: false
+        };
+    }
+
+    userSignup = () => {
+        const { navigate } = this.props.navigation;
+        axios
+            .post("http://localhost:12345/api/users", {
+                fullName: this.state.fullName,
+                password: this.state.password,
+                role: this.state.role,
+                email: this.state.email,
+                gender: this.state.gender,
+                dob: this.state.dob,
+                healthy: this.state.healthy,
+                english: this.state.english,
+                curLocation: this.state.curLocation,
+                isPragnent: this.state.isPragnent,
+                isSmoking: this.state.isSmoking,
+                isLactating: this.state.isLactating,
+                isPlanning: this.state.isPlanning
+            })
+            .then(
+                response => {
+                    console.log(response);
+                    navigate("Login");
+                },
+                error => {
+                    console.log(error);
+                }
+            );
     };
-  }
 
-  userSignup = () => {
-    const { history } = this.props;
-    axios
-      .post("http://localhost:12345/api/users", {
-        fullName: this.state.fullName,
-        password: this.state.password,
-        role: this.state.role,
-        email: this.state.email,
-        gender: this.state.gender,
-        dob: this.state.dob,
-        healthy: this.state.healthy,
-        english: this.state.english,
-        isPragnent: this.state.isPragnent,
-        isSmoking: this.state.isSmoking,
-        isLactating: this.state.isLactating,
-        isPlanning: this.state.isPlanning
-      })
-      .then(
-        response => {
-          console.log(response);
-          history.push("/Homepage");
-        },
-        error => {
-          console.log(error);
+    pickGender = gender => {
+        if (gender !== 0) {
+            this.setState({ gender: gender });
         }
-      );
-  };
+    };
 
-  pickGender = gender => {
-    if (gender !== 0) {
-      this.setState({ gender: gender });
-    }
-  };
+    pickHealthy = healthy => {
+        if (healthy !== 0) {
+            this.setState({ healthy: healthy });
+        }
+    };
 
-  pickHealthy = healthy => {
-    if (healthy !== 0) {
-      this.setState({ healthy: healthy });
-    }
-  };
+    pickLocation = curLocation => {
+        if (curLocation !== 0) {
+            this.setState({ curLocation: curLocation });
+        }
+    };
 
-  pickEnglish = english => {
-    if (english !== 0) {
-      this.setState({ english: english });
-    }
-  };
+    pickEnglish = english => {
+        if (english !== 0) {
+            this.setState({ english: english });
+        }
+    };
 
-  setPragnent = isPragnent => {
-    this.setState({ isPragnent: !this.state.isPragnent });
-  };
+    setPragnent = isPragnent => {
+        this.setState({ isPragnent: !this.state.isPragnent });
+    };
 
-  setSmoking = isSmoking => {
-    this.setState({ isSmoking: !this.state.isSmoking });
-  };
+    setSmoking = isSmoking => {
+        this.setState({ isSmoking: !this.state.isSmoking });
+    };
 
-  setLactating = isLactating => {
-    this.setState({ isLactating: !this.state.isLactating });
-  };
+    setLactating = isLactating => {
+        this.setState({ isLactating: !this.state.isLactating });
+    };
 
-  setPlanning = isPlanning => {
-    this.setState({ isPlanning: !this.state.isPlanning });
-  };
-
+    setPlanning = isPlanning => {
+        this.setState({ isPlanning: !this.state.isPlanning });
+    };
+  
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -101,120 +109,74 @@ export default class ParticipantInfoScreen extends React.Component {
           />
         </View>
         {/* body view */}
-        <View
-          style={{
-            alignItems: "center",
-            flexDirection: "row",
-            paddingTop: "5%"
-          }}
-        >
-          <View
-            style={{ alignItems: "flex-end", flexDirection: "column", flex: 1 }}
-          >
-            <View>
-              <Text style={styles.partDropdown}>Choose your gender</Text>
-              <Text style={styles.partDropdown}>Are you healthy?</Text>
-              <Text style={styles.partDropdown}>
-                Are you a native English speaker?
-              </Text>
-              <Text style={styles.partDropdown}>
-                Where are you currently located?
-              </Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: "column", flex: 1, paddingLeft: 10 }}>
-            <View style={{ padding: 18, marginLeft: 20 }}>
-              <Picker
-                style={styles.partPiker}
-                selectedValue={this.state.gender}
-                onValueChange={this.pickGender}
-              >
+        <View style={{ flexDirection: "column", flex: 1, paddingLeft: 10 }}>
+        <View style={{ padding: 18, marginLeft: 20 }}>
+            <Picker style={styles.partPiker} selectedValue={this.state.gender} onValueChange={this.pickGender} >
                 <Picker.Item label="Your gender" value="0" />
                 <Picker.Item label="Male" value="Male" />
                 <Picker.Item label="Female" value="Female" />
                 <Picker.Item label="Other" value="Other" />
-              </Picker>
-            </View>
-            <View style={{ padding: 18, marginLeft: 20 }}>
-              <Picker
-                style={styles.partPiker}
-                selectedValue={this.state.healthy}
-                onValueChange={this.pickHealthy}
-              >
+            </Picker>
+        </View>
+        <View style={{ padding: 18, marginLeft: 20 }}>
+            <Picker style={styles.partPiker} selectedValue={this.state.healthy} onValueChange={this.pickHealthy} >
                 <Picker.Item label="Yes/No" value="0" />
                 <Picker.Item label="Yes" value="Yes" />
                 <Picker.Item label="No" value="No" />
-              </Picker>
-            </View>
-            <View style={{ padding: 18, marginLeft: 20 }}>
-              <Picker
-                style={styles.partPiker}
-                selectedValue={this.state.english}
-                onValueChange={this.pickEnglish}
-              >
+            </Picker>
+        </View>
+        <View style={{ padding: 18, marginLeft: 20 }}>
+            <Picker style={styles.partPiker} selectedValue={this.state.english} onValueChange={this.pickEnglish} >
                 <Picker.Item label="Yes/No" value="0" />
                 <Picker.Item label="Yes" value="Yes" />
                 <Picker.Item label="No" value="No" />
-              </Picker>
-            </View>
-            <View style={{ padding: 18, marginLeft: 20 }}>
-              <Picker
-                style={styles.partPiker}
-                selectedValue={this.state.english}
-                onValueChange={this.pickEnglish}
-              >
+            </Picker>
+        </View>
+        <View style={{ padding: 18, marginLeft: 20 }}>
+            <Picker style={styles.partPiker} selectedValue={this.state.curLocation} onValueChange={this.pickLocation} >
                 <Picker.Item label="Your current location" value="0" />
                 <Picker.Item label="Home" value="Home" />
                 <Picker.Item label="GP service" value="GP" />
                 <Picker.Item label="Clinic" value="Clinic" />
                 <Picker.Item label="Hospital" value="Hospital" />
-              </Picker>
-            </View>
-          </View>
+            </Picker>
         </View>
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ padding: 30, fontWeight: "bold" }}>
-            Please tick the medical condition/habits you have:
-          </Text>
-          <View style={{ flexDirection: "row" }}>
+    </View>
+                
+    <View style={{ alignItems: "center" }}>
+        <Text style={{ padding: 30, fontWeight: "bold" }}>Please tick the medical condition/habits you have:</Text>
+        <View style={{ flexDirection: "row" }}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Pragnent</Text>
-              <CheckBox
-                value={this.state.isPragnent}
-                onValueChange={this.setPragnent}
-              />
+                <Text style={styles.checkBox}>Pragnent</Text>
+                <CheckBox
+                    value={this.state.isPragnent}
+                    onValueChange={this.setPragnent}
+                />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Smoking</Text>
-              <CheckBox
-                value={this.state.isSmoking}
-                onValueChange={this.setSmoking}
-              />
+                <Text style={styles.checkBox}>Smoking</Text>
+                <CheckBox
+                    value={this.state.isSmoking}
+                    onValueChange={this.setSmoking}
+                />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Lactating</Text>
-              <CheckBox
-                value={this.state.isLactating}
-                onValueChange={this.setLactating}
-              />
+                <Text style={styles.checkBox}>Lactating</Text>
+                <CheckBox
+                    value={this.state.isLactating}
+                    onValueChange={this.setLactating}
+                />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Planning on becoming pragnent</Text>
-              <CheckBox
-                value={this.state.isPlanning}
-                onValueChange={this.setPlanning}
-              />
+                <Text style={styles.checkBox}>Planning on becoming pragnent</Text>
+                <CheckBox
+                    value={this.state.isPlanning}
+                    onValueChange={this.setPlanning}
+                />
             </View>
-          </View>
-          <Button
-            mode="contained"
-            onPress={this.userSignup}
-            style={{ marginTop: 80 }}
-          >
-            Signup
-          </Button>
         </View>
+        <Button mode="contained" onPress={this.userSignup} style={{ marginTop: 80 }}>Signup</Button>
+    </View>
       </SafeAreaView>
     );
   }
