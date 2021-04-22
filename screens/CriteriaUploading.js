@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,15 +10,24 @@ import {
   TextInput as NativeTextInput,
   Alert,
 } from "react-native";
+
+
+
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
+import * as DocumentPicker from "expo-document-picker";
+import { CheckBox } from "react-native-elements";
 
 const CriteriaUploading = () => {
+  const [image, setImage] = useState("");
+  const [workerChecked, setWorkerChecked] = React.useState(false);
+  const [generalChecked, setGeneralChecked] = React.useState(false);
+  const [ApprovalNumber, setApprovalNumber] = useState("");
+  const [Governance , setGovernanceNumber] = useState("");
   const [CriteriaType, setCriteriaType] = useState("");
   const [QuestionPrefix, setQuestionPrefix] = useState("");
   const [CriteriaDetail, setCriteriaDetail] = useState("");
-  const [OtherInfo, setOtherInfo] = useState("");
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Location, setLocation] = useState("");
@@ -25,18 +35,123 @@ const CriteriaUploading = () => {
   const [Duration, setDuration] = useState("");
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
+  const [exclusionQuesion, setExclusionQuestion] = useState([]);
+  const [data, setdata] = useState([])
+
+
+  const pickImage = async () => {
+    let result = await DocumentPicker.getDocumentAsync({
+      type: "application/pdf",
+    });
+    if (result.type == "success") {
+      let newfile = {
+        uri: result.uri,
+        type: `test/${result.name.split(".")[1]}`,
+        name: `test.${result.name.split(".")[1]}`,
+      };
+
+      handleUpload(newfile);
+    }
+  };
+
+  const storeData = async () => {
+    const data = {
+      title: Title,
+        description: Description,
+        location: Location,
+        subjectNo: SubjectNo,
+        duration: Duration,
+        date: Date,
+        InclusionCriteria: Question,
+        ExclusionCriteria: exclusionQuesion,
+        approvalNumber: ApprovalNumber,
+        fileUpload: image,
+    };
+
+
+    try {
+      const jsonValue = JSON.stringify(data)
+      await AsyncStorage.setItem('@storage_Key', jsonValue)
+    } catch (e) {
+      console.log("has")
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      console.log(jsonValue)
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      // error reading value
+    }
+  }
+  
+
+  const handleUpload = (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "employeeapp");
+    data.append("cloud_name", "dzjg12m3b");
+
+    fetch("https://api.cloudinary.com/v1_1/dzjg12m3b/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setImage(data.url);
+      })
+      .catch((err) => {
+        console.log("upload false");
+      });
+  };
 
   const addItem = (() => {
-    let key = Question.length;
-    return () => {
-      Question.unshift({
-        key,
-        description: `${CriteriaType} - ${QuestionPrefix} ${CriteriaDetail} ${OtherInfo} ?`,
-      });
+    if (CriteriaType == "INCLUSION") {
+      let key = Question.length;
+      if (Question.length != 0) {
+        key = Question[Question.length - 1].key + 1;
+      }
 
-      setQuestion(Question.slice(0));
-      key++;
-    };
+      let type = "";
+      if (workerChecked) {
+        type = "Worker Need";
+      } else if (generalChecked) {
+        type = "General";
+      }
+      return () => {
+        Question.push({
+          key,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+        });
+
+        setQuestion(Question.slice(0));
+        key++;
+      };
+    } else if (CriteriaType == "EXCLUSION") {
+      let type = "";
+      if (workerChecked) {
+        type = "Worker Need";
+      } else if (generalChecked) {
+        type = "General";
+      }
+      let key = exclusionQuesion.length;
+      if (exclusionQuesion.length != 0) {
+        key = exclusionQuesion[exclusionQuesion.length - 1].key + 1;
+      }
+      return () => {
+        exclusionQuesion.push({
+          key,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+        });
+
+        setExclusionQuestion(exclusionQuesion.slice(0));
+        key++;
+      };
+    } else {
+      return () => {};
+    }
   })();
 
   const projectUpload = () => {
@@ -46,6 +161,11 @@ const CriteriaUploading = () => {
       tmpQuestion.push(Question[i].description);
     }
 
+    let tmpExclusionQuestion = [];
+
+    for (let i = 0; i < exclusionQuesion.length; i++) {
+      tmpExclusionQuestion.push(exclusionQuesion[i].description);
+    }
     axios
       .post("http://localhost:12345/api/project", {
         title: Title,
@@ -54,7 +174,11 @@ const CriteriaUploading = () => {
         subjectNo: SubjectNo,
         duration: Duration,
         date: Date,
-        criteria: tmpQuestion,
+
+        InclusionCriteria: tmpQuestion,
+        ExclusionCriteria: tmpExclusionQuestion,
+        approvalNumber: ApprovalNumber,
+        fileUpload: image,
       })
       .then(
         (response) => {
@@ -66,22 +190,33 @@ const CriteriaUploading = () => {
       );
   };
 
+
+  const getQuestion = () => {
+    
+    axios
+      .get("http://localhost:12345/api/question", {
+        
+      })
+      .then(
+        (response) => {
+          console.log(response)
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
   const removeItem = (key) => {
     setQuestion(Question.slice().filter((item) => item.key !== key));
   };
 
-  // const renderList = (item) => {
-  //   return (
-  //     <Card style={styles.mycard} key={item.key}>
-  //       <View style={styles.cardView}>
-  //         <Text styl={styles.text}>{item.description}</Text>
-  //         <Card.Actions style={{ position: "absolute", right: 0 }}>
-  //           <Button onPress={() => removeItem(item.key)}>Delete</Button>
-  //         </Card.Actions>
-  //       </View>
-  //     </Card>
-  //   );
-  // };
+  const removeExclusion = (key) => {
+    setExclusionQuestion(
+      exclusionQuesion.slice().filter((item) => item.key !== key)
+    );
+  };
+
   const renderList = Question.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
@@ -94,6 +229,37 @@ const CriteriaUploading = () => {
       </Card>
     );
   });
+
+  const renderExclusonList = exclusionQuesion.map((item) => {
+    return (
+      <Card style={styles.mycard} key={item.key}>
+        <View style={styles.cardView}>
+          <Text styl={styles.text}>{item.description}</Text>
+          <Card.Actions style={{ position: "absolute", right: 0 }}>
+            <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
+          </Card.Actions>
+        </View>
+      </Card>
+    );
+  });
+
+  const workerCheck = () => {
+    if (generalChecked) {
+      setGeneralChecked(!generalChecked);
+      setWorkerChecked(!workerChecked);
+    } else {
+      setWorkerChecked(!workerChecked);
+    }
+  };
+
+  const generalCheck = () => {
+    if (workerChecked) {
+      setGeneralChecked(!generalChecked);
+      setWorkerChecked(!workerChecked);
+    } else {
+      setGeneralChecked(!generalChecked);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.root}>
@@ -185,7 +351,7 @@ const CriteriaUploading = () => {
                 textAlignVertical="top"
                 value={Description}
                 style={{
-                  height: 240,
+                  height: 130,
                   marginHorizontal: 10,
                 }}
                 render={(innerProps) => (
@@ -202,38 +368,118 @@ const CriteriaUploading = () => {
                 )}
                 onChangeText={(text) => setDescription(text)}
               />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 15,
+                }}
+              >
+                <Text style={styles.subTitle}>
+                  Ethics Approval Numbe:
+                </Text>
+                <TextInput
+                  mode="outlined"
+                  value={ApprovalNumber}
+                  style={{flex: 1, height: 30, marginHorizontal:10 }}
+                  onChangeText={(text) => setApprovalNumber(text)}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 15,
+                }}
+              >
+                <Text style={styles.subTitle}>
+                  Governance Approval Number:
+                </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Governance}
+                  style={{flex: 1, height: 30, marginHorizontal:10 }}
+                  onChangeText={(text) => setGovernanceNumber(text)}
+                />
+              </View>
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.subTitle}>Location: </Text>
-              <TextInput
-                mode="outlined"
-                value={Location}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setLocation(text)}
-              />
-              <Text style={styles.subTitle}>Number of Subjects: </Text>
-              <TextInput
-                mode="outlined"
-                value={SubjectNo}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setSubjectNo(text)}
-              />
-              <Text style={styles.subTitle}>Study Duration: </Text>
-              <TextInput
-                mode="outlined"
-                value={Duration}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setDuration(text)}
-              />
-              <Text style={styles.subTitle}>Start Date: </Text>
-              <TextInput
-                mode="outlined"
-                value={Date}
-                style={{ height: 30, marginHorizontal: 10, marginVertical: 3 }}
-                onChangeText={(text) => setDate(text)}
-              />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={styles.subTitle}>Location: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Location}
+                  style={{
+                    height: 30,
+                    margin: 10,
+                    flex: 1,
+                  }}
+                  onChangeText={(text) => setLocation(text)}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Number of Subjects: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={SubjectNo}
+                  style={{
+                    height: 30,
+                    margin: 10,
+                    flex: 1,
+                  }}
+                  onChangeText={(text) => setSubjectNo(text)}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Study Duration: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Duration}
+                  style={{ height: 30, margin: 10, flex: 1 }}
+                  onChangeText={(text) => setDuration(text)}
+                />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Start Date: </Text>
+                <TextInput
+                  mode="outlined"
+                  value={Date}
+                  style={{
+                    height: 30,
+                    margin: 10,
+                    flex: 1,
+                  }}
+                  onChangeText={(text) => setDate(text)}
+                />
+              </View>
+              <Button
+                icon={image == "" ? "upload" : "check"}
+                mode="contained"
+                style={{ margin: 10 }}
+                onPress={() => pickImage()}
+              >
+                File Upload
+              </Button>
             </View>
-            <View style={{ flex: 0.6 }}></View>
           </View>
           <Text
             style={{
@@ -280,6 +526,7 @@ const CriteriaUploading = () => {
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
                 color: "red",
+                
               }}
               itemStyle={{
                 justifyContent: "flex-start",
@@ -310,39 +557,101 @@ const CriteriaUploading = () => {
               ]}
               containerStyle={{
                 height: 40,
-                width: 350,
+                width: 300,
                 marginTop: 8,
                 marginRight: 10,
               }}
-              style={{ backgroundColor: "#fafafa" }}
+              
               selectedLabelStyle={{
                 color: "#00205B",
               }}
-              placeholder="Enter/Select Question Word/Phrase"
+              placeholder="Select Question prefix"
               itemStyle={{
                 justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
               onChangeItem={(item) => setQuestionPrefix(item.value)}
             />
-
+            
+            <DropDownPicker
+              items={[
+                {
+                  label: "smoking in 6 month?",
+                  value: "smoking in 6 month?",
+                },
+                {
+                  label: "older than 18?",
+                  value: "older than 18?",
+                },
+                {
+                  label: "preganant in 4 month?",
+                  value: "preganant in 4 month?",
+                },
+                {
+                  label: "leg pain",
+                  value: "leg pain",
+                },
+              ]}
+              searchable={true}
+              searchablePlaceholder="Search for an item"
+              searchablePlaceholderTextColor="gray"
+              searchableError={() => <Text>Not Found</Text>}
+              placeholder=""
+              containerStyle={{
+                height: 40,
+                width: 40,
+                marginTop: 8,
+              }}
+             
+              defaultValue = ""
+              itemStyle={{
+                justifyContent: "flex-start",
+              }}
+              selectedLabelStyle={{
+                display: "none",
+              }}
+              dropDownStyle={{ width:340}}
+              dropDownMaxHeight = {300}
+              onChangeItem={(item) => setCriteriaDetail(item.value)}
+            />
             <TextInput
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
-              style={{ height: 40, width: 200, marginRight: 10, paddingTop: 0 }}
+              style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
               onChangeText={(text) => setCriteriaDetail(text)}
             />
 
-            <TextInput
-              mode="outlined"
-              value={OtherInfo}
-              placeholder="Other Infomation"
-              style={{ height: 40, width: 200, marginRight: 10 }}
-              onChangeText={(text) => setOtherInfo(text)}
-            />
+            
           </View>
 
+          <View
+            style={{
+              flexDirection: "row",
+              marginVertical: 20,
+            }}
+          >
+            <CheckBox
+              title="This question requires a healthcare worker to answer it
+              "
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={workerChecked}
+              onPress={() => {
+                workerCheck();
+              }}
+            />
+
+            <CheckBox
+              title="This question is a general question"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={generalChecked}
+              onPress={() => {
+                generalCheck();
+              }}
+            />
+          </View>
           <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 3 }}>
               <View style={{ flex: 1 }}>
@@ -352,7 +661,7 @@ const CriteriaUploading = () => {
                       position: "absolute",
                       left: 0,
                       top: 30,
-                      fontSize: 20,
+                      fontSize: 30,
                       color: "#00205B",
                     }}
                   >
@@ -371,7 +680,32 @@ const CriteriaUploading = () => {
                     Add
                   </Button>
                 </View>
-                <View>{renderList}</View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      color: "#00205B",
+                    }}
+                  >
+                    Inclusion Quetsions:
+                  </Text>
+                  <View>{renderList}</View>
+                </View>
+
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      marginTop: 30,
+                      color: "#00205B",
+                    }}
+                  >
+                    Exclusion Quetsions:
+                  </Text>
+                  <View>{renderExclusonList}</View>
+                </View>
 
                 {/* <FlatList
                   data={Question}
@@ -410,14 +744,23 @@ const CriteriaUploading = () => {
           </View>
         </View>
       </ScrollView>
-
+      <View style = {{flexDirection:"row", justifyContent:"center"}}>
       <Button
         mode="contained"
-        style={{ width: 100, alignSelf: "center", marginBottom: 20 }}
-        onPress={() => projectUpload()}
+        style={{ width: 150, alignSelf: "center", margin: 20 }}
+        onPress={() =>storeData()}
       >
-        Save
+        Save Draft
       </Button>
+      <Button
+        mode="contained"
+        style={{ width: 100, alignSelf: "center", margin: 20 }}
+        onPress={() => getQuestion()}
+      >
+        Create
+      </Button>
+      </View>
+        
 
       {/* View of Footer*/}
       <View

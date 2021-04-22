@@ -1,5 +1,7 @@
 /** @format */
 
+// /** @format */
+
 import React from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
@@ -8,9 +10,13 @@ import Signup from "../screens/SignupScreen";
 import CriteriaUploading from "../screens/CriteriaUploading";
 import ParticipantPage from "../screens/ParticipantPage";
 import WorkerPage from "../screens/WorkerPage";
+<<<<<<< HEAD
 import ParticipantInfoScreen from "../screens/ParticipantInfoScreen"
 import QuestionAnswerPage from "../screens/QuestionAnswerPage"
 import QuestionPreLoadingPage from "../screens/QuestionPreLoadingPage"
+=======
+import ParticipantInfoScreen from "../screens/ParticipantInfoScreen";
+>>>>>>> main
 
 export default createAppContainer(
   createSwitchNavigator({
