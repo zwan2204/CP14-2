@@ -220,9 +220,35 @@ export const styles = StyleSheet.create({
         paddingLeft: "2%", 
         alignSelf:"flex-end", 
         fontWeight:"bold"
+    },
+
+    processBarText: {
+        position:"absolute", 
+        paddingLeft:30, 
+        color:"#00205B", 
+        top:-10
+    },
+
+    scrollBarContainer:{
+        width:"2%", 
+        alignContent:"center", 
+        alignItems:"center", 
+        justifyContent:"center"
+    },
+
+    scrollBarOutside:{
+        width:"40%", 
+        height:"95%", 
+        borderRadius:8, 
+        borderColor:"grey", 
+        borderWidth:1
+    },
+
+    scrollBarInside:{
+        width:"100%",
+        borderRadius:8, 
+        backgroundColor:"#00205B"
     }
-
-
 
 
 
