@@ -18,7 +18,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 
-const ProjectUploading = () => {
+const ProjectUploading = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -318,7 +318,7 @@ const ProjectUploading = () => {
           <Button
             mode="contained"
             style={{ width: 100, position: "absolute", right: 30 }}
-            onPress={() => console.log("Pessed")}
+            onPress={() => props.history.push("/projectManagement")}
           >
             Cancel
           </Button>
