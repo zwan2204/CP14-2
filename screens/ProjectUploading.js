@@ -37,6 +37,7 @@ const ProjectUploading = (props) => {
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
   const [data, setdata] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
+  const userId = "606d1642b2fff30342232416";
 
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
@@ -67,6 +68,9 @@ const ProjectUploading = (props) => {
       InclusionCriteria: Question,
       ExclusionCriteria: exclusionQuesion,
       approvalNumber: ApprovalNumber,
+      governance: Governance,
+      userId: userId,
+
       fileUpload: image,
     };
 
@@ -165,13 +169,14 @@ const ProjectUploading = (props) => {
     }
     axios
       .post("http://localhost:12345/api/project", {
+        userId: userId,
         title: Title,
         description: Description,
         location: Location,
         subjectNo: SubjectNo,
         duration: Duration,
         date: Date,
-
+        governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
@@ -179,7 +184,7 @@ const ProjectUploading = (props) => {
       })
       .then(
         (response) => {
-          Alert.alert("successfully upload");
+          console.log(response);
         },
         (error) => {
           console.log(error);
