@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
   TextInput as NativeTextInput,
+  Image,
   Alert,
 } from "react-native";
 
@@ -17,7 +18,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 
-const CriteriaUploading = () => {
+const ProjectUploading = () => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -270,25 +271,25 @@ const CriteriaUploading = () => {
           flexDirection: "row",
         }}
       >
-        <View style={{ flex: 1, backgroundColor: "tomato" }} />
-        <View style={{ flex: 3, backgroundColor: "#00205B" }} />
+        <Image
+          style={{ width: 200, height: 100, marginLeft: 100, marginTop: 20 }}
+          source={require("../assets/header.png")}
+        />
 
-        <View
+        <Button
+          mode="text"
           style={{
-            flex: 1,
-            backgroundColor: "#00205B",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            backgroundColor: "white",
+            width: 120,
+            height: 37,
+            position: "absolute",
+            bottom: 30,
+            right: 30,
           }}
+          onPress={() => console.log("Pessed")}
         >
-          <Button
-            mode="text"
-            style={{ backgroundColor: "white", width: 120, marginBottom: 30 }}
-            onPress={() => console.log("Pessed")}
-          >
-            log out
-          </Button>
-        </View>
+          log out
+        </Button>
       </View>
 
       {/* View of Body*/}
@@ -785,4 +786,4 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
-export default CriteriaUploading;
+export default ProjectUploading;

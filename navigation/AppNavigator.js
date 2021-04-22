@@ -7,21 +7,21 @@ import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
 import Login from "../screens/LoginScreen";
 import Signup from "../screens/SignupScreen";
-import CriteriaUploading from "../screens/CriteriaUploading";
+import ProjectUploading from "../screens/ProjectUploading";
 import ParticipantPage from "../screens/ParticipantPage";
 import WorkerPage from "../screens/WorkerPage";
-import ParticipantInfoScreen from "../screens/ParticipantInfoScreen"
-import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq"
-import QuestionPreLoadingPage from "../screens/QuestionPreLoadingPage"
+import ParticipantInfoScreen from "../screens/ParticipantInfoScreen";
+import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq";
+import QuestionPreLoadingPage from "../screens/QuestionPreLoadingPage";
 
 export default createAppContainer(
   createSwitchNavigator({
     QuestionAnswerPage: QuestionAnswerPage,
     Login: Login,
     Signup: Signup,
-    CriteriaUploading: CriteriaUploading,
+    ProjectUploading: ProjectUploading,
     WorkerPage: WorkerPage,
     ParticipantPage: ParticipantPage,
-    ParticipantInfoScreen: ParticipantInfoScreen
+    ParticipantInfoScreen: ParticipantInfoScreen,
   })
 );
