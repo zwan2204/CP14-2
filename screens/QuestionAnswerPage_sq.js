@@ -14,41 +14,7 @@ import {
 import { styles } from "../styles.js";
 import axios from "axios";
 import Layout from "antd/lib/layout/layout";
-import { Link } from "react-router-dom";
-
-const DATA = [
-    {
-        question: 'Are you female?',
-        inclusionIDList: [2],
-        exclusionIDList: [1],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Are you a smoker?',
-        inclusionIDList: [1,2],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Are you pregnant',
-        inclusionIDList: [2],
-        exclusionIDList: [4],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Your age is between 18 and 65',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-  ];
+import { useHistory, Link } from "react-router-dom";
 
   const DATA2 = [
     {
@@ -117,7 +83,7 @@ const DATA = [
     
   ];
 
-const QuestionAnswerPage = () => {
+const QuestionAnswerPage_sq = () => {
     const [selectedId, setSelectedId] = useState(null);
     const [removedProjectSizeZero, setSize] = useState(false);
     const [removedProjects, setRemovedProjects] = useState({});
@@ -445,4 +411,4 @@ const QuestionAnswerPage = () => {
     );
 }
 
-export default QuestionAnswerPage;
+export default QuestionAnswerPage_sq;
