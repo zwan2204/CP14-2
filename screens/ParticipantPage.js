@@ -8,13 +8,34 @@ import axios from "axios";
 export default class ParticipantPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      question: []
+    };
   }
+  componentDidMount() {
+    this.getQuestion();
+  }
+  getQuestion = () => {
+    axios.get("http://localhost:12345/api/question").then(
+      response => {
+        console.log(response);
+        let list1 = [];
+        response.data.map(item => {
+          list1.push(item.name);
+        });
+        this.setState({ question: list1 });
+        console.log(this.state.question);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text> this is Participant page </Text>
+        <Text>{this.state.question} </Text>
       </View>
     );
   }
