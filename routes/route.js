@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import LoginScreen from "../screens/LoginScreen";
 import CriteriaUploading from "../screens/CriteriaUploading";
 import ParticipantInfoScreen from "../screens/ParticipantInfoScreen";
@@ -21,7 +21,7 @@ import {
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      {/* <Redirect exact from="/" to={LOGIN_URL} /> */}
+      <Redirect exact from="/" to={LOGIN_URL} />
       <Route exact path={LOGIN_URL} component={LoginScreen} />
       <Route exact path={PROJECT_UPLOAD_URL} component={CriteriaUploading} />
       <Route
