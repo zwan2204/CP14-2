@@ -13,6 +13,7 @@ export default class ParticipantInfoScreen extends React.Component {
             dob: "",
             healthy: "",
             english: "",
+            curLocation: "",
             isPragnent: false,
             isSmoking: false,
             isLactating: false,
@@ -32,6 +33,7 @@ export default class ParticipantInfoScreen extends React.Component {
                 dob: this.state.dob,
                 healthy: this.state.healthy,
                 english: this.state.english,
+                curLocation: this.state.curLocation,
                 isPragnent: this.state.isPragnent,
                 isSmoking: this.state.isSmoking,
                 isLactating: this.state.isLactating,
@@ -63,6 +65,12 @@ export default class ParticipantInfoScreen extends React.Component {
     pickEnglish = english => {
         if (english !== 0) {
             this.setState({ english: english });
+        }
+    };
+
+    pickLocation = curLocation => {
+        if (curLocation !== 0) {
+            this.setState({ curLocation: curLocation });
         }
     };
 
@@ -125,7 +133,7 @@ export default class ParticipantInfoScreen extends React.Component {
                             </Picker>
                         </View>
                         <View style={{ padding: 18, marginLeft: 20 }}>
-                            <Picker style={styles.partPiker} selectedValue={this.state.english} onValueChange={this.pickEnglish} >
+                            <Picker style={styles.partPiker} selectedValue={this.state.curLocation} onValueChange={this.pickLocation} >
                                 <Picker.Item label="Your current location" value="0" />
                                 <Picker.Item label="Home" value="Home" />
                                 <Picker.Item label="GP service" value="GP" />
