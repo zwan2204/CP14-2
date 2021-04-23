@@ -20,7 +20,7 @@ import { Link } from "react-router-dom";
     {
         question: 'Are currently participating in otehr clinical studies?',
         inclusionIDList: [1],
-        exclusionIDList: [2],
+        exclusionIDList: [],
         stateYes: false,
         stateNo: false,
         num: 0,
