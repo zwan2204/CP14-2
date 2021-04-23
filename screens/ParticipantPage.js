@@ -4,8 +4,8 @@ import React from "react";
 import { Text, View, TextInput, TouchableOpacity } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-
-export default class ParticipantPage extends React.Component {
+import { connect } from "react-redux";
+class ParticipantPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +36,16 @@ export default class ParticipantPage extends React.Component {
     return (
       <View style={styles.container}>
         <Text>{this.state.question} </Text>
+        <Text>{this.props.userId} </Text>
       </View>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.user.userId
+  };
+};
+
+export default connect(mapStateToProps)(ParticipantPage);

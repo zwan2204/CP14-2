@@ -21,35 +21,38 @@ import {
   WORKER_URL,
   QUESTIONNAIRE_URL,
   QUESTIONNAIRE_SPECIFIC_URL,
-  PROJECT_MANAGEMENT_URL,
+  PROJECT_MANAGEMENT_URL
 } from "./urlMap";
-
+import { store } from "../redux";
+import { Provider } from "react-redux";
 const Routes = () => (
   <BrowserRouter>
-    <Switch>
-      <Redirect exact from="/" to={LOGIN_URL} />
-      <Route exact path={LOGIN_URL} component={LoginScreen} />
-      <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
-      <Route
-        exact
-        path={PROJECT_MANAGEMENT_URL}
-        component={ProjectManagement}
-      />
-      <Route
-        exact
-        path={PARTICIPANT_INFO_URL}
-        component={ParticipantInfoScreen}
-      />
-      <Route exact path={PARTICIPANT_URL} component={ParticipantPage} />
-      <Route exact path={REGISTER_URL} component={SignupScreen} />
-      <Route exact path={WORKER_URL} component={WorkerScreen} />
-      <Route exact path={QUESTIONNAIRE_URL} component={QuestionAnswerPage} />
-      <Route
-        exact
-        path={QUESTIONNAIRE_SPECIFIC_URL}
-        component={QuestionSpecificPage}
-      />
-    </Switch>
+    <Provider store={store}>
+      <Switch>
+        <Redirect exact from="/" to={LOGIN_URL} />
+        <Route exact path={LOGIN_URL} component={LoginScreen} />
+        <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
+        <Route
+          exact
+          path={PROJECT_MANAGEMENT_URL}
+          component={ProjectManagement}
+        />
+        <Route
+          exact
+          path={PARTICIPANT_INFO_URL}
+          component={ParticipantInfoScreen}
+        />
+        <Route exact path={PARTICIPANT_URL} component={ParticipantPage} />
+        <Route exact path={REGISTER_URL} component={SignupScreen} />
+        <Route exact path={WORKER_URL} component={WorkerScreen} />
+        <Route exact path={QUESTIONNAIRE_URL} component={QuestionAnswerPage} />
+        <Route
+          exact
+          path={QUESTIONNAIRE_SPECIFIC_URL}
+          component={QuestionSpecificPage}
+        />
+      </Switch>
+    </Provider>
   </BrowserRouter>
 );
 
