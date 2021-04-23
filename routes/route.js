@@ -27,7 +27,7 @@ import {
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Redirect exact from="/" to={PROJECT_MANAGEMENT_URL} />
+      <Redirect exact from="/" to={LOGIN_URL} />
       <Route exact path={LOGIN_URL} component={LoginScreen} />
       <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
       <Route
