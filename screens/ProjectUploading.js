@@ -11,13 +11,13 @@ import {
   Image,
   Alert,
 } from "react-native";
-
+import moment from "moment";
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
-
+import uuid from "react-native-uuid";
 const ProjectUploading = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
@@ -57,36 +57,30 @@ const ProjectUploading = (props) => {
   useEffect(() => {
     getQuestion();
   }, []);
+
   const storeData = async () => {
+    const currentDate = moment().format("DD/MM/YY");
+    const documentId = uuid.v4();
     const data = {
       title: Title,
       description: Description,
       location: Location,
       subjectNo: SubjectNo,
       duration: Duration,
+      createdDate: currentDate,
       date: Date,
       InclusionCriteria: Question,
       ExclusionCriteria: exclusionQuesion,
       approvalNumber: ApprovalNumber,
       governance: Governance,
-      userId: userId,
-
       fileUpload: image,
     };
 
     try {
       const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem("@storage_Key", jsonValue);
+      await AsyncStorage.setItem(`${userId},${documentId}`, jsonValue);
+      props.history.push("/projectManagement");
     } catch (e) {}
-  };
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("@storage_Key");
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-    }
   };
 
   const handleUpload = (image) => {
@@ -156,6 +150,7 @@ const ProjectUploading = (props) => {
   })();
 
   const projectUpload = () => {
+    const currentDate = moment().format("DD/MM/YY");
     let tmpQuestion = [];
 
     for (let i = 0; i < Question.length; i++) {
@@ -175,7 +170,9 @@ const ProjectUploading = (props) => {
         location: Location,
         subjectNo: SubjectNo,
         duration: Duration,
+        createdDate: currentDate,
         date: Date,
+        state: "pending",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
@@ -184,6 +181,7 @@ const ProjectUploading = (props) => {
       })
       .then(
         (response) => {
+          props.history.push("/projectManagement");
           console.log(response);
         },
         (error) => {
@@ -194,7 +192,7 @@ const ProjectUploading = (props) => {
 
   const getQuestion = () => {
     let questions = [];
-    axios.get("http://localhost:12345/api/question", {}).then(
+    axios.get("http://localhost:12345/api/question").then(
       (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let question = {
@@ -727,14 +725,16 @@ const ProjectUploading = (props) => {
         <Button
           mode="contained"
           style={{ width: 150, alignSelf: "center", margin: 20 }}
-          onPress={() => getQuestion()}
+          onPress={() => storeData()}
         >
           Save Draft
         </Button>
         <Button
           mode="contained"
           style={{ width: 100, alignSelf: "center", margin: 20 }}
-          onPress={() => projectUpload()}
+          onPress={() => {
+            projectUpload();
+          }}
         >
           Create
         </Button>

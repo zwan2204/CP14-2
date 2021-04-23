@@ -29,20 +29,15 @@ const ProjectManagement = (props) => {
   const [incompleteDrop, setIncompleteDrop] = useState("none");
   const [unreleasedDrop, setUnreleasedDrop] = useState("none");
   const [releasedDrop, setReleasedDrop] = useState("none");
-  const Question = [
-    {
-      key: "1",
-      description: "dasdasd",
-    },
-    {
-      key: "2",
-      description: "11/11/11",
-    },
-    {
-      key: "3",
-      description: "pending",
-    },
-  ];
+
+  const [unreleasedProject, setUnreleasedProject] = useState([]);
+  const [releasedProject, setReleasedProject] = useState([]);
+  const [incompleteProject, setIncompleteProject] = useState([]);
+  const userId = "606d1642b2fff30342232416";
+  useEffect(() => {
+    getProjects();
+    getLocalStorage();
+  }, []);
 
   const toggleIncompleteVisibility = () => {
     if (incompleteDrop == "flex") {
@@ -68,12 +63,96 @@ const ProjectManagement = (props) => {
     }
   };
 
-  const incompleteRender = Question.map((item) => {
+  const deleteProject = (projectId) => {
+    axios.delete(`http://localhost:12345/api/project/${projectId}`).then(
+      (response) => {
+        getProjects();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const deleteIncomplete = async (id) => {
+    try {
+      await AsyncStorage.removeItem(id);
+      getLocalStorage();
+    } catch (e) {}
+  };
+
+  const getProjects = () => {
+    let unreleasedProjects = [];
+    let releasedProjects = [];
+    axios.get(`http://localhost:12345/api/project/${userId}`).then(
+      (response) => {
+        for (let i = 0; i < Object.keys(response.data).length; i++) {
+          let project = {
+            key: response.data[i]._id,
+            title: response.data[i].title,
+            createdDate: response.data[i].createdDate,
+            state: response.data[i].state,
+          };
+          if (response.data[i].state != "Recruiting") {
+            unreleasedProjects.push(project);
+          } else {
+            releasedProjects.push(project);
+          }
+        }
+
+        setReleasedProject(releasedProjects);
+        setUnreleasedProject(unreleasedProjects);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const getLocalStorage = async () => {
+    let keys = [];
+    let values = [];
+    let incompleteProjects = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+      values = await AsyncStorage.multiGet(keys);
+
+      for (let i = 0; i < values.length; i++) {
+        if (userId == values[i][0].split(",")[0]) {
+          let remainTask = 0;
+          let JsonKeys = Object.keys(JSON.parse(values[i][1]));
+
+          for (let x = 0; x < JsonKeys.length; x++) {
+            if (
+              JSON.parse(values[i][1])[JsonKeys[x]].length == 0 ||
+              !JSON.parse(values[i][1])[JsonKeys[x]]
+            ) {
+              remainTask++;
+            }
+          }
+
+          let project = {
+            key: values[i][0],
+            title: JSON.parse(values[i][1]).title,
+            createdDate: JSON.parse(values[i][1]).createdDate,
+            state: remainTask,
+          };
+
+          incompleteProjects.push(project);
+        }
+      }
+      setIncompleteProject(incompleteProjects);
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const incompleteRender = incompleteProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
-        <DataTable.Cell>{item.key}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.description}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.description}</DataTable.Cell>
+        <DataTable.Cell>{item.title}</DataTable.Cell>
+        <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
+        <DataTable.Cell numeric>{`${item.state} tasks left`}</DataTable.Cell>
         <DataTable.Cell numeric>
           <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
             Edit
@@ -83,6 +162,7 @@ const ProjectManagement = (props) => {
             compact="true"
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
+            onPress={() => deleteIncomplete(item.key)}
           >
             Remove
           </Button>
@@ -91,21 +171,19 @@ const ProjectManagement = (props) => {
     );
   });
 
-  const unreleasedRender = Question.map((item) => {
+  const unreleasedRender = unreleasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${unreleasedDrop}` }}>
-        <DataTable.Cell>{item.key}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.description}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.description}</DataTable.Cell>
+        <DataTable.Cell>{item.title}</DataTable.Cell>
+        <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
+        <DataTable.Cell numeric>{item.state}</DataTable.Cell>
         <DataTable.Cell numeric>
-          <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
-            Edit
-          </Button>
           <Button
             mode="outlined"
             compact="true"
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
+            onPress={() => deleteProject(item.key)}
           >
             Remove
           </Button>
@@ -114,12 +192,12 @@ const ProjectManagement = (props) => {
     );
   });
 
-  const releasedRender = Question.map((item) => {
+  const releasedRender = releasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${releasedDrop}` }}>
-        <DataTable.Cell>{item.key}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.description}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.description}</DataTable.Cell>
+        <DataTable.Cell>{item.title}</DataTable.Cell>
+        <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
+        <DataTable.Cell numeric>{item.state}</DataTable.Cell>
         <DataTable.Cell numeric>
           <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
             Edit
@@ -129,6 +207,7 @@ const ProjectManagement = (props) => {
             compact="true"
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
+            onPress={() => deleteProject(item.key)}
           >
             Remove
           </Button>
@@ -162,7 +241,7 @@ const ProjectManagement = (props) => {
             bottom: 30,
             right: 30,
           }}
-          onPress={() => console.log("Pessed")}
+          onPress={() => console.log()}
         >
           log out
         </Button>
