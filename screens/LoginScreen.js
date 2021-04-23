@@ -11,10 +11,10 @@ export default class LoginScreen extends React.Component {
     super(props);
     this.state = {
       email: "@",
-      password: ""
+      password: "",
     };
   }
-  pickRole = role => {
+  pickRole = (role) => {
     this.setState({ role: role });
   };
 
@@ -23,20 +23,20 @@ export default class LoginScreen extends React.Component {
     axios
       .post("http://localhost:12345/api/auth", {
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       })
       .then(
-        response => {
+        (response) => {
           console.log(response);
           if (response.data.userRole === "Admin") {
-            history.push("/projectUpload");
+            history.push("/projectManagement");
           } else if (response.data.userRole === "Health Care Workers") {
             history.push("/worker");
           } else {
             history.push("/participant");
           }
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -54,7 +54,7 @@ export default class LoginScreen extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row"
+            flexDirection: "row",
           }}
         >
           <Image
@@ -68,7 +68,7 @@ export default class LoginScreen extends React.Component {
           style={{
             flex: 1,
             flexDirection: "column",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <View
@@ -76,7 +76,7 @@ export default class LoginScreen extends React.Component {
               justifyContent: "center",
               textAlign: "center",
               alignItems: "center",
-              marginTop: 80
+              marginTop: 80,
             }}
           >
             <Text
@@ -84,7 +84,7 @@ export default class LoginScreen extends React.Component {
                 color: "#00205B",
                 fontSize: 20,
                 fontWeight: "bold",
-                paddingBottom: 70
+                paddingBottom: 70,
               }}
             >
               Log In
@@ -94,14 +94,14 @@ export default class LoginScreen extends React.Component {
               style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text style={{ justifyContent: "flex-start" }}>Email: </Text>
               <TextInput
                 mode="outlined"
                 style={{ height: 30, alignSelf: "flex-end" }}
-                onChangeText={text => this.setState({ email: text })}
+                onChangeText={(text) => this.setState({ email: text })}
               />
             </View>
             <HelperText type="error" visible={this.hasErrors()}>
@@ -112,7 +112,7 @@ export default class LoginScreen extends React.Component {
               style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text style={{ alignItems: "flex-start" }}>Password: </Text>
@@ -120,7 +120,7 @@ export default class LoginScreen extends React.Component {
                 mode="outlined"
                 style={{ height: 30 }}
                 secureTextEntry={true}
-                onChangeText={text => this.setState({ password: text })}
+                onChangeText={(text) => this.setState({ password: text })}
               />
             </View>
           </View>

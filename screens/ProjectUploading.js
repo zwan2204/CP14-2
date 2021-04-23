@@ -8,16 +8,17 @@ import {
   ScrollView,
   Platform,
   TextInput as NativeTextInput,
+  Image,
   Alert,
 } from "react-native";
-
+import moment from "moment";
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
-
-const CriteriaUploading = () => {
+import uuid from "react-native-uuid";
+const ProjectUploading = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -36,6 +37,7 @@ const CriteriaUploading = () => {
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
   const [data, setdata] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
+  const userId = "606d1642b2fff30342232416";
 
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
@@ -55,33 +57,30 @@ const CriteriaUploading = () => {
   useEffect(() => {
     getQuestion();
   }, []);
+
   const storeData = async () => {
+    const currentDate = moment().format("DD/MM/YY");
+    const documentId = uuid.v4();
     const data = {
       title: Title,
       description: Description,
       location: Location,
       subjectNo: SubjectNo,
       duration: Duration,
+      createdDate: currentDate,
       date: Date,
       InclusionCriteria: Question,
       ExclusionCriteria: exclusionQuesion,
       approvalNumber: ApprovalNumber,
+      governance: Governance,
       fileUpload: image,
     };
 
     try {
       const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem("@storage_Key", jsonValue);
+      await AsyncStorage.setItem(`${userId},${documentId}`, jsonValue);
+      props.history.push("/projectManagement");
     } catch (e) {}
-  };
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("@storage_Key");
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-    }
   };
 
   const handleUpload = (image) => {
@@ -151,6 +150,7 @@ const CriteriaUploading = () => {
   })();
 
   const projectUpload = () => {
+    const currentDate = moment().format("DD/MM/YY");
     let tmpQuestion = [];
 
     for (let i = 0; i < Question.length; i++) {
@@ -164,13 +164,16 @@ const CriteriaUploading = () => {
     }
     axios
       .post("http://localhost:12345/api/project", {
+        userId: userId,
         title: Title,
         description: Description,
         location: Location,
         subjectNo: SubjectNo,
         duration: Duration,
+        createdDate: currentDate,
         date: Date,
-
+        state: "pending",
+        governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
@@ -178,7 +181,8 @@ const CriteriaUploading = () => {
       })
       .then(
         (response) => {
-          Alert.alert("successfully upload");
+          props.history.push("/projectManagement");
+          console.log(response);
         },
         (error) => {
           console.log(error);
@@ -188,7 +192,7 @@ const CriteriaUploading = () => {
 
   const getQuestion = () => {
     let questions = [];
-    axios.get("http://localhost:12345/api/question", {}).then(
+    axios.get("http://localhost:12345/api/question").then(
       (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let question = {
@@ -270,25 +274,25 @@ const CriteriaUploading = () => {
           flexDirection: "row",
         }}
       >
-        <View style={{ flex: 1, backgroundColor: "tomato" }} />
-        <View style={{ flex: 3, backgroundColor: "#00205B" }} />
+        <Image
+          style={{ width: 200, height: 100, marginLeft: 100, marginTop: 20 }}
+          source={require("../assets/header.png")}
+        />
 
-        <View
+        <Button
+          mode="text"
           style={{
-            flex: 1,
-            backgroundColor: "#00205B",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            backgroundColor: "white",
+            width: 120,
+            height: 37,
+            position: "absolute",
+            bottom: 30,
+            right: 30,
           }}
+          onPress={() => console.log("Pessed")}
         >
-          <Button
-            mode="text"
-            style={{ backgroundColor: "white", width: 120, marginBottom: 30 }}
-            onPress={() => console.log("Pessed")}
-          >
-            log out
-          </Button>
-        </View>
+          log out
+        </Button>
       </View>
 
       {/* View of Body*/}
@@ -317,7 +321,7 @@ const CriteriaUploading = () => {
           <Button
             mode="contained"
             style={{ width: 100, position: "absolute", right: 30 }}
-            onPress={() => console.log("Pessed")}
+            onPress={() => props.history.push("/projectManagement")}
           >
             Cancel
           </Button>
@@ -721,14 +725,16 @@ const CriteriaUploading = () => {
         <Button
           mode="contained"
           style={{ width: 150, alignSelf: "center", margin: 20 }}
-          onPress={() => getQuestion()}
+          onPress={() => storeData()}
         >
           Save Draft
         </Button>
         <Button
           mode="contained"
           style={{ width: 100, alignSelf: "center", margin: 20 }}
-          onPress={() => projectUpload()}
+          onPress={() => {
+            projectUpload();
+          }}
         >
           Create
         </Button>
@@ -785,4 +791,4 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
-export default CriteriaUploading;
+export default ProjectUploading;

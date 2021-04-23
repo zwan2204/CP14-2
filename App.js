@@ -4,7 +4,7 @@ import React from "react";
 import { Text, View, TextInput, TouchableOpacity } from "react-native";
 
 import AppNavigator from "./navigation/AppNavigator";
-import CriteriaUploading from "./screens/CriteriaUploading";
+import ProjectUploading from "./screens/ProjectUploading";
 import Route from "./routes/route";
 
 export default class App extends React.Component {
@@ -12,7 +12,7 @@ export default class App extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         {/* <AppNavigator /> */}
-        {/* <CriteriaUploading /> */}
+        {/* <ProjectUploading /> */}
         <Route />
       </View>
     );
