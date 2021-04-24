@@ -60,12 +60,13 @@ const QuestionAnswerPage = (props) => {
     const [availableProjects, setAvailableProjects] = useState([]);
     const [isFiltered, setFiltered] = useState(false);
     const loadedProjects = props.location.filteredProjects;
+    const previousData = props.location.data;
     var num = 0;
 
     /* filter the questions based on the available projects retrieved from the general questions */
     if (!isFiltered && loadedProjects != null) {
         console.log("传过来的project是： " + loadedProjects);
-        console.log("xxxxx" + loadedProjects.length);
+        console.log("传过来的data是： " + previousData);
         let tempData = DATA;
         let newData = [];
         tempData.forEach(item => {
@@ -94,7 +95,6 @@ const QuestionAnswerPage = (props) => {
             }
         });
         DATA = newData;
-        console.log(DATA);
         setFiltered(true);
     }
 
@@ -381,7 +381,9 @@ const QuestionAnswerPage = (props) => {
                             styles.questionnaireButton, 
                             {backgroundColor:"#00205B"}]}>
                             <Link 
-                                to={"/questionnaire"}
+                                to={{
+                                    pathname: "/questionnaire",
+                                    }}
                                 style={{color:"white", textDecoration:"none"}}>
                                     BACK
                             </Link>

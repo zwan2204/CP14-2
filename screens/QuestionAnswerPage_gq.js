@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 
 
-  const DATA2 = [
+  const DATA = [
     {
         question: 'Are currently participating in otehr clinical studies?',
         inclusionIDList: [2],
@@ -90,7 +90,7 @@ import { Link } from "react-router-dom";
     },
   ];
 
-const QuestionAnswerPage = () => {
+const QuestionAnswerPage = (props) => {
     const [selectedId, setSelectedId] = useState(null);
     const [removedProjectSizeZero, setSize] = useState(false);
     const [removedProjects, setRemovedProjects] = useState({});
@@ -104,6 +104,8 @@ const QuestionAnswerPage = () => {
     const [questionsLeft, setQuestionLeft] = React.useState(0);
     const [availableProjects, setAvailableProjects] = useState([]);
     var num = 0;
+
+
 
 
     const handleClickLeft = (item) => {
@@ -204,8 +206,8 @@ const QuestionAnswerPage = () => {
 
     const getAvailableProjects = () => {
         let projectList = [];
-        for (let index3 = 0; index3 < DATA2.length; index3++) {
-            let questionItem = DATA2[index3];
+        for (let index3 = 0; index3 < DATA.length; index3++) {
+            let questionItem = DATA[index3];
             let incluArray = questionItem.inclusionIDList;
             let removeList = removedProjects;
             for (let index = 0; index < incluArray.length; index++) {
@@ -285,7 +287,9 @@ const QuestionAnswerPage = () => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1}>
+                    <Text style={styles.titleInfoP1}
+                        onPress={() => console.log(DATA)}
+                    >
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -322,7 +326,7 @@ const QuestionAnswerPage = () => {
                                 setScrollViewHeight(e.nativeEvent.layout.height);
                             }}>
                             <FlatList
-                                data={DATA2} 
+                                data={DATA} 
                                 renderItem={renderItem} 
                                 keyExtractor={item => item.question} 
                                 extraData={selectedId}
@@ -401,7 +405,8 @@ const QuestionAnswerPage = () => {
                             <Link 
                                 to={{
                                     pathname: showingMessage ? "" : "/questionnaire_sq", 
-                                    filteredProjects: availableProjects}} 
+                                    filteredProjects: availableProjects,
+                                    data: DATA}}
                                 style={{color: "white", textDecoration:"none"}}>NEXT
                             </Link>
                         </TouchableOpacity>
