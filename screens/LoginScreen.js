@@ -6,7 +6,9 @@ import { styles } from "../styles.js";
 import axios from "axios";
 import { HelperText, TextInput, Button } from "react-native-paper";
 import { useHistory, Link } from "react-router-dom";
-export default class LoginScreen extends React.Component {
+import { storeUserId } from "../redux/actions/userAction";
+import { connect } from "react-redux";
+class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,8 +30,10 @@ export default class LoginScreen extends React.Component {
       .then(
         response => {
           console.log(response);
+          const userId = response.data.userId;
+          this.props.storeUserId(userId);
           if (response.data.userRole === "Admin") {
-            history.push("/projectUpload");
+            history.push("/projectManagement");
           } else if (response.data.userRole === "Health Care Workers") {
             history.push("/worker");
           } else {
@@ -154,3 +158,15 @@ export default class LoginScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.user.userId
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  storeUserId: id => dispatch(storeUserId(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
