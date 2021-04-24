@@ -14,9 +14,9 @@ import { styles } from "../styles.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+let currentData = [];
 
-
-  const DATA = [
+let DATA_General = [
     {
         question: 'Are currently participating in otehr clinical studies?',
         inclusionIDList: [2],
@@ -88,7 +88,47 @@ import { Link } from "react-router-dom";
         stateNo: false,
         num: 5,
     },
-  ];
+];
+
+let DATA_Specific = [
+    {
+        question: 'S1',
+        inclusionIDList: [2],
+        exclusionIDList: [1],
+        stateYes: false,
+        stateNo: false,
+        num: 0,
+    },
+
+    {
+        question: 'S2',
+        inclusionIDList: [1,2],
+        exclusionIDList: [],
+        stateYes: false,
+        stateNo: false,
+        num: 1,
+    },
+
+    {
+        question: 'S3',
+        inclusionIDList: [2],
+        exclusionIDList: [],
+        stateYes: false,
+        stateNo: false,
+        num: 2,
+    },
+
+    {
+        question: 'S4',
+        inclusionIDList: [3, 1],
+        exclusionIDList: [],
+        stateYes: false,
+        stateNo: false,
+        num: 3,
+    },
+
+];
+
 
 const QuestionAnswerPage = (props) => {
     const [selectedId, setSelectedId] = useState(null);
@@ -103,10 +143,54 @@ const QuestionAnswerPage = (props) => {
         * (100 - scrollElementHeightPercent);
     const [questionsLeft, setQuestionLeft] = React.useState(0);
     const [availableProjects, setAvailableProjects] = useState([]);
+    
+    /* 0 means on the page of personal information page, 1 means general question page
+    2 means specific question page */
+    const [step, setStep] = useState(0);
+    
+    /* questions needs to answer by workers */
+    const [requireHCWorker, setRequireHCW] = useState(false);
+
+    /* this is used to set sub-title of the page */
+    const [subTitle, setSubTitle] = useState("Geoooooooo?");
+
+    /* this is used to set sub-title of the page */
+    const [buttonText, setButtonText] = useState("Next");
+
     var num = 0;
 
+    const stepForward = (isForward) => {
+        let currentStep = step;
+        if (isForward && currentStep < 3) {
+            currentStep += 1;
+        }
+        if (!isForward && currentStep > 0) {
+            currentStep -= 1;
+        }
+        setStep(currentStep);
+        switchContent(currentStep);
+    }
 
+    const switchContent = (step) => {
+        if (step == 0) {
+            setSubTitle("Geoooooooo?");
+            setButtonText("Next");
+        } else if (step == 1) {
+            setSubTitle("General Questions");
+            currentData = DATA_General;
+            setButtonText("Next");
+        } else if (step == 2) {
+            setSubTitle("Specific Questions");
+            setButtonText("Submit");
+            currentData = DATA_Specific;
+        } else {
+            /* send eligible project's IDs */
+        }
+    }
 
+    const washQuestions = (data) => {
+        
+    }
 
     const handleClickLeft = (item) => {
         makeASelection(item, false);
@@ -206,8 +290,8 @@ const QuestionAnswerPage = (props) => {
 
     const getAvailableProjects = () => {
         let projectList = [];
-        for (let index3 = 0; index3 < DATA.length; index3++) {
-            let questionItem = DATA[index3];
+        for (let index3 = 0; index3 < DATA_General.length; index3++) {
+            let questionItem = DATA_General[index3];
             let incluArray = questionItem.inclusionIDList;
             let removeList = removedProjects;
             for (let index = 0; index < incluArray.length; index++) {
@@ -235,7 +319,7 @@ const QuestionAnswerPage = (props) => {
         if (num == 8) {
             sleep(100);
             let avp = getAvailableProjects();
-            setAvailableProjects(avp); /*  */
+            setAvailableProjects(avp);
             if (avp.length == 0) {
                 setShowingMessage(true);
             } else {
@@ -275,25 +359,89 @@ const QuestionAnswerPage = (props) => {
         <Item item={item}/>
     );
 
+    const ButtonView = () => {
+        if (step == 2) {
+            return (
+                <View style={styles.extraInformation}>
+                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
+                        *Sorry, no project matches your condition.
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={[
+                                styles.questionnaireButton, 
+                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
+                            onPress={() => {
+                                stepForward(true)}}>
+                                <Text style={{color: "white"}}>{buttonText}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            );
+        } else if (step == 0) {
+            return (
+                <View style={styles.extraInformation}>
+                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
+                        *Sorry, no project matches your condition.
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={[
+                                styles.questionnaireButton, 
+                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
+                            onPress={() => {
+                                stepForward(true)}}>
+                                <Text style={{color: "white"}}>{buttonText}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.extraInformation}>
+                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
+                        *Sorry, no project matches your condition.
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity 
+                            style={[
+                                styles.questionnaireButton, 
+                                {backgroundColor:"#00205B"}]}
+                            onPress={() => {
+                                stepForward(false)}}>
+                                    <Text style={{color: "white"}}>Back</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.questionnaireButton, 
+                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
+                            onPress={() => {
+                                stepForward(true)}}>
+                                <Text style={{color: "white"}}>{buttonText}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            );
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             {/* header view */}
             <View style={{height: "20%", backgroundColor: "#00205B", flexDirection: "row"}}>
                 <Image 
-                    style={{width: 200, height: 100, left: 100, top: 20}} 
+                    style={{width: 200, height: 100, left: 100, top: 40}} 
                     source={require('../assets/header.png')}/>
             </View>
             
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1}
-                        onPress={() => console.log(DATA)}
-                    >
+                    <Text style={styles.titleInfoP1} onPress={()=>console.log(step)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
-                        - General Questions
+                        - {subTitle}
                     </Text>
                 </View>
                 
@@ -326,7 +474,7 @@ const QuestionAnswerPage = (props) => {
                                 setScrollViewHeight(e.nativeEvent.layout.height);
                             }}>
                             <FlatList
-                                data={DATA} 
+                                data={DATA_General} 
                                 renderItem={renderItem} 
                                 keyExtractor={item => item.question} 
                                 extraData={selectedId}
@@ -359,23 +507,38 @@ const QuestionAnswerPage = (props) => {
                                 Demography？
                             </Text>
                         </View>
-                        <View style={[styles.processBarPole ,{backgroundColor:"#00205B"}]}></View>
-                        <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>
-                            <Text style={{color:"white", paddingLeft:5}}>2</Text>
+                        <View 
+                            style={[styles.processBarPole,
+                            {backgroundColor: step >= 1 ? "#00205B" : "white"}]}>
+                        </View>
+                        <View 
+                            style={[styles.processBarCircle, 
+                            {backgroundColor: step >= 1 ? "#00205B" : "white"}]}>
+                            <Text style={{color: step >= 1 ? "white" : "grey", paddingLeft:5}}>2</Text>
                             <Text style={styles.processBarText}>
                                 General Questions
                             </Text>
                         </View>
-                        <View style={[styles.processBarPole ,{backgroundColor:"white"}]}></View>
-                        <View style={[styles.processBarCircle , {backgroundColor:"white"}]}>                        
-                            <Text style={{color:"grey", paddingLeft:5}}>3</Text>
+                        <View style={[
+                            styles.processBarPole, 
+                            {backgroundColor: step >= 2 ? "#00205B" : "white"}]}>
+                        </View>
+                        <View style={[
+                            styles.processBarCircle , 
+                            {backgroundColor: step >= 2 ? "#00205B" : "white"}]}>                        
+                            <Text style={{color: step >= 2 ? "white" : "grey", paddingLeft:5}}>3</Text>
                             <Text style={styles.processBarText}>
                                 Specific Questions
                             </Text>
                         </View>
-                        <View style={[styles.processBarPole ,{backgroundColor:"white"}]}></View>
-                        <View style={[styles.processBarCircle , {backgroundColor:"white"}]}>                        
-                            <Text style={{color:"grey", paddingLeft:5}}>4</Text>
+                        <View style={[
+                            styles.processBarPole, 
+                            {backgroundColor: step >= 3 ? "#00205B" : "white"}]}>
+                        </View>
+                        <View style={[
+                            styles.processBarCircle , 
+                            {backgroundColor: step >= 3 ? "#00205B" : "white"}]}>                        
+                            <Text style={{color: step >= 3 ? "white" : "grey", paddingLeft:5}}>4</Text>
                             <Text style={styles.processBarText}>
                                 Available Projects
                             </Text>
@@ -388,27 +551,24 @@ const QuestionAnswerPage = (props) => {
                     <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
                         *Sorry, no project matches your condition.
                     </Text>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={[
-                            styles.questionnaireButton, 
-                            {backgroundColor:"#00205B"}]}>
-                            <Link 
-                                to={""}
-                                style={{color:"white", textDecoration:"none"}}>
-                                    BACK
-                            </Link>
-                        </TouchableOpacity>
+                    <View style={[
+                        styles.buttonContainer, 
+                        {justifyContent: step > 0 ? "space-between" : "center"}]}>
+                        {step > 0 && <TouchableOpacity 
+                            style={[
+                                styles.questionnaireButton, 
+                                {backgroundColor:"#00205B"}]}
+                            onPress={() => {
+                                stepForward(false)}}>
+                                    <Text style={{color: "white"}}>Back</Text>
+                        </TouchableOpacity>}
                         <TouchableOpacity
                             style={[
                                 styles.questionnaireButton, 
-                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}>
-                            <Link 
-                                to={{
-                                    pathname: showingMessage ? "" : "/questionnaire_sq", 
-                                    filteredProjects: availableProjects,
-                                    data: DATA}}
-                                style={{color: "white", textDecoration:"none"}}>NEXT
-                            </Link>
+                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
+                            onPress={() => {
+                                stepForward(true)}}>
+                                <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

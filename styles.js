@@ -184,7 +184,7 @@ export const styles = StyleSheet.create({
 
     questionnaireButton:{
         width:"35%", 
-        height:"100%", 
+        height:"100%",
         borderRadius:8, 
         alignContent:"center", 
         alignItems:"center", 
@@ -203,7 +203,6 @@ export const styles = StyleSheet.create({
         width:"20%", 
         height:"35%", 
         flexDirection:"row", 
-        justifyContent:"space-between"
     },
 
     titleInfoP1: {
