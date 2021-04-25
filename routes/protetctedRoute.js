@@ -5,9 +5,11 @@ import { Route, Redirect } from "react-router-dom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LOGIN_URL } from "./urlMap";
 
-export const isLoggedIn = async () => {
-  const role = await AsyncStorage.getItem("role");
-  return role === "Admin";
+export const isAdmin = async () => {
+  try {
+    const role = await AsyncStorage.getItem("role");
+    return role === "Admin";
+  } catch (e) {}
 };
 
 const ProtectedRoute = ({ component: ProtectedComponent, ...rest }) => {
@@ -15,7 +17,7 @@ const ProtectedRoute = ({ component: ProtectedComponent, ...rest }) => {
     <Route
       {...rest}
       render={routeProps => {
-        if (!isLoggedIn())
+        if (!isAdmin())
           return (
             <Redirect
               to={{
