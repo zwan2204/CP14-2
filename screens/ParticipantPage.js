@@ -15,6 +15,7 @@ class ParticipantPage extends React.Component {
   componentDidMount() {
     this.getQuestion();
   }
+
   getQuestion = () => {
     axios.get("http://localhost:12345/api/question").then(
       response => {
@@ -37,6 +38,7 @@ class ParticipantPage extends React.Component {
       <View style={styles.container}>
         <Text>{this.state.question} </Text>
         <Text>{this.props.userId} </Text>
+        <Text>{this.props.role} </Text>
       </View>
     );
   }
@@ -44,7 +46,8 @@ class ParticipantPage extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    userId: state.user.userId
+    userId: state.user.userId,
+    role: state.user.role
   };
 };
 

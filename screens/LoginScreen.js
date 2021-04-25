@@ -6,8 +6,9 @@ import { styles } from "../styles.js";
 import axios from "axios";
 import { HelperText, TextInput, Button } from "react-native-paper";
 import { useHistory, Link } from "react-router-dom";
-import { storeUserId } from "../redux/actions/userAction";
+import { storeUserInfo } from "../redux/actions/userAction";
 import { connect } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +32,9 @@ class LoginScreen extends React.Component {
         response => {
           console.log(response);
           const userId = response.data.userId;
-          this.props.storeUserId(userId);
+          const role = response.data.userRole;
+          this.props.storeUserInfo(userId, role);
+          AsyncStorage.setItem("role", role);
           if (response.data.userRole === "Admin") {
             history.push("/projectManagement");
           } else if (response.data.userRole === "Health Care Workers") {
@@ -166,7 +169,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  storeUserId: id => dispatch(storeUserId(id))
+  storeUserInfo: (id, role) => dispatch(storeUserInfo(id, role))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

@@ -3,7 +3,8 @@
 import { STORE_USERID } from "../actions/userAction";
 
 const initialState = {
-  userId: ""
+  userId: "",
+  role: ""
 };
 
 const userReducer = (state = initialState, action) => {
@@ -11,7 +12,8 @@ const userReducer = (state = initialState, action) => {
     case STORE_USERID:
       return {
         ...state,
-        userId: action.id
+        userId: action.id,
+        role: action.role
       };
 
     default:
