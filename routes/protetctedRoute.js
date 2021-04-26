@@ -5,11 +5,9 @@ import { Route, Redirect } from "react-router-dom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LOGIN_URL } from "./urlMap";
 
-export const isAdmin = async () => {
-  try {
-    const role = await AsyncStorage.getItem("role");
-    return role === "Admin";
-  } catch (e) {}
+const isAdmin = () => {
+  const role = localStorage.getItem("role");
+  return role === "Admin";
 };
 
 const ProtectedRoute = ({ component: ProtectedComponent, ...rest }) => {
