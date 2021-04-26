@@ -211,7 +211,6 @@ const QuestionAnswerPage = (props) => {
     const scrollPerc = (contentOffset.y / (contentSize - scrollViewHeight)) 
         * (100 - scrollElementHeightPercent);
     const [questionsLeft, setQuestionLeft] = React.useState(0);
-    // const [availableProjects, setAvailableProjects] = useState([]);
 
     /* 0 means on the page of personal information page, 1 means general question page
     2 means specific question page */
@@ -247,13 +246,11 @@ const QuestionAnswerPage = (props) => {
         } else if (step == 1) {
             setSubTitle("General Questions");
             setButtonText("Next");
-            console.log("switch时候的av： " + availableProjects);
             washQuestions(DATA_General, availableProjects);
             // currentData = DATA_General;
         } else if (step == 2) {
             setSubTitle("Specific Questions");
             setButtonText("Submit");
-            console.log("洗specific的avai" + availableProjects);
             washQuestions(DATA_Specific, availableProjects);
             // currentData = DATA_Specific;
         } else {
@@ -261,7 +258,8 @@ const QuestionAnswerPage = (props) => {
         }
     }
 
-    let age = 30; //假设获得的年龄
+
+    const [age, setAge] = useState(25);
     const [gender, setGender] = useState("male");
     const [healthy, setHealthy] = useState(false);
     const [smoking, setSmoking] = useState(false);
@@ -274,17 +272,28 @@ const QuestionAnswerPage = (props) => {
         let availabelData = [];
         let removedlData = {};
         tempData.forEach(item => {
-            if (item.gender == gender && item.healthy == healthy && 
-                item.smoking == smoking && item.pregnant == pregnant &&
-                item.lactating == lactating && item.planning == planning) {
+            //filter projects based on age
+            let userage = 25; ////////////////////////////delete
+            const ageRange = item.age.split(",");
+            for (let i = 0; i < ageRange.length; i++) {
+                ageRange[i] = parseInt(ageRange[i]);
+            }
+            if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                    (isNaN(ageRange[0]) && userage <= ageRange[1]) ||
+                    (userage >= ageRange[0] && isNaN(ageRange[1])) ||
+                    (userage >= ageRange[0] || userage <= ageRange[1])) {
+                if (item.gender == gender && item.healthy == healthy && 
+                        item.smoking == smoking && item.pregnant == pregnant &&
+                        item.lactating == lactating && item.planning == planning) {
                     availabelData.push(item.projectID);
+                } else {
+                    removedlData[item.projectID] = 1;
+                }
             } else {
                 removedlData[item.projectID] = 1;
             }
         });
         //wash data_general based on the user's selections.
-        console.log("wash project avai: " + availabelData);
-        // setAvailableProjects(availabelData);
         availableProjects = availabelData;
         setRemovedProjects(removedlData);
         washQuestions(DATA_General, availabelData);
@@ -454,10 +463,8 @@ const QuestionAnswerPage = (props) => {
         num += 1;
         if (num == 1) {
             sleep(100);
-            let avp = getAvailableProjects();
-            // setAvailableProjects(avp);
-            availableProjects = avp;
-            if (avp.length == 0) {
+            availableProjects = getAvailableProjects();
+            if (availableProjects.length == 0) {
                 setShowingMessage(true);
             } else {
                 setShowingMessage(false);
