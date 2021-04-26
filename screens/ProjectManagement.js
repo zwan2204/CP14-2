@@ -247,7 +247,7 @@ const ProjectManagement = (props) => {
             bottom: 30,
             right: 30,
           }}
-          onPress={() => console.log()}
+          onPress={() => props.history.push("/Homepage")}
         >
           log out
         </Button>
