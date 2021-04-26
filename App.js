@@ -11,9 +11,9 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {/* <AppNavigator /> */}
+        <AppNavigator />
         {/* <CriteriaUploading /> */}
-        <Route />
+        {/* <Route /> */}
       </View>
     );
   }
