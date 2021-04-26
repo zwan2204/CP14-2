@@ -10,8 +10,6 @@
 
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
-import ReactDOM from 'react-dom';
-
 
 const Antdd = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,4 +40,4 @@ const Antdd = (props) => {
   );
 };
 
-ReactDOM.render(<Antdd />, mountNode);
+export default Antdd;
