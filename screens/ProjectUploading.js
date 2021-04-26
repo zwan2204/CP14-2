@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { TextInputMask } from "react-native-masked-text";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,9 +11,8 @@ import {
   Platform,
   TextInput as NativeTextInput,
   Image,
-  Alert,
 } from "react-native";
-import moment from "moment";
+import moment, { max } from "moment";
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -35,10 +36,42 @@ const ProjectUploading = (props) => {
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
-  const [data, setdata] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
-  const userId = "606d1642b2fff30342232416";
 
+  const [isPragnent, setIsPragnent] = React.useState(false);
+  const [isSmoking, setIsSmoking] = React.useState(false);
+  const [isLactating, setIsLactating] = React.useState(false);
+  const [isPlaningPragnent, setPlaningPragnent] = React.useState(false);
+  const [gender, setGender] = useState("");
+  const [minAge, setMinAge] = useState("null");
+  const [maxAge, setMaxAge] = useState("null");
+  const userId = localStorage.getItem("userId");
+  // const userId = "606d1642b2fff30342232416";
+  const projectId = props.location.projectKey;
+  // const userId = Local.getItem("userId");
+
+  const editPage = () => {
+    if (projectId) {
+      const ediInfo = JSON.parse(localStorage.getItem(projectId));
+      setApprovalNumber(ediInfo.approvalNumber);
+      setGovernanceNumber(ediInfo.governance);
+      setTitle(ediInfo.title);
+      setDescription(ediInfo.description);
+      setLocation(ediInfo.location);
+      setSubjectNo(ediInfo.subjectNo);
+      setDuration(ediInfo.duration);
+      setDate(ediInfo.date);
+      setQuestion(ediInfo.InclusionCriteria);
+      setExclusionQuestion(ediInfo.ExclusionCriteria);
+      setIsPragnent(ediInfo.isPragnent);
+      setIsSmoking(ediInfo.isSmoking);
+      setIsLactating(ediInfo.isLactating);
+      setPlaningPragnent(ediInfo.isPlaningPragnent);
+      setGender(ediInfo.gender);
+      setMinAge(ediInfo.ageGroup.split(",")[0]);
+      setMaxAge(ediInfo.ageGroup.split(",")[1]);
+    }
+  };
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
@@ -56,11 +89,18 @@ const ProjectUploading = (props) => {
 
   useEffect(() => {
     getQuestion();
+    editPage();
   }, []);
 
   const storeData = async () => {
     const currentDate = moment().format("DD/MM/YY");
-    const documentId = uuid.v4();
+    let documentId = "";
+    if (projectId) {
+      documentId = projectId.split(",")[1];
+    } else {
+      documentId = uuid.v4();
+    }
+
     const data = {
       title: Title,
       description: Description,
@@ -74,6 +114,12 @@ const ProjectUploading = (props) => {
       approvalNumber: ApprovalNumber,
       governance: Governance,
       fileUpload: image,
+      isPragnent: isPragnent,
+      isSmoking: isSmoking,
+      isLactating: isLactating,
+      isPlaningPragnent: isPlaningPragnent,
+      gender: gender,
+      ageGroup: `${minAge},${maxAge}`,
     };
 
     try {
@@ -172,12 +218,18 @@ const ProjectUploading = (props) => {
         duration: Duration,
         createdDate: currentDate,
         date: Date,
-        state: "pending",
+        state: "New Upload",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
         fileUpload: image,
+        isPragnent: isPragnent,
+        isSmoking: isSmoking,
+        isLactating: isLactating,
+        isPlaningPragnent: isPlaningPragnent,
+        gender: gender,
+        ageGroup: `${minAge},${maxAge}`,
       })
       .then(
         (response) => {
@@ -289,7 +341,7 @@ const ProjectUploading = (props) => {
             bottom: 30,
             right: 30,
           }}
-          onPress={() => console.log("Pessed")}
+          onPress={() => props.history.push("/Homepage")}
         >
           log out
         </Button>
@@ -483,15 +535,186 @@ const ProjectUploading = (props) => {
           <Text
             style={{
               marginTop: 20,
-
-              fontSize: 20,
+              fontSize: 30,
               color: "#00205B",
             }}
           >
             Criteria
           </Text>
         </View>
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 20,
+            color: "#00205B",
+          }}
+        >
+          Basic Demographic criteria
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            ...(Platform.OS !== "android" && {
+              zIndex: 10,
+            }),
+          }}
+        >
+          <DropDownPicker
+            items={[
+              {
+                label: "Male",
+                value: "Male",
+              },
+              {
+                label: "Female",
+                value: "Female",
+              },
+              {
+                label: "Not required",
+                value: "Not required",
+              },
+            ]}
+            defaultValue={gender == "" ? null : gender}
+            containerStyle={{
+              height: 40,
+              width: 300,
+              marginTop: 8,
+              marginRight: 10,
+            }}
+            selectedLabelStyle={{
+              color: "#00205B",
+            }}
+            placeholder="Select allow gender"
+            itemStyle={{
+              justifyContent: "flex-start",
+            }}
+            dropDownStyle={{ backgroundColor: "#fafafa" }}
+            onChangeItem={(item) => setGender(item.value)}
+          />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: 15,
+                color: "#00205B",
+              }}
+            >
+              Minimum age:
+            </Text>
+            <TextInputMask
+              type={"custom"}
+              options={{
+                mask: "99",
+              }}
+              style={{
+                borderWidth: 1,
+                height: 37,
+                width: 40,
+                borderColor: "gray",
+                marginLeft: 10,
+                padding: 5,
+                borderRadius: 3,
+              }}
+              // dont forget to set the "value" and "onChangeText" props
+              value={minAge == "null" ? "" : minAge}
+              onChangeText={(text) => {
+                text == "" ? setMinAge("null") : setMinAge(text);
+              }}
+            />
+          </View>
 
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: 15,
+                color: "#00205B",
+                marginLeft: 10,
+              }}
+            >
+              Maximum age:
+            </Text>
+            <TextInputMask
+              type={"custom"}
+              options={{
+                mask: "99",
+              }}
+              style={{
+                borderWidth: 1,
+                height: 37,
+                width: 40,
+                borderColor: "gray",
+                marginLeft: 10,
+                padding: 5,
+                borderRadius: 3,
+              }}
+              // dont forget to set the "value" and "onChangeText" props
+              value={maxAge == "null" ? "" : maxAge}
+              onChangeText={(text) => {
+                text == "" ? setMaxAge("null") : setMaxAge(text);
+              }}
+            />
+          </View>
+        </View>
+
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 20,
+            color: "#00205B",
+          }}
+        >
+          Exclusion Demographic criteria
+        </Text>
+        <View style={{ flexDirection: "row" }}>
+          <CheckBox
+            title="Pragnent
+              "
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isPragnent}
+            onPress={() => {
+              setIsPragnent(!isPragnent);
+            }}
+          />
+
+          <CheckBox
+            title="Smoking"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isSmoking}
+            onPress={() => {
+              setIsSmoking(!isSmoking);
+            }}
+          />
+          <CheckBox
+            title="Lactating"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isLactating}
+            onPress={() => {
+              setIsLactating(!isLactating);
+            }}
+          />
+          <CheckBox
+            title="Planning on becoming pargnent"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isPlaningPragnent}
+            onPress={() => {
+              setPlaningPragnent(!isPlaningPragnent);
+            }}
+          />
+        </View>
+
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 20,
+            color: "#00205B",
+          }}
+        >
+          General and specific criteria
+        </Text>
         {/* Question input area*/}
         <View>
           <View

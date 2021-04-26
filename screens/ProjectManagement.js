@@ -7,23 +7,10 @@ import {
   Image,
   View,
   ScrollView,
-  Platform,
-  TextInput as NativeTextInput,
-  Alert,
 } from "react-native";
 
-import {
-  Button,
-  Card,
-  TextInput,
-  Colors,
-  DataTable,
-  IconButton,
-} from "react-native-paper";
+import { Button, Colors, DataTable, IconButton } from "react-native-paper";
 import axios from "axios";
-import DropDownPicker from "react-native-dropdown-picker";
-import * as DocumentPicker from "expo-document-picker";
-import { CheckBox } from "react-native-elements";
 
 const ProjectManagement = (props) => {
   const [incompleteDrop, setIncompleteDrop] = useState("none");
@@ -33,7 +20,8 @@ const ProjectManagement = (props) => {
   const [unreleasedProject, setUnreleasedProject] = useState([]);
   const [releasedProject, setReleasedProject] = useState([]);
   const [incompleteProject, setIncompleteProject] = useState([]);
-  const userId = "606d1642b2fff30342232416";
+  const userId = localStorage.getItem("userId");
+  // const userId = "606d1642b2fff30342232416";
   useEffect(() => {
     getProjects();
     getLocalStorage();
@@ -104,7 +92,7 @@ const ProjectManagement = (props) => {
         setUnreleasedProject(unreleasedProjects);
       },
       (error) => {
-        console.log(error);
+        props.history.push("/Homepage");
       }
     );
   };
@@ -113,6 +101,12 @@ const ProjectManagement = (props) => {
     let keys = [];
     let values = [];
     let incompleteProjects = [];
+    const uncheckRemain = [
+      "isPragnent",
+      "isSmoking",
+      "isLactating",
+      "isPlaningPragnent",
+    ];
     try {
       keys = await AsyncStorage.getAllKeys();
       values = await AsyncStorage.multiGet(keys);
@@ -123,11 +117,13 @@ const ProjectManagement = (props) => {
           let JsonKeys = Object.keys(JSON.parse(values[i][1]));
 
           for (let x = 0; x < JsonKeys.length; x++) {
-            if (
-              JSON.parse(values[i][1])[JsonKeys[x]].length == 0 ||
-              !JSON.parse(values[i][1])[JsonKeys[x]]
-            ) {
-              remainTask++;
+            if (uncheckRemain.indexOf(JsonKeys[x]) < 0) {
+              if (
+                JSON.parse(values[i][1])[JsonKeys[x]].length == 0 ||
+                !JSON.parse(values[i][1])[JsonKeys[x]]
+              ) {
+                remainTask++;
+              }
             }
           }
 
@@ -154,7 +150,17 @@ const ProjectManagement = (props) => {
         <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
         <DataTable.Cell numeric>{`${item.state} tasks left`}</DataTable.Cell>
         <DataTable.Cell numeric>
-          <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
+          <Button
+            mode="outlined"
+            compact="true"
+            labelStyle={{ fontSize: 10 }}
+            onPress={() =>
+              props.history.push({
+                pathname: "/projectUpload",
+                projectKey: item.key, // your data array of objects
+              })
+            }
+          >
             Edit
           </Button>
           <Button

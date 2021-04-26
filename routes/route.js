@@ -21,7 +21,7 @@ import {
   WORKER_URL,
   QUESTIONNAIRE_URL,
   QUESTIONNAIRE_SPECIFIC_URL,
-  PROJECT_MANAGEMENT_URL
+  PROJECT_MANAGEMENT_URL,
 } from "./urlMap";
 import { store } from "../redux";
 import { Provider } from "react-redux";
@@ -31,12 +31,8 @@ const Routes = () => (
       <Switch>
         <Redirect exact from="/" to={LOGIN_URL} />
         <Route exact path={LOGIN_URL} component={LoginScreen} />
-        <ProtectedRoute
-          exact
-          path={PROJECT_UPLOAD_URL}
-          component={ProjectUploading}
-        />
-        <ProtectedRoute
+        <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
+        <Route
           exact
           path={PROJECT_MANAGEMENT_URL}
           component={ProjectManagement}
