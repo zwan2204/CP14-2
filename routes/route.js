@@ -11,7 +11,7 @@ import WorkerScreen from "../screens/WorkerPage";
 import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq";
 import QuestionSpecificPage from "../screens/QuestionAnswerPage_sq";
 import ProjectManagement from "../screens/ProjectManagement";
-
+import ProtectedRoute from "./protetctedRoute";
 import {
   LOGIN_URL,
   REGISTER_URL,
@@ -31,8 +31,12 @@ const Routes = () => (
       <Switch>
         <Redirect exact from="/" to={LOGIN_URL} />
         <Route exact path={LOGIN_URL} component={LoginScreen} />
-        <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
-        <Route
+        <ProtectedRoute
+          exact
+          path={PROJECT_UPLOAD_URL}
+          component={ProjectUploading}
+        />
+        <ProtectedRoute
           exact
           path={PROJECT_MANAGEMENT_URL}
           component={ProjectManagement}

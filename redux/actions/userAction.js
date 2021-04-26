@@ -2,7 +2,8 @@
 
 export const STORE_USERID = "STORE_USERID";
 
-export const storeUserId = id => ({
+export const storeUserInfo = (id, role) => ({
   type: STORE_USERID,
-  id
+  id,
+  role
 });
