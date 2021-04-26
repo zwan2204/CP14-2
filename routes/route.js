@@ -12,6 +12,9 @@ import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq";
 import QuestionSpecificPage from "../screens/QuestionAnswerPage_sq";
 import ProjectManagement from "../screens/ProjectManagement";
 import ProtectedRoute from "./protetctedRoute";
+import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";
+import antdd from "../screens/antdd";
+
 import {
   LOGIN_URL,
   REGISTER_URL,
@@ -21,7 +24,9 @@ import {
   WORKER_URL,
   QUESTIONNAIRE_URL,
   QUESTIONNAIRE_SPECIFIC_URL,
-  PROJECT_MANAGEMENT_URL
+  PROJECT_MANAGEMENT_URL,
+  PROJECT_APPROVAL_URL,
+  ANTDD_URL
 } from "./urlMap";
 import { store } from "../redux";
 import { Provider } from "react-redux";
@@ -55,6 +60,9 @@ const Routes = () => (
           path={QUESTIONNAIRE_SPECIFIC_URL}
           component={QuestionSpecificPage}
         />
+        <Route exact path={PROJECT_APPROVAL_URL} component={ProjectApprovalScreen} />
+        <Route exact path={ANTDD_URL} component={antdd} />
+
       </Switch>
     </Provider>
   </BrowserRouter>
