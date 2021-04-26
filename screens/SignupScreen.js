@@ -9,15 +9,18 @@ import { HelperText, Button } from "react-native-paper";
 import { useHistory, Link } from "react-router-dom";
 
 export default class SignupScreen extends React.Component {
-  state = {
-    fullName: "",
-    password: "",
-    role: "Participant",
-    email: "",
-    gender: "",
-    dob: "",
-    staffId: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      fullName: "",
+      password: "",
+      role: "Participant",
+      email: "",
+      gender: "",
+      dob: "",
+      staffId: ""
+    };
+  }
 
   pickRole = role => {
     this.setState({ role: role });
@@ -65,40 +68,36 @@ export default class SignupScreen extends React.Component {
             />
           </View>
 
-          <View
-            style={{ alignItems: "center", flexDirection: "column", flex: 1 }}
-          >
+          <View style={{ alignItems: "center", flexDirection: "column", flex: 1 }}>
             <View style={{ alignItems: "center", margin: 30 }}>
-              <Text
-                style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}
-              >
-                Create New Account
-              </Text>
+              <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}> Create New Account </Text>
             </View>
-            <Picker
-              style={styles.picker}
-              selectedValue={this.state.role}
-              onValueChange={this.pickRole}
-            >
-              <Picker.Item label="Participant" value="Participant" />
-              <Picker.Item label="Project Manager" value="Project Manager" />
-              <Picker.Item
-                label="Health Care Workers"
-                value="Health Care Workers"
-              />
-              <Picker.Item label="NSWHP staff" value="Admin" />
-            </Picker>
-            <View style={{ margin: 20, flexDirection: "column", flex: 1 }}>
-              <Text style={styles.subTitle}>Email Address: </Text>
-              <TextInput
-                style={styles.inputView}
-                onChangeText={text => this.setState({ email: text })}
-              />
+            <View style={{ marginTop: 20, marginBottom: 30, flexDirection: "column" }}>
+              <Text style={styles.subTitle}>Please choose your role: </Text>
+              <Picker
+                style={styles.picker}
+                selectedValue={this.state.role}
+                onValueChange={this.pickRole}
+              >
+                <Picker.Item label="Participant" value="Participant" />
+                <Picker.Item label="Project Manager" value="Project Manager" />
+                <Picker.Item label="Health Care Workers" value="Health Care Workers" />
+                <Picker.Item label="NSWHP staff" value="Admin" />
+              </Picker>
+            </View>
+
+            <View style={{ marginTop: 0, flexDirection: "column", flex: 1 }}>
               <Text style={styles.subTitle}>Your full name: </Text>
               <TextInput
                 style={styles.inputView}
                 onChangeText={text => this.setState({ fullName: text })}
               />
+              <Text style={styles.subTitle}>Email Address: </Text>
+              <TextInput
+                style={styles.inputView}
+                onChangeText={text => this.setState({ email: text })}
+              />
+
               <Text style={styles.subTitle}>Passwrod: </Text>
               <TextInput
                 style={styles.inputView}
@@ -114,7 +113,7 @@ export default class SignupScreen extends React.Component {
                 onPress={() => history.push("/participantInfo")}
                 style={{ marginBottom: 0 }}
               >
-                Next
+                Signup
               </Button>
             </View>
           </View>
@@ -146,25 +145,32 @@ export default class SignupScreen extends React.Component {
                 Create New Account
               </Text>
             </View>
-            <Picker
-              style={styles.picker}
-              selectedValue={this.state.role}
-              onValueChange={this.pickRole}
-            >
-              <Picker.Item label="Participant" value="Participant" />
-              <Picker.Item label="Project Manager" value="Project Manager" />
-              <Picker.Item
-                label="Health Care Workers"
-                value="Health Care Workers"
-              />
-              <Picker.Item label="NSWHP staff" value="Admin" />
-            </Picker>
-
-            <View style={{ margin: 20, flexDirection: "column", flex: 1 }}>
+            <View style={{ marginTop: 20, marginBottom: 30, flexDirection: "column" }}>
+              <Text style={styles.subTitle}>Please choose your role: </Text>
+              <Picker
+                style={styles.picker}
+                selectedValue={this.state.role}
+                onValueChange={this.pickRole}
+              >
+                <Picker.Item label="Participant" value="Participant" />
+                <Picker.Item label="Project Manager" value="Project Manager" />
+                <Picker.Item
+                  label="Health Care Workers"
+                  value="Health Care Workers"
+                />
+                <Picker.Item label="NSWHP staff" value="Admin" />
+              </Picker>
+            </View>
+            <View style={{ margin: 0, flexDirection: "column", flex: 1 }}>
               <Text style={styles.subTitle}>Stafflink Number: </Text>
               <TextInput
                 style={styles.inputView}
                 onChangeText={text => this.setState({ staffId: text })}
+              />
+              <Text style={styles.subTitle}>Your full name: </Text>
+              <TextInput
+                style={styles.inputView}
+                onChangeText={text => this.setState({ fullName: text })}
               />
               <Text style={styles.subTitle}>Email Address: </Text>
               <TextInput
