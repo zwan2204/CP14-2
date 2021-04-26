@@ -16,6 +16,64 @@ import { Link } from "react-router-dom";
 
 let currentData = [];
 
+let DATA_Demo = [
+    {
+        projectID: 1,
+        age: "null,18",
+        gender: "male",
+        healthy: true,
+        smoking: true,
+        pregnant: false,
+        lactating: false,
+        planning: false,
+    },
+
+    {
+        projectID: 2,
+        age: "18,65",
+        gender: "male",
+        healthy: true,
+        smoking: true,
+        pregnant: false,
+        lactating: false,
+        planning: false,
+    },
+
+    {
+        projectID: 3,
+        age: "30,60",
+        gender: "male",
+        healthy: true,
+        smoking: false,
+        pregnant: false,
+        lactating: false,
+        planning: false,
+    },
+
+    {
+        projectID: 4,
+        age: "65,null",
+        gender: "male",
+        healthy: true,
+        smoking: false,
+        pregnant: false,
+        lactating: false,
+        planning: false,
+    },
+
+    {
+        projectID: 5,
+        age: "18,60",
+        gender: "male",
+        healthy: false,
+        smoking: false,
+        pregnant: false,
+        lactating: false,
+        planning: false,
+    },
+
+];
+
 let DATA_General = [
     {
         question: 'Are currently participating in otehr clinical studies?',
@@ -38,7 +96,7 @@ let DATA_General = [
     {
         question: 'Do you have the history of significant multiple and/or severe allergies?',
         inclusionIDList: [2],
-        exclusionIDList: [],
+        exclusionIDList: [3],
         stateYes: false,
         stateNo: false,
         num: 2,
@@ -73,8 +131,8 @@ let DATA_General = [
 
     {
         question: 'Do you have High Blood Pressure (Hypertension)?111',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
+        inclusionIDList: [3],
+        exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
         num: 5,
@@ -82,7 +140,7 @@ let DATA_General = [
 
     {
         question: 'Do you have High Blood Pressure (Hypertension)?111 1 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111',
-        inclusionIDList: [3, 1],
+        inclusionIDList: [4, 5],
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
@@ -92,7 +150,7 @@ let DATA_General = [
 
 let DATA_Specific = [
     {
-        question: 'S1',
+        question: '2, 1',
         inclusionIDList: [2],
         exclusionIDList: [1],
         stateYes: false,
@@ -101,8 +159,8 @@ let DATA_Specific = [
     },
 
     {
-        question: 'S2',
-        inclusionIDList: [1,2],
+        question: '2',
+        inclusionIDList: [2],
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
@@ -110,8 +168,8 @@ let DATA_Specific = [
     },
 
     {
-        question: 'S3',
-        inclusionIDList: [2],
+        question: '3, 1',
+        inclusionIDList: [3, 1],
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
@@ -119,15 +177,26 @@ let DATA_Specific = [
     },
 
     {
-        question: 'S4',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
+        question: '1, 5',
+        inclusionIDList: [1],
+        exclusionIDList: [5],
+        stateYes: false,
+        stateNo: false,
+        num: 3,
+    },
+
+    {
+        question: '4',
+        inclusionIDList: [],
+        exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
         num: 3,
     },
 
 ];
+
+let availableProjects = [];
 
 
 const QuestionAnswerPage = (props) => {
@@ -142,8 +211,8 @@ const QuestionAnswerPage = (props) => {
     const scrollPerc = (contentOffset.y / (contentSize - scrollViewHeight)) 
         * (100 - scrollElementHeightPercent);
     const [questionsLeft, setQuestionLeft] = React.useState(0);
-    const [availableProjects, setAvailableProjects] = useState([]);
-    
+    // const [availableProjects, setAvailableProjects] = useState([]);
+
     /* 0 means on the page of personal information page, 1 means general question page
     2 means specific question page */
     const [step, setStep] = useState(0);
@@ -152,10 +221,10 @@ const QuestionAnswerPage = (props) => {
     const [requireHCWorker, setRequireHCW] = useState(false);
 
     /* this is used to set sub-title of the page */
-    const [subTitle, setSubTitle] = useState("Geoooooooo?");
+    const [subTitle, setSubTitle] = useState("Demographic Information");
 
     /* this is used to set sub-title of the page */
-    const [buttonText, setButtonText] = useState("Next");
+    const [buttonText, setButtonText] = useState("Confirm");
 
     var num = 0;
 
@@ -173,23 +242,84 @@ const QuestionAnswerPage = (props) => {
 
     const switchContent = (step) => {
         if (step == 0) {
-            setSubTitle("Geoooooooo?");
-            setButtonText("Next");
+            setSubTitle("Demographic Information");
+            setButtonText("Confirm");
         } else if (step == 1) {
             setSubTitle("General Questions");
-            currentData = DATA_General;
             setButtonText("Next");
+            console.log("switch时候的av： " + availableProjects);
+            washQuestions(DATA_General, availableProjects);
+            // currentData = DATA_General;
         } else if (step == 2) {
             setSubTitle("Specific Questions");
             setButtonText("Submit");
-            currentData = DATA_Specific;
+            console.log("洗specific的avai" + availableProjects);
+            washQuestions(DATA_Specific, availableProjects);
+            // currentData = DATA_Specific;
         } else {
             /* send eligible project's IDs */
         }
     }
 
-    const washQuestions = (data) => {
-        
+    let age = 30; //假设获得的年龄
+    const [gender, setGender] = useState("male");
+    const [healthy, setHealthy] = useState(false);
+    const [smoking, setSmoking] = useState(false);
+    const [pregnant, setPregnant] = useState(false);
+    const [lactating, setLactating] = useState(false);
+    const [planning, setPlanning] = useState(false);
+    
+    const washProjects = (data) => {
+        let tempData = data;
+        let availabelData = [];
+        let removedlData = {};
+        tempData.forEach(item => {
+            if (item.gender == gender && item.healthy == healthy && 
+                item.smoking == smoking && item.pregnant == pregnant &&
+                item.lactating == lactating && item.planning == planning) {
+                    availabelData.push(item.projectID);
+            } else {
+                removedlData[item.projectID] = 1;
+            }
+        });
+        //wash data_general based on the user's selections.
+        console.log("wash project avai: " + availabelData);
+        // setAvailableProjects(availabelData);
+        availableProjects = availabelData;
+        setRemovedProjects(removedlData);
+        washQuestions(DATA_General, availabelData);
+        washQuestions(DATA_Specific, availabelData);
+    }
+
+    const washQuestions = (data, availabel) => {
+        let tempData = data;
+        let filteredData = [];
+        tempData.forEach(item => {
+            let shouldRemove = true;
+            for(let index = 0; index < item.inclusionIDList.length; index++) {
+                for (let index_2 = 0; index_2 < availabel.length; index_2++) {
+                    if (availabel[index_2] == item.inclusionIDList[index]) {
+                        shouldRemove = false;
+                        break;
+                    }
+                }
+                if (!shouldRemove) {break;}
+            }
+            for(let index = 0; index < item.exclusionIDList.length; index++) {
+                if (!shouldRemove) {break;}
+                for (let index_2 = 0; index_2 < availabel.length; index_2++) {
+                    if (availableProjects[index_2] == item.exclusionIDList[index]) {
+                        shouldRemove = false;
+                        break;
+                    }
+                }
+                if (!shouldRemove) {break;}
+            }
+            if (!shouldRemove) {
+                filteredData.push(item);
+            }
+        });
+        currentData = filteredData;
     }
 
     const handleClickLeft = (item) => {
@@ -290,13 +420,19 @@ const QuestionAnswerPage = (props) => {
 
     const getAvailableProjects = () => {
         let projectList = [];
-        for (let index3 = 0; index3 < DATA_General.length; index3++) {
-            let questionItem = DATA_General[index3];
+        for (let index = 0; index < currentData.length; index++) {
+            let questionItem = currentData[index];
             let incluArray = questionItem.inclusionIDList;
+            let excluArray = questionItem.exclusionIDList;
             let removeList = removedProjects;
-            for (let index = 0; index < incluArray.length; index++) {
-                if (removeList[incluArray[index]] == null) {
-                    projectList.push(incluArray[index]);
+            for (let index2 = 0; index2 < incluArray.length; index2++) {
+                if (removeList[incluArray[index2]] == null) {
+                    projectList.push(incluArray[index2]);
+                }
+            }
+            for (let index2 = 0; index2 < excluArray.length; index2++) {
+                if (removeList[excluArray[index2]] == null) {
+                    projectList.push(excluArray[index2]);
                 }
             }
         }
@@ -316,10 +452,11 @@ const QuestionAnswerPage = (props) => {
     const Item = ({item}) => {
         /* needs to be changed, need to get the total number of questions*/
         num += 1;
-        if (num == 8) {
+        if (num == 1) {
             sleep(100);
             let avp = getAvailableProjects();
-            setAvailableProjects(avp);
+            // setAvailableProjects(avp);
+            availableProjects = avp;
             if (avp.length == 0) {
                 setShowingMessage(true);
             } else {
@@ -327,7 +464,7 @@ const QuestionAnswerPage = (props) => {
             }
         }
 
-        if (removeThisQuestion(item)) {
+        if (step != 0 && removeThisQuestion(item)) {
             return null;
         } else {
             return(
@@ -359,72 +496,6 @@ const QuestionAnswerPage = (props) => {
         <Item item={item}/>
     );
 
-    const ButtonView = () => {
-        if (step == 2) {
-            return (
-                <View style={styles.extraInformation}>
-                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
-                        *Sorry, no project matches your condition.
-                    </Text>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={[
-                                styles.questionnaireButton, 
-                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
-                            onPress={() => {
-                                stepForward(true)}}>
-                                <Text style={{color: "white"}}>{buttonText}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            );
-        } else if (step == 0) {
-            return (
-                <View style={styles.extraInformation}>
-                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
-                        *Sorry, no project matches your condition.
-                    </Text>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={[
-                                styles.questionnaireButton, 
-                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
-                            onPress={() => {
-                                stepForward(true)}}>
-                                <Text style={{color: "white"}}>{buttonText}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.extraInformation}>
-                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
-                        *Sorry, no project matches your condition.
-                    </Text>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity 
-                            style={[
-                                styles.questionnaireButton, 
-                                {backgroundColor:"#00205B"}]}
-                            onPress={() => {
-                                stepForward(false)}}>
-                                    <Text style={{color: "white"}}>Back</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.questionnaireButton, 
-                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
-                            onPress={() => {
-                                stepForward(true)}}>
-                                <Text style={{color: "white"}}>{buttonText}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            );
-        }
-    }
-
     return (
         <SafeAreaView style={styles.container}>
             {/* header view */}
@@ -437,7 +508,7 @@ const QuestionAnswerPage = (props) => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={()=>console.log(step)}>
+                    <Text style={styles.titleInfoP1} onPress={()=>console.log(availableProjects, currentData)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -473,14 +544,16 @@ const QuestionAnswerPage = (props) => {
                             onLayout={e => {
                                 setScrollViewHeight(e.nativeEvent.layout.height);
                             }}>
+                            {step != 0 && 
                             <FlatList
-                                data={DATA_General} 
+                                data={currentData} 
                                 renderItem={renderItem} 
                                 keyExtractor={item => item.question} 
                                 extraData={selectedId}
-                            />
+                            />}
+                            {step == 0 && 
+                            <View></View>}
                         </ScrollView>
-
                     </View>
 
                     {/* scroll bar */}
@@ -504,7 +577,7 @@ const QuestionAnswerPage = (props) => {
                         <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>
                             <Text style={{color:"white", paddingLeft:5}}>1</Text>
                             <Text style={{position:"absolute", paddingLeft:30, color:"#00205B"}}>
-                                Demography？
+                                Demographic Information
                             </Text>
                         </View>
                         <View 
@@ -567,6 +640,7 @@ const QuestionAnswerPage = (props) => {
                                 styles.questionnaireButton, 
                                 {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
                             onPress={() => {
+                                step == 0 ? washProjects(DATA_Demo) : null,
                                 stepForward(true)}}>
                                 <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
