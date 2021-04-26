@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { 
     Text, 
     View, 
@@ -13,6 +13,7 @@ import {
 import { styles } from "../styles.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
 
 let currentData = [];
 
@@ -20,8 +21,9 @@ let DATA_Demo = [
     {
         projectID: 1,
         age: "null,18",
-        gender: "male",
-        healthy: true,
+        gender: "Male",
+        healthy: "Yes",
+        english: "Yes",
         smoking: true,
         pregnant: false,
         lactating: false,
@@ -31,8 +33,9 @@ let DATA_Demo = [
     {
         projectID: 2,
         age: "18,65",
-        gender: "male",
-        healthy: true,
+        gender: "Male",
+        english: "Yes",
+        healthy: "Yes",
         smoking: true,
         pregnant: false,
         lactating: false,
@@ -42,8 +45,9 @@ let DATA_Demo = [
     {
         projectID: 3,
         age: "30,60",
-        gender: "male",
-        healthy: true,
+        gender: "Male",
+        english: "Yes",
+        healthy: "Yes",
         smoking: false,
         pregnant: false,
         lactating: false,
@@ -53,8 +57,9 @@ let DATA_Demo = [
     {
         projectID: 4,
         age: "65,null",
-        gender: "male",
-        healthy: true,
+        gender: "Male",
+        english: "Yes",
+        healthy: "Yes",
         smoking: false,
         pregnant: false,
         lactating: false,
@@ -64,8 +69,9 @@ let DATA_Demo = [
     {
         projectID: 5,
         age: "18,60",
-        gender: "male",
-        healthy: false,
+        gender: "Male",
+        english: "Yes",
+        healthy: "Yes",
         smoking: false,
         pregnant: false,
         lactating: false,
@@ -81,7 +87,7 @@ let DATA_General = [
         exclusionIDList: [1],
         stateYes: false,
         stateNo: false,
-        num: 0,
+        state: "notComplete",
     },
 
     {
@@ -90,7 +96,7 @@ let DATA_General = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 1,
+        state: "notComplete",
     },
 
     {
@@ -99,7 +105,7 @@ let DATA_General = [
         exclusionIDList: [3],
         stateYes: false,
         stateNo: false,
-        num: 2,
+        state: "notComplete",
     },
 
     {
@@ -108,7 +114,7 @@ let DATA_General = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 3,
+        state: "notComplete",
     },
 
     {
@@ -117,7 +123,7 @@ let DATA_General = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 4,
+        state: "notComplete",
     },
 
     {
@@ -126,7 +132,7 @@ let DATA_General = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 5,
+        state: "notComplete",
     },
 
     {
@@ -135,7 +141,7 @@ let DATA_General = [
         exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
-        num: 5,
+        state: "notComplete",
     },
 
     {
@@ -144,7 +150,7 @@ let DATA_General = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 5,
+        state: "notComplete",
     },
 ];
 
@@ -155,7 +161,7 @@ let DATA_Specific = [
         exclusionIDList: [1],
         stateYes: false,
         stateNo: false,
-        num: 0,
+        state: "notComplete",
     },
 
     {
@@ -164,7 +170,7 @@ let DATA_Specific = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 1,
+        state: "notComplete",
     },
 
     {
@@ -173,7 +179,7 @@ let DATA_Specific = [
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
-        num: 2,
+        state: "notComplete",
     },
 
     {
@@ -182,7 +188,7 @@ let DATA_Specific = [
         exclusionIDList: [5],
         stateYes: false,
         stateNo: false,
-        num: 3,
+        state: "notComplete",
     },
 
     {
@@ -191,7 +197,7 @@ let DATA_Specific = [
         exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
-        num: 3,
+        state: "notComplete", //discard - completed
     },
 
 ];
@@ -203,7 +209,6 @@ const QuestionAnswerPage = (props) => {
     const [selectedId, setSelectedId] = useState(null);
     const [removedProjectSizeZero, setSize] = useState(false);
     const [removedProjects, setRemovedProjects] = useState({});
-    const [showingMessage, setShowingMessage] = useState(false);
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
     const [contentSize, setContentSize] = React.useState(0);
     const [scrollViewHeight, setScrollViewHeight] = React.useState(0);
@@ -227,6 +232,29 @@ const QuestionAnswerPage = (props) => {
 
     var num = 0;
 
+    /* The data pass to the Demo page */
+    const [age, setAge] = useState(25);
+    const initialDemo = {
+        gender: "",
+        healthy: "",
+        location: "",
+        english: "",
+        smoking: false,
+        pregnant: false,
+        lactating: false,
+        planning: false
+    };
+    const reducer = (state, action) => ({ ...state, ...action });
+    const [demoInfo, setDemoInfo] = useReducer(reducer, initialDemo);
+
+    /* error messages: restrict moving to the next page */
+    const showingDemoError = (demoInfo.gender == "" || demoInfo.healthy == "" ||
+        demoInfo.location == "" || demoInfo.english == "") ? true : false;
+    const showingGeneralAmptyError = (step == 1 && currentData.length == 0) ? true : false;
+    const showingSpecificAmptyError = (step == 2 && currentData.length == 0) ? true : false;
+    const [showingNoMatchMessage, setShowingMessage] = useState(false);
+    const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
+
     const stepForward = (isForward) => {
         let currentStep = step;
         if (isForward && currentStep < 3) {
@@ -247,25 +275,14 @@ const QuestionAnswerPage = (props) => {
             setSubTitle("General Questions");
             setButtonText("Next");
             washQuestions(DATA_General, availableProjects);
-            // currentData = DATA_General;
         } else if (step == 2) {
             setSubTitle("Specific Questions");
             setButtonText("Submit");
             washQuestions(DATA_Specific, availableProjects);
-            // currentData = DATA_Specific;
         } else {
             /* send eligible project's IDs */
         }
     }
-
-
-    const [age, setAge] = useState(25);
-    const [gender, setGender] = useState("male");
-    const [healthy, setHealthy] = useState(false);
-    const [smoking, setSmoking] = useState(false);
-    const [pregnant, setPregnant] = useState(false);
-    const [lactating, setLactating] = useState(false);
-    const [planning, setPlanning] = useState(false);
     
     const washProjects = (data) => {
         let tempData = data;
@@ -282,9 +299,13 @@ const QuestionAnswerPage = (props) => {
                     (isNaN(ageRange[0]) && userage <= ageRange[1]) ||
                     (userage >= ageRange[0] && isNaN(ageRange[1])) ||
                     (userage >= ageRange[0] || userage <= ageRange[1])) {
-                if (item.gender == gender && item.healthy == healthy && 
-                        item.smoking == smoking && item.pregnant == pregnant &&
-                        item.lactating == lactating && item.planning == planning) {
+                if (item.gender == demoInfo.gender && 
+                        item.healthy == demoInfo.healthy && 
+                        item.smoking == demoInfo.smoking && 
+                        item.pregnant == demoInfo.pregnant &&
+                        item.lactating == demoInfo.lactating && 
+                        item.planning == demoInfo.planning &&
+                        item.english == demoInfo.english) {
                     availabelData.push(item.projectID);
                 } else {
                     removedlData[item.projectID] = 1;
@@ -427,6 +448,17 @@ const QuestionAnswerPage = (props) => {
         }
     }
 
+    const checkCompleteAllQuestions = () => {
+        for (let i = 0; i < currentData.length; i++) {
+            if (currentData[i].state == "notComplete") {
+                setNotCompleteMsg(true);
+                return false;
+            }
+        }
+        setNotCompleteMsg(false);
+        return true;
+    }
+
     const getAvailableProjects = () => {
         let projectList = [];
         for (let index = 0; index < currentData.length; index++) {
@@ -472,8 +504,14 @@ const QuestionAnswerPage = (props) => {
         }
 
         if (step != 0 && removeThisQuestion(item)) {
+            item.state = "discard";
             return null;
         } else {
+            if (!item.stateYes && !item.stateNo) {
+                item.state = "notComplete";
+            } else {
+                item.state = "completed";
+            }
             return(
                 <View style={[styles.item]}>
                     <Text style={styles.questionSentence}>{item.question}</Text>
@@ -515,7 +553,7 @@ const QuestionAnswerPage = (props) => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={()=>console.log(availableProjects, currentData)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(availableProjects)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -529,10 +567,10 @@ const QuestionAnswerPage = (props) => {
                         {/* General question section */}
                         {/* Title bar information */}
                         <View style={styles.partABTitleBar}>
-                            <Text style={styles.partABTitleText}>
+                            {step == 0 ? null : <Text style={styles.partABTitleText}>
                                 *{questionsLeft} Questions Left
-                            </Text>
-                            <View style={styles.partABTitleYesNo}>
+                            </Text>}
+                            <View style={[styles.partABTitleYesNo, {opacity: step == 0 ? 0 : 1}]}>
                                 <Text style={{fontSize:"1.2em"}}>Yes</Text>
                                 <Text style={{fontSize:"1.2em"}}>No</Text>
                             </View>
@@ -559,10 +597,10 @@ const QuestionAnswerPage = (props) => {
                                 extraData={selectedId}
                             />}
                             {step == 0 && 
-                            <View></View>}
+                            <QuestionDemo setDemoInfo={setDemoInfo}></QuestionDemo>}
                         </ScrollView>
                     </View>
-
+                    {/* {setSmoking, setPregnant, setLactating, setPlanning, setLocation} */}
                     {/* scroll bar */}
                     <View style={styles.scrollBarContainer}>
                         <View 
@@ -628,9 +666,20 @@ const QuestionAnswerPage = (props) => {
 
                 {/* Button to next page */}
                 <View style={styles.extraInformation}>
-                    <Text style={{opacity: showingMessage? 1 : 0, fontSize: "1.2em", color:"red"}}>
+                    {(showingNoMatchMessage || showingGeneralAmptyError || showingSpecificAmptyError) ? 
+                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
                         *Sorry, no project matches your condition.
-                    </Text>
+                    </Text> : 
+                    showingNotCompleteMsg ? 
+                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                        *Please complete all questions.
+                    </Text> : null}
+
+                    {showingDemoError && 
+                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                        *Please complete the first four questions.
+                    </Text>}
+
                     <View style={[
                         styles.buttonContainer, 
                         {justifyContent: step > 0 ? "space-between" : "center"}]}>
@@ -645,15 +694,21 @@ const QuestionAnswerPage = (props) => {
                         <TouchableOpacity
                             style={[
                                 styles.questionnaireButton, 
-                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}
+                                {backgroundColor: showingNoMatchMessage || showingDemoError ||
+                                        showingGeneralAmptyError || showingSpecificAmptyError ?
+                                    "lightgrey" : "#00205B"}]}
                             onPress={() => {
-                                step == 0 ? washProjects(DATA_Demo) : null,
-                                stepForward(true)}}>
+                                    //if no project matches the user's condition, do nothing:
+                                    showingNoMatchMessage || showingDemoError ||
+                                        showingGeneralAmptyError || showingSpecificAmptyError ? null :
+                                    //if the current page is Demo, wash projects based on results.
+                                    (step == 0 ? washProjects(DATA_Demo) : null,
+                                    //check questions are completed or not.
+                                    (step == 0 || checkCompleteAllQuestions() ? stepForward(true) : null))}}>
                                 <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-
             </View>
 
             {/* View of Footer*/}

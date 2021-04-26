@@ -96,7 +96,6 @@ export const styles = StyleSheet.create({
 
     questionSentence:{
         width:"70%", 
-        fontSize:"1em", 
         paddingRight:"1%",
         fontSize:"1.5em"
     },
