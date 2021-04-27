@@ -7,7 +7,7 @@ import { LOGIN_URL } from "./urlMap";
 
 const isAdmin = () => {
   const role = localStorage.getItem("role");
-  return role === "Admin";
+  return role === "Admin" || role === "Project Manager";
 };
 
 const ProtectedRoute = ({ component: ProtectedComponent, ...rest }) => {
