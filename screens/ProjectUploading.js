@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -19,6 +21,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 import uuid from "react-native-uuid";
+import Footer from "./Footer";
 const ProjectUploading = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
@@ -964,18 +967,7 @@ const ProjectUploading = (props) => {
       </View>
 
       {/* View of Footer*/}
-      <View
-        style={{
-          height: 70,
-          backgroundColor: "#00205B",
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ color: "white", fontSize: 17, marginLeft: 10 }}>
-          NSW Health website | Disclaimer | Privacy | Copyright | Accessibility
-          | Site map
-        </Text>
-      </View>
+      <Footer />
     </SafeAreaView>
   );
 };
