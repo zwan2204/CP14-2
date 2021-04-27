@@ -80,7 +80,6 @@ const ProjectUploading = (props) => {
       type: "application/pdf",
     });
     if (result.type == "success") {
-      console.log(result.uri);
       let newfile = {
         uri: result.uri,
         type: `application/${result.name.split(".")[1]}`,
