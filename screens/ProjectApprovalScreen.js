@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  TextInput as NativeTextInput,
+  TextInput as NativeTextInput
 } from "react-native";
 import { styles } from "../styles.js";
 import { Button, Dialog, TextInput } from "react-native-paper";
@@ -21,7 +21,7 @@ export default class ProjectApprovalScreen extends React.Component {
       pendingComment: "",
       commentBoarderColor: "black",
       projectId: this.props.location.state.projectId,
-      projectInfo: [],
+      projectInfo: []
     };
   }
 
@@ -34,7 +34,7 @@ export default class ProjectApprovalScreen extends React.Component {
   };
 
   componentWillMount() {
-    console.log(this.props.location.state.projectId); 
+    console.log(this.props.location.state.projectId);
   }
 
   componentDidMount() {
@@ -44,9 +44,11 @@ export default class ProjectApprovalScreen extends React.Component {
   getProjectInfo = () => {
     let projectInfos = [];
     axios
-      .get(`http://localhost:12345/api/project/info${this.props.location.state.projectId}`)
+      .get(
+        `http://localhost:12345/api/project/${this.props.location.state.projectId}`
+      )
       .then(
-        (response) => {
+        response => {
           console.log(response.data);
           let title: response.data.title;
           let description: response.data.description;
@@ -68,7 +70,7 @@ export default class ProjectApprovalScreen extends React.Component {
           this.setState({ projectInfo: projectInfos });
           console.log(this.state.projectInfo);
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -83,7 +85,7 @@ export default class ProjectApprovalScreen extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row",
+            flexDirection: "row"
           }}
         >
           <Image
@@ -98,7 +100,7 @@ export default class ProjectApprovalScreen extends React.Component {
               height: 37,
               position: "absolute",
               bottom: 30,
-              right: 30,
+              right: 30
             }}
             onPress={() => console.log()}
           >
@@ -121,7 +123,7 @@ export default class ProjectApprovalScreen extends React.Component {
               style={{
                 backgroundColor: "white",
                 width: 120,
-                height: 37,
+                height: 37
               }}
             >
               Cancel
@@ -135,7 +137,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 flex: 1,
                 marginBottom: 10,
                 flexDirection: "row",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Text style={styles.subTitle}>Project titile: </Text>
@@ -146,9 +148,9 @@ export default class ProjectApprovalScreen extends React.Component {
                   marginLeft: 10,
                   borderWidth: 1,
                   borderColor: "black",
-                  borderRadius: 5,
+                  borderRadius: 5
                 }}
-                onChangeText={(text) => setTitle(text)}
+                onChangeText={text => setTitle(text)}
               />
             </View>
             <View style={{ flex: 6, flexDirection: "row" }}>
@@ -170,22 +172,22 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.state.pendingComment,
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
-                        render={(innerProps) => (
+                        render={innerProps => (
                           <NativeTextInput
                             {...innerProps}
                             style={[
                               innerProps.style,
                               {
                                 paddingTop: 8,
-                                paddingBottom: 8,
-                              },
+                                paddingBottom: 8
+                              }
                             ]}
                           />
                         )}
                         value={this.state.pendingComment}
-                        onChangeText={(text) =>
+                        onChangeText={text =>
                           this.setState({ pendingComment: text })
                         }
                       />
@@ -203,7 +205,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         marginHorizontal: 10,
                         borderWidth: 1,
                         borderColor: "black",
-                        borderRadius: 5,
+                        borderRadius: 5
                       }}
                     >
                       ijasdfljsklfndskjfkngmlewjfknmdlewjfngfkmeljfn,ekdmsjnkjsdjfksmlvnxkchvoisjofjdfioefo;hasofas;dfsiofj
@@ -246,7 +248,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: 15,
+                    marginTop: 15
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
@@ -257,16 +259,16 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
-                    onChangeText={(text) => setApprovalNumber(text)}
+                    onChangeText={text => setApprovalNumber(text)}
                   />
                 </View>
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: 15,
+                    marginTop: 15
                   }}
                 >
                   <Text style={styles.subTitle}>
@@ -279,9 +281,9 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
-                    onChangeText={(text) => setGovernanceNumber(text)}
+                    onChangeText={text => setGovernanceNumber(text)}
                   />
                 </View>
               </View>
@@ -295,16 +297,16 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
-                    onChangeText={(text) => setLocation(text)}
+                    onChangeText={text => setLocation(text)}
                   />
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "center"
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -315,16 +317,16 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
-                    onChangeText={(text) => setSubjectNo(text)}
+                    onChangeText={text => setSubjectNo(text)}
                   />
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "center"
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
@@ -335,16 +337,16 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
-                    onChangeText={(text) => setDuration(text)}
+                    onChangeText={text => setDuration(text)}
                   />
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "center"
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
@@ -355,9 +357,9 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
-                    onChangeText={(text) => setDate(text)}
+                    onChangeText={text => setDate(text)}
                   />
                 </View>
               </View>
