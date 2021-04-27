@@ -34,7 +34,7 @@ export default class ProjectApprovalScreen extends React.Component {
   };
 
   componentWillMount() {
-    console.log(this.props.location.state.projectId); 
+    console.log(this.props.location.state.projectId);
   }
 
   componentDidMount() {
@@ -44,18 +44,20 @@ export default class ProjectApprovalScreen extends React.Component {
   getProjectInfo = () => {
     let projectInfos = [];
     axios
-      .get(`http://localhost:12345/api/project/info${this.props.location.state.projectId}`)
+      .get(
+        `http://localhost:12345/api/project/${this.props.location.state.projectId}`
+      )
       .then(
         (response) => {
           console.log(response.data);
-          let title: response.data.title;
-          let description: response.data.description;
-          let location: response.data.location;
-          let subjectNo: response.data.subjectNo;
-          let duration: response.data.duration;
-          let date: response.data.date;
-          let eNumber: response.data.approvalNumber;
-          let governance: response.data.governance;
+          let title = response.data.title;
+          let description = response.data.description;
+          let location = response.data.location;
+          let subjectNo = response.data.subjectNo;
+          let duration = response.data.duration;
+          let date = response.data.date;
+          let eNumber = response.data.approvalNumber;
+          let governance = response.data.governance;
 
           projectInfos.push(title);
           projectInfos.push(description);

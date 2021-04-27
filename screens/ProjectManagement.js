@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -9,7 +11,14 @@ import {
   ScrollView,
 } from "react-native";
 
-import { Button, Colors, DataTable, IconButton } from "react-native-paper";
+import {
+  Button,
+  Card,
+  TextInput,
+  Colors,
+  DataTable,
+  IconButton,
+} from "react-native-paper";
 import axios from "axios";
 
 const ProjectManagement = (props) => {
@@ -72,7 +81,7 @@ const ProjectManagement = (props) => {
   const getProjects = () => {
     let unreleasedProjects = [];
     let releasedProjects = [];
-    axios.get(`http://localhost:12345/api/project/${userId}`).then(
+    axios.get(`http://localhost:12345/api/project/?user=${userId}`).then(
       (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let project = {
