@@ -152,7 +152,7 @@ export default class WorkerPage extends React.Component {
                       <DataTable.Cell numeric>
                         <Link to={{
                           pathname: "/projectApproval",
-                          state: {projectId: item.key}
+                          state: {projectId: item.key, projectState: item.state}
                         }}> process</Link>
                         {/* <Button>Process</Button> */}
                       </DataTable.Cell>
