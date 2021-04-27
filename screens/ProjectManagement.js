@@ -94,7 +94,7 @@ const ProjectManagement = (props) => {
         setUnreleasedProject(unreleasedProjects);
       },
       (error) => {
-        props.history.push("/Homepage");
+        console.log(error);
       }
     );
   };
@@ -145,6 +145,21 @@ const ProjectManagement = (props) => {
     }
   };
 
+  const updateState = (id) => {
+    axios
+      .put(`http://localhost:12345/api/project/state/${id}`, {
+        state: "Recruiting",
+      })
+      .then(
+        (response) => {
+          getProjects();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
   const incompleteRender = incompleteProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
@@ -192,7 +207,7 @@ const ProjectManagement = (props) => {
             disabled={item.state == "New Upload" ? true : false}
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
-            onPress={() => console.log(item.state)}
+            onPress={() => updateState(item.key)}
           >
             {item.state == "Authorized" ? "Release" : "Edit"}
           </Button>
