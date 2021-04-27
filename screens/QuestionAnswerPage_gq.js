@@ -20,11 +20,11 @@ let currentData = [];
 let DATA_Demo = [
     {
         projectID: 1,
-        age: "null,18",
+        age: "null,65",
         gender: "Male",
         healthy: "Yes",
         english: "Yes",
-        smoking: true,
+        smoking: false,
         pregnant: false,
         lactating: false,
         planning: false,
@@ -36,7 +36,7 @@ let DATA_Demo = [
         gender: "Male",
         english: "Yes",
         healthy: "Yes",
-        smoking: true,
+        smoking: false,
         pregnant: false,
         lactating: false,
         planning: false,
@@ -44,7 +44,7 @@ let DATA_Demo = [
 
     {
         projectID: 3,
-        age: "30,60",
+        age: "18,65",
         gender: "Male",
         english: "Yes",
         healthy: "Yes",
@@ -56,19 +56,7 @@ let DATA_Demo = [
 
     {
         projectID: 4,
-        age: "65,null",
-        gender: "Male",
-        english: "Yes",
-        healthy: "Yes",
-        smoking: false,
-        pregnant: false,
-        lactating: false,
-        planning: false,
-    },
-
-    {
-        projectID: 5,
-        age: "18,60",
+        age: "18,null",
         gender: "Male",
         english: "Yes",
         healthy: "Yes",
@@ -82,9 +70,9 @@ let DATA_Demo = [
 
 let DATA_General = [
     {
-        question: 'Are currently participating in otehr clinical studies?',
-        inclusionIDList: [2],
-        exclusionIDList: [1],
+        question: 'Are currently participating in other clinical studies?',
+        inclusionIDList: [1],
+        exclusionIDList: [2],
         stateYes: false,
         stateNo: false,
         state: "notComplete",
@@ -92,8 +80,8 @@ let DATA_General = [
 
     {
         question: 'Do you have a home partner and/or regular caregiver?',
-        inclusionIDList: [1,2],
-        exclusionIDList: [],
+        inclusionIDList: [1],
+        exclusionIDList: [3],
         stateYes: false,
         stateNo: false,
         state: "notComplete",
@@ -109,7 +97,7 @@ let DATA_General = [
     },
 
     {
-        question: 'Do you have High Blood Pressure (Hypertension)? Do you have High Blood Pressure (Hypertension)? Do you have High Blood Pressure (Hypertension)? Do you have High Blood Pressure (Hypertension)?',
+        question: 'Do you have the history of significant multiple and/or severe allergies?',
         inclusionIDList: [3, 1],
         exclusionIDList: [],
         stateYes: false,
@@ -118,25 +106,7 @@ let DATA_General = [
     },
 
     {
-        question: 'Do you have High Blood Pressure (Hypertension)??',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-        state: "notComplete",
-    },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)?11',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-        state: "notComplete",
-    },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)?111',
+        question: 'Do you have High Blood Pressure (Hypertension)?',
         inclusionIDList: [3],
         exclusionIDList: [4],
         stateYes: false,
@@ -145,18 +115,19 @@ let DATA_General = [
     },
 
     {
-        question: 'Do you have High Blood Pressure (Hypertension)?111 1 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111',
-        inclusionIDList: [4, 5],
-        exclusionIDList: [],
+        question: 'Are you mentally or legally incapacitated or has had significant history of recent mental health issues?',
+        inclusionIDList: [3],
+        exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
         state: "notComplete",
     },
+
 ];
 
 let DATA_Specific = [
     {
-        question: '2, 1',
+        question: 'Are you mentally or legally incapacitated or has had significant history of recent mental health issues?',
         inclusionIDList: [2],
         exclusionIDList: [1],
         stateYes: false,
@@ -165,7 +136,7 @@ let DATA_Specific = [
     },
 
     {
-        question: '2',
+        question: 'Do you have deep hip joint or anterior groin pain?',
         inclusionIDList: [2],
         exclusionIDList: [],
         stateYes: false,
@@ -174,7 +145,7 @@ let DATA_Specific = [
     },
 
     {
-        question: '3, 1',
+        question: 'Are you receiving treatment for Ulcerative Colitis?',
         inclusionIDList: [3, 1],
         exclusionIDList: [],
         stateYes: false,
@@ -183,21 +154,21 @@ let DATA_Specific = [
     },
 
     {
-        question: '1, 5',
+        question: 'Do you have current major or mild depression despite ongoing treatment?',
         inclusionIDList: [1],
-        exclusionIDList: [5],
+        exclusionIDList: [3],
         stateYes: false,
         stateNo: false,
         state: "notComplete",
     },
 
     {
-        question: '4',
+        question: 'Are you symptomatic with radiating low back and leg pain for greater than 6 months prior to surgery with a clinical diagnosis of lumbar protruding disc?',
         inclusionIDList: [],
         exclusionIDList: [4],
         stateYes: false,
         stateNo: false,
-        state: "notComplete", //discard - completed
+        state: "notComplete",
     },
 
 ];
@@ -493,7 +464,7 @@ const QuestionAnswerPage = (props) => {
     const Item = ({item}) => {
         /* needs to be changed, need to get the total number of questions*/
         num += 1;
-        if (num == 1) {
+        if (num == 5) {
             sleep(100);
             availableProjects = getAvailableProjects();
             if (availableProjects.length == 0) {
@@ -669,7 +640,7 @@ const QuestionAnswerPage = (props) => {
                     {(showingNoMatchMessage || showingGeneralAmptyError || showingSpecificAmptyError) ? 
                     <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
                         *Sorry, no project matches your condition.
-                    </Text> : 
+                    </Text> :
                     showingNotCompleteMsg ? 
                     <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
                         *Please complete all questions.
@@ -681,7 +652,7 @@ const QuestionAnswerPage = (props) => {
                     </Text>}
 
                     <View style={[
-                        styles.buttonContainer, 
+                        styles.buttonContainer,
                         {justifyContent: step > 0 ? "space-between" : "center"}]}>
                         {step > 0 && <TouchableOpacity 
                             style={[
