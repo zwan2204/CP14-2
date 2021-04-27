@@ -189,6 +189,16 @@ const ProjectManagement = (props) => {
           <Button
             mode="outlined"
             compact="true"
+            disabled={item.state == "New Upload" ? true : false}
+            style={{ marginHorizontal: 5 }}
+            labelStyle={{ fontSize: 10 }}
+            onPress={() => console.log(item.state)}
+          >
+            {item.state == "Authorized" ? "Release" : "Edit"}
+          </Button>
+          <Button
+            mode="outlined"
+            compact="true"
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
             onPress={() => deleteProject(item.key)}
