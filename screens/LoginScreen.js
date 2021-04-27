@@ -9,6 +9,7 @@ import { useHistory, Link } from "react-router-dom";
 import { storeUserInfo } from "../redux/actions/userAction";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "./Header";
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +36,7 @@ class LoginScreen extends React.Component {
           const role = response.data.userRole;
           this.props.storeUserInfo(userId, role);
           AsyncStorage.setItem("role", role);
+          AsyncStorage.setItem("userId", userId);
           if (role === "Admin" || role === "Project Manager") {
             history.push("/projectManagement");
           } else if (role === "Health Care Workers") {
@@ -59,19 +61,7 @@ class LoginScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         {/* Header color */}
-        <View
-          style={{
-            height: 140,
-            backgroundColor: "#00205B",
-            flexDirection: "row"
-          }}
-        >
-          <Image
-            style={{ width: 200, height: 100, left: 100, top: 20 }}
-            source={require("../assets/header.png")}
-          />
-        </View>
-
+        <Header />
         {/* Body */}
         <View
           style={{
@@ -139,12 +129,14 @@ class LoginScreen extends React.Component {
             onPress={this.userLogin}
             style={{ marginTop: 40 }}
           >
-            <Link to="/questionnaire" style={{color:"white"}}>
-            LOGIN
+            <Link to="/questionnaire" style={{ color: "white" }}>
+              LOGIN
             </Link>
           </Button>
 
-          <Button mode="text" onPress={() => history.push("/register")}>Signup</Button>
+          <Button mode="text" onPress={() => history.push("/register")}>
+            Signup
+          </Button>
         </View>
 
         {/* <View
