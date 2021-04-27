@@ -80,13 +80,27 @@ const ProjectUploading = (props) => {
       type: "application/pdf",
     });
     if (result.type == "success") {
+      console.log(result.uri);
       let newfile = {
         uri: result.uri,
-        type: `test/${result.name.split(".")[1]}`,
-        name: `test.${result.name.split(".")[1]}`,
+        type: `application/${result.name.split(".")[1]}`,
+        name: `project.${result.name.split(".")[1]}`,
       };
 
-      handleUpload(newfile);
+      const data = new FormData();
+      data.append("file", JSON.stringify(newfile));
+
+      fetch("http://localhost:12345/upload", {
+        method: "POST",
+
+        // send our base64 string as POST request
+        body: data,
+      })
+        .then(async (r) => {
+          let data = await r.json();
+          setImage(data.url);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -130,25 +144,6 @@ const ProjectUploading = (props) => {
       await AsyncStorage.setItem(`${userId},${documentId}`, jsonValue);
       props.history.push("/projectManagement");
     } catch (e) {}
-  };
-
-  const handleUpload = (image) => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "employeeapp");
-    data.append("cloud_name", "dzjg12m3b");
-
-    fetch("https://api.cloudinary.com/v1_1/dzjg12m3b/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setImage(data.url);
-      })
-      .catch((err) => {
-        console.log("upload false");
-      });
   };
 
   const addItem = (() => {
