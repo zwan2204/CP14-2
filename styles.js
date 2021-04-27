@@ -220,8 +220,13 @@ export const styles = StyleSheet.create({
         paddingLeft: "2%", 
         alignSelf:"flex-end", 
         fontWeight:"bold"
-    }
+    },
 
+    containerStyle: {
+      backgroundColor: 'white', 
+      zIndex: 1
+    
+    }
 
 
 
