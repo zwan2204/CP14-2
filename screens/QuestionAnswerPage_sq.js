@@ -9,20 +9,21 @@ import {
     Image, 
     ScrollView, 
     FlatList, 
-    NativeModules,
 } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import Layout from "antd/lib/layout/layout";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-  const DATA2 = [
+
+
+  let DATA = [
     {
         question: 'Are currently participating in otehr clinical studies?',
-        inclusionIDList: [2],
-        exclusionIDList: [1],
+        inclusionIDList: [1],
+        exclusionIDList: [],
         stateYes: false,
         stateNo: false,
+        num: 0,
     },
 
     {
@@ -31,94 +32,82 @@ import { useHistory, Link } from "react-router-dom";
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
+        num: 1,
     },
 
     {
         question: 'Do you have the history of significant multiple and/or severe allergies?',
-        inclusionIDList: [2],
+        inclusionIDList: [3],
         exclusionIDList: [],
         stateYes: false,
         stateNo: false,
+        num: 2,
     },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)? Do you have High Blood Pressure (Hypertension)? Do you have High Blood Pressure (Hypertension)? Do you have High Blood Pressure (Hypertension)?',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)??',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)?11',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)?111',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-
-    {
-        question: 'Do you have High Blood Pressure (Hypertension)?111 1 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111 Do you have High Blood Pressure (Hypertension)?1111',
-        inclusionIDList: [3, 1],
-        exclusionIDList: [],
-        stateYes: false,
-        stateNo: false,
-    },
-    
   ];
 
-const QuestionAnswerPage_sq = () => {
+const QuestionAnswerPage = (props) => {
     const [selectedId, setSelectedId] = useState(null);
     const [removedProjectSizeZero, setSize] = useState(false);
     const [removedProjects, setRemovedProjects] = useState({});
-    const [currrentSelection, setCurrenNum] = useState(0);
     const [showingMessage, setShowingMessage] = useState(false);
-    const ScrollViewManager = NativeModules.ScrollViewManager;
-    
-    const [initialScrollView, setInitialScrollView] = useState(true);
-    const [maxH, setMaxHeight] = useState(1);
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
     const [contentSize, setContentSize] = React.useState(0);
     const [scrollViewHeight, setScrollViewHeight] = React.useState(0);
     const scrollElementHeightPercent = 45;
-    const scrollPerc = (contentOffset.y / (contentSize - scrollViewHeight)) * (100 - scrollElementHeightPercent);
+    const scrollPerc = (contentOffset.y / (contentSize - scrollViewHeight)) 
+        * (100 - scrollElementHeightPercent);
     const [questionsLeft, setQuestionLeft] = React.useState(0);
-
-    var availableProjects = [];
+    const [availableProjects, setAvailableProjects] = useState([]);
+    const [isFiltered, setFiltered] = useState(false);
+    const loadedProjects = props.location.filteredProjects;
+    const previousData = props.location.data;
     var num = 0;
 
-    const a = () => {
-        console.log(location.filteredProjects);
-    };
+    /* filter the questions based on the available projects retrieved from the general questions */
+    if (!isFiltered && loadedProjects != null) {
+        console.log("传过来的project是： " + loadedProjects);
+        console.log("传过来的data是： " + previousData);
+        let tempData = DATA;
+        let newData = [];
+        tempData.forEach(item => {
+            let shouldRemove = true;
+            for(let index = 0; index < item.inclusionIDList.length; index++) {
+                for (let index_2 = 0; index_2 < loadedProjects.length; index_2++) {
+                    if (loadedProjects[index_2] == item.inclusionIDList[index]) {
+                        shouldRemove = false;
+                        break;
+                    }
+                }
+                if (!shouldRemove) {break;}
+            }
+            for(let index = 0; index < item.exclusionIDList.length; index++) {
+                if (!shouldRemove) {break;}
+                for (let index_2 = 0; index_2 < loadedProjects.length; index_2++) {
+                    if (loadedProjects[index_2] == item.exclusionIDList[index]) {
+                        shouldRemove = false;
+                        break;
+                    }
+                }
+                if (!shouldRemove) {break;}
+            }
+            if (!shouldRemove) {
+                newData.push(item);
+            }
+        });
+        DATA = newData;
+        setFiltered(true);
+    }
 
     const handleClickLeft = (item) => {
         makeASelection(item, false);
         item.stateYes = true;
         item.stateNo = false;
-        setCurrenNum(item.num);
     }
 
     const handleClickRight = (item) => {
         makeASelection(item, true);
         item.stateYes = false;
         item.stateNo = true;
-        setCurrenNum(item.num);
     }
 
     const makeASelection = (item, inclusion) => {
@@ -207,8 +196,8 @@ const QuestionAnswerPage_sq = () => {
 
     const getAvailableProjects = () => {
         let projectList = [];
-        for (let index3 = 0; index3 < DATA2.length; index3++) {
-            let questionItem = DATA2[index3];
+        for (let index3 = 0; index3 < DATA.length; index3++) {
+            let questionItem = DATA[index3];
             let incluArray = questionItem.inclusionIDList;
             let removeList = removedProjects;
             for (let index = 0; index < incluArray.length; index++) {
@@ -230,22 +219,17 @@ const QuestionAnswerPage_sq = () => {
         } while (currentDate - date < milliseconds);
     }
 
-    const aaa = () => {
-        if(ScrollViewManager && ScrollViewManager.getContentSize) {
-            ScrollViewManager.getContentSize(ReactNative.findNodeHandle(this.scrollViewRef), (contentSize) => {
-              console.log(contentSize);
-            })
-        }
-    }
-
     const Item = ({item}) => {
+        /* needs to be changed, need to get the total number of questions*/
         num += 1;
         if (num == 8) {
             sleep(100);
-            availableProjects = getAvailableProjects();
-            if (availableProjects.length == 0) {
-                console.log("a");
-                setShowingMessage(availableProjects.length == 0? true : false);
+            let avp = getAvailableProjects();
+            setAvailableProjects(avp); /*  */
+            if (avp.length == 0) {
+                setShowingMessage(true);
+            } else {
+                setShowingMessage(false);
             }
         }
 
@@ -258,13 +242,17 @@ const QuestionAnswerPage_sq = () => {
                     <View style={styles.tickContianer}>
                         {/* Yes button */}
                         <TouchableOpacity 
-                            onPress={() => {handleClickLeft(item), setSelectedId(item.question + item.stateYes)}}
+                            onPress={() => {
+                                handleClickLeft(item), 
+                                setSelectedId(item.question + item.stateYes)}}
                             style={item.stateYes ? styles.hightlightTickBox : styles.tickBox}>
                         </TouchableOpacity>
 
                         {/* No button */}
                         <TouchableOpacity 
-                            onPress={() => {handleClickRight(item), setSelectedId(item.question + item.stateYes)}} 
+                            onPress={() => {
+                                handleClickRight(item), 
+                                setSelectedId(item.question + item.stateYes)}} 
                             style={item.stateNo ? styles.hightlightTickBox : styles.tickBox}>
                         </TouchableOpacity>
                     </View>
@@ -276,12 +264,14 @@ const QuestionAnswerPage_sq = () => {
     const renderItem = ({ item }) => (
         <Item item={item}/>
     );
-
+    
     return (
         <SafeAreaView style={styles.container}>
             {/* header view */}
-            <View style={{ height: "20%", backgroundColor: "#00205B", flexDirection: "row" }}>
-                <Image style={{ width: 200, height: 100, left: 100, top: 20 }} source={require('../assets/header.png')} />
+            <View style={{height: "20%", backgroundColor: "#00205B", flexDirection: "row"}}>
+                <Image 
+                    style={{width: 200, height: 100, left: 100, top: 20}} 
+                    source={require('../assets/header.png')}/>
             </View>
             
             <View style={{height: "75%"}}>
@@ -318,17 +308,13 @@ const QuestionAnswerPage_sq = () => {
                                 setContentOffset(e.nativeEvent.contentOffset);
                             }}
                             onContentSizeChange={(_, height) => {
-                                if (initialScrollView) {
-                                    setMaxHeight(height);
-                                    setInitialScrollView(false);
-                                }
                                 setContentSize(height);
                             }}
                             onLayout={e => {
                                 setScrollViewHeight(e.nativeEvent.layout.height);
                             }}>
                             <FlatList
-                                data={DATA2} 
+                                data={DATA} 
                                 renderItem={renderItem} 
                                 keyExtractor={item => item.question} 
                                 extraData={selectedId}
@@ -338,11 +324,18 @@ const QuestionAnswerPage_sq = () => {
                     </View>
 
                     {/* scroll bar */}
-                    <View style={{width:"2%", alignContent:"center", alignItems:"center", justifyContent:"center"}}>
+                    <View style={styles.scrollBarContainer}>
                         <View 
-                            style={{width:"40%", height:"95%", borderRadius:8, borderColor:"grey", borderWidth:1, opacity: contentSize >= scrollViewHeight ? 1 : 0}}>
-                            <View style={{top:`${Number(scrollPerc || 0).toFixed(0)}%`, width:"100%", height:`${scrollElementHeightPercent}%`, borderRadius:8, backgroundColor:"#00205B", opacity: contentSize >= scrollViewHeight ? 1 : 0, 
-                            }}></View>
+                            style={[
+                                styles.scrollBarOutside, 
+                                {opacity: contentSize >= scrollViewHeight ? 1 : 0}]}>
+                            <View 
+                                style={[
+                                    styles.scrollBarInside, 
+                                    {top:`${Number(scrollPerc || 0).toFixed(0)}%`, 
+                                        height:`${scrollElementHeightPercent}%`, 
+                                        opacity: contentSize >= scrollViewHeight ? 1 : 0}]}>
+                            </View>
                         </View>
                     </View>
 
@@ -357,21 +350,21 @@ const QuestionAnswerPage_sq = () => {
                         <View style={[styles.processBarPole ,{backgroundColor:"#00205B"}]}></View>
                         <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>
                             <Text style={{color:"white", paddingLeft:5}}>2</Text>
-                            <Text style={{position:"absolute", paddingLeft:30, color:"#00205B", top:-10}}>
+                            <Text style={styles.processBarText}>
                                 General Questions
                             </Text>
                         </View>
                         <View style={[styles.processBarPole ,{backgroundColor:"#00205B"}]}></View>
                         <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>                        
                             <Text style={{color:"white", paddingLeft:5}}>3</Text>
-                            <Text style={{position:"absolute", paddingLeft:30, color:"#00205B", top:-10}}>
+                            <Text style={styles.processBarText}>
                                 Specific Questions
                             </Text>
                         </View>
                         <View style={[styles.processBarPole ,{backgroundColor:"white"}]}></View>
                         <View style={[styles.processBarCircle , {backgroundColor:"white"}]}>                        
                             <Text style={{color:"grey", paddingLeft:5}}>4</Text>
-                            <Text style={{position:"absolute", paddingLeft:30, color:"#00205B", top:-10}}>
+                            <Text style={styles.processBarText}>
                                 Available Projects
                             </Text>
                         </View>
@@ -384,15 +377,28 @@ const QuestionAnswerPage_sq = () => {
                         *Sorry, no project matches your condition.
                     </Text>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={[styles.questionnaireButton, {backgroundColor:"#00205B"}]} 
-                            onPress={()=>console.log("a")}>
-                            <Link to={"/questionnaire"} style={{color:"white", textDecoration:"none"}}>BACK</Link>
+                        <TouchableOpacity style={[
+                            styles.questionnaireButton, 
+                            {backgroundColor:"#00205B"}]}>
+                            <Link 
+                                to={{
+                                    pathname: "/questionnaire",
+                                    }}
+                                style={{color:"white", textDecoration:"none"}}>
+                                    BACK
+                            </Link>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles.questionnaireButton, {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]} 
-                            onPress={showingMessage ? null : a}>
-                            <Text style={{color: "white"}}>NEXT</Text>
+                            style={[
+                                styles.questionnaireButton, 
+                                {backgroundColor: showingMessage ? "lightgrey" : "#00205B"}]}>
+                            <Link 
+                                to={{
+                                    pathname: showingMessage ? "" : "", 
+                                    filteredProjects:availableProjects}} 
+                                style={{color: "white", textDecoration:"none"}}>
+                                    SUBMIT
+                            </Link>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -411,4 +417,4 @@ const QuestionAnswerPage_sq = () => {
     );
 }
 
-export default QuestionAnswerPage_sq;
+export default QuestionAnswerPage;

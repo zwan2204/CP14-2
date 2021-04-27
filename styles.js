@@ -96,7 +96,6 @@ export const styles = StyleSheet.create({
 
     questionSentence:{
         width:"70%", 
-        fontSize:"1em", 
         paddingRight:"1%",
         fontSize:"1.5em"
     },
@@ -184,7 +183,7 @@ export const styles = StyleSheet.create({
 
     questionnaireButton:{
         width:"35%", 
-        height:"100%", 
+        height:"100%",
         borderRadius:8, 
         alignContent:"center", 
         alignItems:"center", 
@@ -203,7 +202,6 @@ export const styles = StyleSheet.create({
         width:"20%", 
         height:"35%", 
         flexDirection:"row", 
-        justifyContent:"space-between"
     },
 
     titleInfoP1: {
@@ -220,9 +218,40 @@ export const styles = StyleSheet.create({
         paddingLeft: "2%", 
         alignSelf:"flex-end", 
         fontWeight:"bold"
+    },
+
+    processBarText: {
+        position:"absolute", 
+        paddingLeft:30, 
+        color:"#00205B", 
+        top:-10
+    },
+    containerStyle: {
+      backgroundColor: 'white', 
+      zIndex: 1
+    
+    },
+
+    scrollBarContainer:{
+        width:"2%", 
+        alignContent:"center", 
+        alignItems:"center", 
+        justifyContent:"center"
+    },
+
+    scrollBarOutside:{
+        width:"40%", 
+        height:"95%", 
+        borderRadius:8, 
+        borderColor:"grey", 
+        borderWidth:1
+    },
+
+    scrollBarInside:{
+        width:"100%",
+        borderRadius:8, 
+        backgroundColor:"#00205B"
     }
-
-
 
 
 

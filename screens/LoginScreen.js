@@ -36,9 +36,9 @@ class LoginScreen extends React.Component {
           this.props.storeUserInfo(userId, role);
           AsyncStorage.setItem("role", role);
           localStorage.setItem("userId", userId);
-          if (role === "Admin" || role === "Project Manager") {
+          if (role === "Project Manager") {
             history.push("/projectManagement");
-          } else if (role === "Health Care Workers") {
+          } else if (role === "Admin") {
             history.push("/worker");
           } else {
             history.push("/participant");
@@ -55,6 +55,8 @@ class LoginScreen extends React.Component {
   }
 
   render() {
+    const { history } = this.props;
+
     return (
       <SafeAreaView style={styles.container}>
         {/* Header color */}
@@ -138,10 +140,14 @@ class LoginScreen extends React.Component {
             onPress={this.userLogin}
             style={{ marginTop: 40 }}
           >
-            LOGIN
+            <Link to="/questionnaire" style={{ color: "white" }}>
+              LOGIN
+            </Link>
           </Button>
 
-          <Link to={"/register"}>Signup</Link>
+          <Button mode="text" onPress={() => history.push("/register")}>
+            Signup
+          </Button>
         </View>
 
         {/* <View
