@@ -11,14 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 
-import {
-  Button,
-  Card,
-  TextInput,
-  Colors,
-  DataTable,
-  IconButton,
-} from "react-native-paper";
+import { Button, Colors, DataTable, IconButton } from "react-native-paper";
 import axios from "axios";
 
 const ProjectManagement = (props) => {
