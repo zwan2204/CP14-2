@@ -36,6 +36,7 @@ class LoginScreen extends React.Component {
           const role = response.data.userRole;
           this.props.storeUserInfo(userId, role);
           AsyncStorage.setItem("role", role);
+          AsyncStorage.setItem("userId", userId);
           if (role === "Admin" || role === "Project Manager") {
             history.push("/projectManagement");
           } else if (role === "Health Care Workers") {
