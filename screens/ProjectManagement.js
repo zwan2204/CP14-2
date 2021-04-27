@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -9,7 +11,7 @@ import {
   ScrollView,
   Platform,
   TextInput as NativeTextInput,
-  Alert,
+  Alert
 } from "react-native";
 
 import {
@@ -18,14 +20,14 @@ import {
   TextInput,
   Colors,
   DataTable,
-  IconButton,
+  IconButton
 } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 
-const ProjectManagement = (props) => {
+const ProjectManagement = props => {
   const [incompleteDrop, setIncompleteDrop] = useState("none");
   const [unreleasedDrop, setUnreleasedDrop] = useState("none");
   const [releasedDrop, setReleasedDrop] = useState("none");
@@ -63,18 +65,18 @@ const ProjectManagement = (props) => {
     }
   };
 
-  const deleteProject = (projectId) => {
+  const deleteProject = projectId => {
     axios.delete(`http://localhost:12345/api/project/${projectId}`).then(
-      (response) => {
+      response => {
         getProjects();
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
   };
 
-  const deleteIncomplete = async (id) => {
+  const deleteIncomplete = async id => {
     try {
       await AsyncStorage.removeItem(id);
       getLocalStorage();
@@ -84,14 +86,14 @@ const ProjectManagement = (props) => {
   const getProjects = () => {
     let unreleasedProjects = [];
     let releasedProjects = [];
-    axios.get(`http://localhost:12345/api/project/${userId}`).then(
-      (response) => {
+    axios.get(`http://localhost:12345/api/project/?user=${userId}`).then(
+      response => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let project = {
             key: response.data[i]._id,
             title: response.data[i].title,
             createdDate: response.data[i].createdDate,
-            state: response.data[i].state,
+            state: response.data[i].state
           };
           if (response.data[i].state != "Recruiting") {
             unreleasedProjects.push(project);
@@ -103,7 +105,7 @@ const ProjectManagement = (props) => {
         setReleasedProject(releasedProjects);
         setUnreleasedProject(unreleasedProjects);
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -135,7 +137,7 @@ const ProjectManagement = (props) => {
             key: values[i][0],
             title: JSON.parse(values[i][1]).title,
             createdDate: JSON.parse(values[i][1]).createdDate,
-            state: remainTask,
+            state: remainTask
           };
 
           incompleteProjects.push(project);
@@ -147,7 +149,7 @@ const ProjectManagement = (props) => {
     }
   };
 
-  const incompleteRender = incompleteProject.map((item) => {
+  const incompleteRender = incompleteProject.map(item => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -171,7 +173,7 @@ const ProjectManagement = (props) => {
     );
   });
 
-  const unreleasedRender = unreleasedProject.map((item) => {
+  const unreleasedRender = unreleasedProject.map(item => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${unreleasedDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -192,7 +194,7 @@ const ProjectManagement = (props) => {
     );
   });
 
-  const releasedRender = releasedProject.map((item) => {
+  const releasedRender = releasedProject.map(item => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${releasedDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -223,7 +225,7 @@ const ProjectManagement = (props) => {
         style={{
           height: 140,
           backgroundColor: "#00205B",
-          flexDirection: "row",
+          flexDirection: "row"
         }}
       >
         <Image
@@ -239,7 +241,7 @@ const ProjectManagement = (props) => {
             height: 37,
             position: "absolute",
             bottom: 30,
-            right: 30,
+            right: 30
           }}
           onPress={() => console.log()}
         >
@@ -255,7 +257,7 @@ const ProjectManagement = (props) => {
               fontWeight: "bold",
               fontSize: 35,
               color: "gray",
-              marginBottom: 10,
+              marginBottom: 10
             }}
           >
             My Projects
@@ -329,7 +331,7 @@ const ProjectManagement = (props) => {
         style={{
           height: 70,
           backgroundColor: "#00205B",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         <Text style={{ color: "white", fontSize: 17, marginLeft: 10 }}>
@@ -343,7 +345,7 @@ const ProjectManagement = (props) => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 export default ProjectManagement;
