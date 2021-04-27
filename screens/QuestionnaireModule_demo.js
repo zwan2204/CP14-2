@@ -11,7 +11,7 @@ export function QuestionDemo({setDemoInfo}) {
     const[healthy, setHealthy_thisPage] = useState("");
     const[english, setEnglish_thisPage] = useState("");
     const[curLocation, setcurLocatio_thisPage] = useState("");
-    const[isPragnent, setPragnent_thisPage] = useState(false);
+    const[isPregnant, setPregnant_thisPage] = useState(false);
     const[isSmoking, setSmoking_thisPage] = useState(false);
     const[isLactating, setLactating_thisPage] = useState(false);
     const[isPlanning, setPlanning_thisPage] = useState(false);
@@ -44,9 +44,9 @@ export function QuestionDemo({setDemoInfo}) {
         }
     };
 
-    const pickIsPragnent = () => {
-        setDemoInfo({pregnant: !isPragnent});
-        setPragnent_thisPage(!isPragnent);
+    const pickIsPregnant = () => {
+        setDemoInfo({pregnant: !isPregnant});
+        setPregnant_thisPage(!isPregnant);
     };
 
     const pickIsSmoking = () => {
@@ -138,12 +138,12 @@ export function QuestionDemo({setDemoInfo}) {
               <View style={{flexDirection: "row", height:"60%",paddingLeft:"4%", width:"100%"}}>
                   <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
                       <Text style={{fontSize:"1.5em", paddingRight:20}}>
-                          Pragnent
+                          Pregnant
                       </Text>
                       <CheckBox
                           style={{height:"1.5em", width:"1.5em"}}
-                          value={isPragnent}
-                          onValueChange={pickIsPragnent}
+                          value={isPregnant}
+                          onValueChange={pickIsPregnant}
                       />
                   </View>
                   <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
@@ -168,7 +168,7 @@ export function QuestionDemo({setDemoInfo}) {
                   </View>
                   <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
                       <Text style={{fontSize:"1.5em" , paddingRight:20}}>
-                          Planning on becoming pragnent
+                          Planning on becoming pregnant
                       </Text>
                       <CheckBox
                           style={{height:"1.5em", width:"1.5em"}}

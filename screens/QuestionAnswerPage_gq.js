@@ -12,8 +12,9 @@ import {
 } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
+import getUserAge from "../screens/QuestionnaireModule_data";
+
 
 let currentData = [];
 
@@ -97,7 +98,7 @@ let DATA_General = [
     },
 
     {
-        question: 'Do you have the history of significant multiple and/or severe allergies?',
+        question: 'Do you have the history of significant multiple and/or severe allergies2?',
         inclusionIDList: [3, 1],
         exclusionIDList: [],
         stateYes: false,
@@ -225,6 +226,12 @@ const QuestionAnswerPage = (props) => {
     const showingSpecificAmptyError = (step == 2 && currentData.length == 0) ? true : false;
     const [showingNoMatchMessage, setShowingMessage] = useState(false);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
+
+    // let DataProcessor = new QuestionnaireDataProcess();
+    let userID = "ni de id";
+    /* get user's information */
+    let userInfo = getUserAge("aaa");
+
 
     const stepForward = (isForward) => {
         let currentStep = step;
@@ -464,7 +471,7 @@ const QuestionAnswerPage = (props) => {
     const Item = ({item}) => {
         /* needs to be changed, need to get the total number of questions*/
         num += 1;
-        if (num == 5) {
+        if (num == 1) {
             sleep(100);
             availableProjects = getAvailableProjects();
             if (availableProjects.length == 0) {
@@ -524,7 +531,7 @@ const QuestionAnswerPage = (props) => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(availableProjects)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -629,7 +636,7 @@ const QuestionAnswerPage = (props) => {
                             {backgroundColor: step >= 3 ? "#00205B" : "white"}]}>                        
                             <Text style={{color: step >= 3 ? "white" : "grey", paddingLeft:5}}>4</Text>
                             <Text style={styles.processBarText}>
-                                Available Projects
+                                Eligible Projects
                             </Text>
                         </View>
                     </View>
@@ -638,16 +645,16 @@ const QuestionAnswerPage = (props) => {
                 {/* Button to next page */}
                 <View style={styles.extraInformation}>
                     {(showingNoMatchMessage || showingGeneralAmptyError || showingSpecificAmptyError) ? 
-                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                    <Text style={styles.questionMsg}>
                         *Sorry, no project matches your condition.
                     </Text> :
                     showingNotCompleteMsg ? 
-                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                    <Text style={styles.questionMsg}>
                         *Please complete all questions.
                     </Text> : null}
 
                     {showingDemoError && 
-                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                    <Text style={styles.questionMsg}>
                         *Please complete the first four questions.
                     </Text>}
 

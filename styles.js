@@ -195,13 +195,13 @@ export const styles = StyleSheet.create({
         height:"20%", 
         alignContent:"center", 
         alignItems:"center", 
-        justifyContent:"space-around"
+        justifyContent:"space-around",
     },
 
     buttonContainer: {
         width:"20%", 
         height:"35%", 
-        flexDirection:"row", 
+        flexDirection:"row",
     },
 
     titleInfoP1: {
@@ -246,8 +246,14 @@ export const styles = StyleSheet.create({
         width:"100%",
         borderRadius:8, 
         backgroundColor:"#00205B"
+    },
+
+    questionMsg:{
+        opacity: 1, 
+        fontSize: "1.2em", 
+        color:"red", 
+        position:"absolute", 
+        top:0
     }
-
-
 
 })
