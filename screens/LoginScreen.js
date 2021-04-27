@@ -54,6 +54,8 @@ class LoginScreen extends React.Component {
   }
 
   render() {
+    const { history } = this.props;
+
     return (
       <SafeAreaView style={styles.container}>
         {/* Header color */}
@@ -142,7 +144,7 @@ class LoginScreen extends React.Component {
             </Link>
           </Button>
 
-          <Link to={"/register"}>Signup</Link>
+          <Button mode="text" onPress={() => history.push("/register")}>Signup</Button>
         </View>
 
         {/* <View

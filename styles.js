@@ -226,6 +226,11 @@ export const styles = StyleSheet.create({
         color:"#00205B", 
         top:-10
     },
+    containerStyle: {
+      backgroundColor: 'white', 
+      zIndex: 1
+    
+    },
 
     scrollBarContainer:{
         width:"2%", 
