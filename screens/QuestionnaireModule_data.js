@@ -6,22 +6,53 @@ import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 import axios from "axios";
 
-const getUserAge = (userID) => {
-    axios.get("http://localhost:12345/api/patients").then(
-        (response) => {
-            for (let i = 0; i < Object.keys(response.data).length; i++) {
-                console.log("hehehe");
+const userID = localStorage.getItem("userId");
 
-                if (response.data[i].email == "tests12242322") {
-                    setUser(userID);
-                    return ("hehehehe");
-                }
-            }
+export const getUserInfo = () => {
+    let demoInfo = {};
+    axios.get(`http://localhost:12345/api/users/${userID}`).then(
+        (response) => {
+            demoInfo["gender"] = response.data.gender;
+            demoInfo["healthy"] = response.data.healthy;
+            demoInfo["english"] = response.data.english;
+            demoInfo["location"] = "";
+            demoInfo["isPregnant"] = response.data.isPregnant;
+            demoInfo["isSmoking"] = response.data.isSmoking;
+            demoInfo["isLactating"] = response.data.isLactating;
+            demoInfo["isPlanning"] = response.data.isPlanning;
         },
         (error) => {
-            return "meiyou";
+            console.log(error);
         }
     );
-    return null;
+    return demoInfo;
+}
+
+const getUserAge = () => {
+    const[age, setAge] = useState(0);
+    axios.get(`http://localhost:12345/api/users/${userID}`).then(
+        (response) => {
+            let dob = response.data.dob;
+            let tempAge = getAge(dob);
+            setAge(tempAge);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+    return age;
 }
 export default getUserAge;
+
+const  getAge = (dateString)=>{
+    var regroupData = dateString.split("/");
+    var newDate = regroupData[2] + "/" + regroupData[1] + "/" + regroupData[0];
+    var today = new Date();
+    var birthDate = new Date(newDate);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}

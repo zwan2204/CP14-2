@@ -42,7 +42,7 @@ class LoginScreen extends React.Component {
           } else if (role === "Health Care Workers") {
             history.push("/worker");
           } else {
-            history.push("/participant");
+            history.push("/questionnaire");
           }
         },
         error => {

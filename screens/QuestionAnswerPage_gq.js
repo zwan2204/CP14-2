@@ -14,6 +14,7 @@ import { styles } from "../styles.js";
 import axios from "axios";
 import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
 import getUserAge from "../screens/QuestionnaireModule_data";
+import {getUserInfo} from "../screens/QuestionnaireModule_data";
 
 
 let currentData = [];
@@ -21,8 +22,8 @@ let currentData = [];
 let DATA_Demo = [
     {
         projectID: 1,
-        age: "null,65",
-        gender: "Male",
+        age: "null,18",
+        gender: "male",
         healthy: "Yes",
         english: "Yes",
         smoking: false,
@@ -34,7 +35,7 @@ let DATA_Demo = [
     {
         projectID: 2,
         age: "18,65",
-        gender: "Male",
+        gender: "male",
         english: "Yes",
         healthy: "Yes",
         smoking: false,
@@ -46,7 +47,7 @@ let DATA_Demo = [
     {
         projectID: 3,
         age: "18,65",
-        gender: "Male",
+        gender: "male",
         english: "Yes",
         healthy: "Yes",
         smoking: false,
@@ -58,7 +59,7 @@ let DATA_Demo = [
     {
         projectID: 4,
         age: "18,null",
-        gender: "Male",
+        gender: "male",
         english: "Yes",
         healthy: "Yes",
         smoking: false,
@@ -205,19 +206,8 @@ const QuestionAnswerPage = (props) => {
     var num = 0;
 
     /* The data pass to the Demo page */
-    const [age, setAge] = useState(25);
-    const initialDemo = {
-        gender: "",
-        healthy: "",
-        location: "",
-        english: "",
-        smoking: false,
-        pregnant: false,
-        lactating: false,
-        planning: false
-    };
     const reducer = (state, action) => ({ ...state, ...action });
-    const [demoInfo, setDemoInfo] = useReducer(reducer, initialDemo);
+    const [demoInfo, setDemoInfo] = useReducer(reducer, getUserInfo());
 
     /* error messages: restrict moving to the next page */
     const showingDemoError = (demoInfo.gender == "" || demoInfo.healthy == "" ||
@@ -227,10 +217,9 @@ const QuestionAnswerPage = (props) => {
     const [showingNoMatchMessage, setShowingMessage] = useState(false);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
 
-    // let DataProcessor = new QuestionnaireDataProcess();
-    let userID = "ni de id";
-    /* get user's information */
-    let userInfo = getUserAge("aaa");
+    /* get user's age */
+    let userAge = getUserAge();
+    /* get user's stored */
 
 
     const stepForward = (isForward) => {
@@ -267,16 +256,16 @@ const QuestionAnswerPage = (props) => {
         let availabelData = [];
         let removedlData = {};
         tempData.forEach(item => {
-            //filter projects based on age
-            let userage = 25; ////////////////////////////delete
+            //filter projects based on age.
             const ageRange = item.age.split(",");
             for (let i = 0; i < ageRange.length; i++) {
                 ageRange[i] = parseInt(ageRange[i]);
             }
             if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                    (isNaN(ageRange[0]) && userage <= ageRange[1]) ||
-                    (userage >= ageRange[0] && isNaN(ageRange[1])) ||
-                    (userage >= ageRange[0] || userage <= ageRange[1])) {
+                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                    (userAge >= ageRange[0] || userAge <= ageRange[1])) {
+                //filter projects based on user's selections.
                 if (item.gender == demoInfo.gender && 
                         item.healthy == demoInfo.healthy && 
                         item.smoking == demoInfo.smoking && 
@@ -405,14 +394,17 @@ const QuestionAnswerPage = (props) => {
     const removeThisQuestion = (item) => {
         if ((item.stateYes == false) && 
             (item.stateNo == false) && removedProjects && removedProjectSizeZero) {
-            /* check whether the IDs in the inclusionIDList are all included in the removedProjects list */
+            /* check whether the IDs in the inclusionIDList are all included 
+            in the removedProjects list */
             for (let index = 0; index < item.inclusionIDList.length; index++) {
-                /* if an ID is not in the list, this question should not be removed, return false */
+                /* if an ID is not in the list, this question should not be removed, 
+                return false */
                 if (removedProjects[item.inclusionIDList[index]] == null) {
                     return false;
                 }
             }
-            /* check whether the IDs in the exclusionIDList are all included in the removedProjects list */
+            /* check whether the IDs in the exclusionIDList are all included in the 
+            removedProjects list */
             for (let index = 0; index < item.exclusionIDList.length; index++) {
                 // if (!removedProjects.includes(item.exclusionIDList[index])) {
                 if (removedProjects[item.exclusionIDList[index]] == null) {
@@ -531,7 +523,7 @@ const QuestionAnswerPage = (props) => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(demoInfo)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -575,7 +567,7 @@ const QuestionAnswerPage = (props) => {
                                 extraData={selectedId}
                             />}
                             {step == 0 && 
-                            <QuestionDemo setDemoInfo={setDemoInfo}></QuestionDemo>}
+                            <QuestionDemo setDemoInfo={setDemoInfo} demoInfo={demoInfo}></QuestionDemo>}
                         </ScrollView>
                     </View>
                     {/* {setSmoking, setPregnant, setLactating, setPlanning, setLocation} */}
