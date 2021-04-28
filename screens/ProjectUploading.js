@@ -45,6 +45,9 @@ const ProjectUploading = (props) => {
   const [isSmoking, setIsSmoking] = React.useState(false);
   const [isLactating, setIsLactating] = React.useState(false);
   const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
+  const [isHealthy, setHealthy] = React.useState(false);
+  const [isEnglishFluent, setEnglishFluent] = React.useState(false);
+
   const [gender, setGender] = useState("");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
@@ -62,6 +65,9 @@ const ProjectUploading = (props) => {
       setDescription(ediInfo.description);
       setLocation(ediInfo.location);
       setSubjectNo(ediInfo.subjectNo);
+      setHealthy(ediInfo.isHealthy);
+      setEnglishFluent(ediInfo.isEnglishFluent);
+      setImage(ediInfo.fileUpload);
       setDuration(ediInfo.duration);
       setDate(ediInfo.date);
       setQuestion(ediInfo.InclusionCriteria);
@@ -131,6 +137,8 @@ const ProjectUploading = (props) => {
       governance: Governance,
       fileUpload: image,
       isPragnant: isPragnant,
+      isHealthy: isHealthy,
+      isEnglishFluent: isEnglishFluent,
       isSmoking: isSmoking,
       isLactating: isLactating,
       isPlaningPragnant: isPlaningPragnant,
@@ -212,6 +220,7 @@ const ProjectUploading = (props) => {
       }
       tmpExclusionQuestion.push(exclusionQuesion[i].description);
     }
+
     axios
       .post("http://localhost:12345/api/project", {
         userId: userId,
@@ -222,8 +231,10 @@ const ProjectUploading = (props) => {
         duration: Duration,
         createdDate: currentDate,
         date: Date,
+        needHealth: isHealthy,
+        needEnglish: isEnglishFluent,
         workerNeed: workerNeed,
-        state: "New Upload",
+        state: "pending",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
@@ -656,6 +667,24 @@ const ProjectUploading = (props) => {
               value={maxAge == "null" ? "" : maxAge}
               onChangeText={(text) => {
                 text == "" ? setMaxAge("null") : setMaxAge(text);
+              }}
+            />
+            <CheckBox
+              title="Need speek fluent english"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={isEnglishFluent}
+              onPress={() => {
+                setEnglishFluent(!isEnglishFluent);
+              }}
+            />
+            <CheckBox
+              title="Should be health"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={isHealthy}
+              onPress={() => {
+                setHealthy(!isHealthy);
               }}
             />
           </View>

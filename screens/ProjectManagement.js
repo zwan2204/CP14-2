@@ -108,6 +108,8 @@ const ProjectManagement = (props) => {
       "isSmoking",
       "isLactating",
       "isPlaningPragnant",
+      "isHealthy",
+      "isEnglishFluent",
     ];
     try {
       keys = await AsyncStorage.getAllKeys();

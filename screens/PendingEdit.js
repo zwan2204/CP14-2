@@ -43,6 +43,8 @@ const PendingEdit = (props) => {
   const [isSmoking, setIsSmoking] = React.useState(false);
   const [isLactating, setIsLactating] = React.useState(false);
   const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
+  const [isHealthy, setHealthy] = React.useState(false);
+  const [isEnglishFluent, setEnglishFluent] = React.useState(false);
   const [gender, setGender] = useState("");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
@@ -81,6 +83,9 @@ const PendingEdit = (props) => {
           setIsSmoking(response.data.isSmoking);
           setIsLactating(response.data.isLactating);
           setPlaningPragnant(response.data.isPlaningPragnant);
+
+          setHealthy(response.data.needHealth);
+          setEnglishFluent(response.data.needEnglish);
           setGender(response.data.gender);
           setMinAge(response.data.ageGroup.split(",")[0]);
           setMaxAge(response.data.ageGroup.split(",")[1]);
@@ -647,6 +652,25 @@ const PendingEdit = (props) => {
               value={maxAge == "null" ? "" : maxAge}
               onChangeText={(text) => {
                 text == "" ? setMaxAge("null") : setMaxAge(text);
+              }}
+            />
+
+            <CheckBox
+              title="Need speek fluent english"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={isEnglishFluent}
+              onPress={() => {
+                setEnglishFluent(!isEnglishFluent);
+              }}
+            />
+            <CheckBox
+              title="Should be health"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={isHealthy}
+              onPress={() => {
+                setHealthy(!isHealthy);
               }}
             />
           </View>

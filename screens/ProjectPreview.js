@@ -32,6 +32,9 @@ const ProjectPreview = (props) => {
   const [isSmoking, setIsSmoking] = React.useState(false);
   const [isLactating, setIsLactating] = React.useState(false);
   const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
+  const [isHealthy, setHealthy] = React.useState(false);
+  const [isEnglishFluent, setEnglishFluent] = React.useState(false);
+
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
   // const userId = "606d1642b2fff30342232416";
@@ -58,6 +61,8 @@ const ProjectPreview = (props) => {
         setDuration(response.data.duration);
         setDate(response.data.date);
         setIsPragnant(response.data.isPragnant);
+        setHealthy(response.data.needHealth);
+        setEnglishFluent(response.data.needEnglish);
         setIsSmoking(response.data.isSmoking);
         setIsLactating(response.data.isLactating);
         setPlaningPragnant(response.data.isPlaningPragnant);
@@ -390,6 +395,18 @@ const ProjectPreview = (props) => {
                 height: 30,
                 margin: 10,
               }}
+            />
+            <CheckBox
+              title="Need speek fluent english"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={isEnglishFluent}
+            />
+            <CheckBox
+              title="Should be health"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={isHealthy}
             />
           </View>
         </View>
