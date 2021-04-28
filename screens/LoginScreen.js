@@ -42,7 +42,11 @@ class LoginScreen extends React.Component {
           } else if (role === "Admin") {
             history.push("/worker");
           } else {
+<<<<<<< HEAD
             history.push("/questionnaire");
+=======
+            //history.push("/participant");
+>>>>>>> preview
           }
         },
         (error) => {

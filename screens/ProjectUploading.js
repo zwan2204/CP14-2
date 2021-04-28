@@ -273,7 +273,7 @@ const ProjectUploading = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text styl={styles.text}>{item.description}</Text>
+          <Text>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeItem(item.key)}>Delete</Button>
           </Card.Actions>
@@ -286,7 +286,7 @@ const ProjectUploading = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text styl={styles.text}>{item.description}</Text>
+          <Text>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
           </Card.Actions>
@@ -693,7 +693,7 @@ const ProjectUploading = (props) => {
             }}
           />
           <CheckBox
-            title="Planning on becoming pargnent"
+            title="Planning on becoming pragnent"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             checked={isPlaningPragnent}
