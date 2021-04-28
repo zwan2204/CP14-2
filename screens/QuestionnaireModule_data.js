@@ -8,24 +8,29 @@ import axios from "axios";
 
 const userID = localStorage.getItem("userId");
 
-export const getUserInfo = () => {
-    let demoInfo = {};
+export const updateUserInfo = () => {
+
+}
+
+export const getUserInfo = ({setGet}) => {
+    let userInfo = {};
     axios.get(`http://localhost:12345/api/users/${userID}`).then(
         (response) => {
-            demoInfo["gender"] = response.data.gender;
-            demoInfo["healthy"] = response.data.healthy;
-            demoInfo["english"] = response.data.english;
-            demoInfo["location"] = "";
-            demoInfo["isPregnant"] = response.data.isPregnant;
-            demoInfo["isSmoking"] = response.data.isSmoking;
-            demoInfo["isLactating"] = response.data.isLactating;
-            demoInfo["isPlanning"] = response.data.isPlanning;
+            userInfo["gender"] = response.data.gender;
+            userInfo["healthy"] = response.data.healthy;
+            userInfo["english"] = response.data.english;
+            userInfo["location"] = "";
+            userInfo["isPregnant"] = response.data.isPregnant;
+            userInfo["isSmoking"] = response.data.isSmoking;
+            userInfo["isLactating"] = response.data.isLactating;
+            userInfo["isPlanning"] = response.data.isPlanning;
+            setGet(true);
         },
         (error) => {
             console.log(error);
         }
     );
-    return demoInfo;
+    return userInfo;
 }
 
 const getUserAge = () => {

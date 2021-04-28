@@ -176,6 +176,7 @@ let DATA_Specific = [
 ];
 
 let availableProjects = [];
+// let userInformation = getUserInfo();
 
 
 const QuestionAnswerPage = (props) => {
@@ -205,9 +206,13 @@ const QuestionAnswerPage = (props) => {
 
     var num = 0;
 
+    /* get user's age */
+    let userAge = getUserAge();
+
     /* The data pass to the Demo page */
+    const [getUserData, setGet] = useState(false);
     const reducer = (state, action) => ({ ...state, ...action });
-    const [demoInfo, setDemoInfo] = useReducer(reducer, getUserInfo());
+    const [demoInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
 
     /* error messages: restrict moving to the next page */
     const showingDemoError = (demoInfo.gender == "" || demoInfo.healthy == "" ||
@@ -216,11 +221,6 @@ const QuestionAnswerPage = (props) => {
     const showingSpecificAmptyError = (step == 2 && currentData.length == 0) ? true : false;
     const [showingNoMatchMessage, setShowingMessage] = useState(false);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
-
-    /* get user's age */
-    let userAge = getUserAge();
-    /* get user's stored */
-
 
     const stepForward = (isForward) => {
         let currentStep = step;
@@ -562,11 +562,11 @@ const QuestionAnswerPage = (props) => {
                             {step != 0 && 
                             <FlatList
                                 data={currentData} 
-                                renderItem={renderItem} 
+                                renderItem={renderItem}
                                 keyExtractor={item => item.question} 
                                 extraData={selectedId}
                             />}
-                            {step == 0 && 
+                            {step == 0 && getUserData &&
                             <QuestionDemo setDemoInfo={setDemoInfo} demoInfo={demoInfo}></QuestionDemo>}
                         </ScrollView>
                     </View>
@@ -674,7 +674,7 @@ const QuestionAnswerPage = (props) => {
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? washProjects(DATA_Demo) : null,
                                     //check questions are completed or not.
-                                    (step == 0 || checkCompleteAllQuestions() ? stepForward(true) : null))}}>
+                                    (step == 0 || checkCompleteAllQuestions() ? (stepForward(true), console.log("aaa")) : null))}}>
                                 <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
                     </View>

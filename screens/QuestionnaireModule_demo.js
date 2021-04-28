@@ -7,6 +7,7 @@ import { styles } from "../styles.js";
 import axios from "axios";
 
 export function QuestionDemo({setDemoInfo, demoInfo}) {
+    console.log("aaaa: "+demoInfo);
     let gender_default = demoInfo["gender"];
     let healthy_default = demoInfo["healthy"];
     let english_default = demoInfo["english"];
@@ -24,7 +25,6 @@ export function QuestionDemo({setDemoInfo, demoInfo}) {
     const[isSmoking, setSmoking_thisPage] = useState(false);
     const[isLactating, setLactating_thisPage] = useState(false);
     const[isPlanning, setPlanning_thisPage] = useState(false);
-
 
     const pickGender = gender => {
         if (gender !== 0) {
@@ -199,7 +199,7 @@ export function QuestionDemo({setDemoInfo, demoInfo}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isSmoking_default == isSmoking ? isSmoking : !isSmoking}
+                            value={isSmoking_default === isSmoking ? isSmoking : !isSmoking}
                             onValueChange={pickIsSmoking}
                         />
                     </View>
@@ -209,7 +209,7 @@ export function QuestionDemo({setDemoInfo, demoInfo}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isLactating_default == isLactating ? isLactating : !isLactating}
+                            value={isLactating_default === isLactating ? isLactating : !isLactating}
                             onValueChange={pickIsLactating}
                         />
                     </View>
@@ -219,7 +219,7 @@ export function QuestionDemo({setDemoInfo, demoInfo}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isPlanning_default == isPlanning ? isPlanning : !isPlanning}
+                            value={isPlanning_default === isPlanning ? isPlanning : !isPlanning}
                             onValueChange={pickIsPlanning}
                         />
                     </View>
