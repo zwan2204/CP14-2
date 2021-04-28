@@ -87,6 +87,15 @@ const PendingEdit = (props) => {
     );
   };
 
+  const deleteComment = (commentId) => {
+    axios.delete(`http://localhost:12345/api/comment/${commentId}`).then(
+      (response) => {},
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   const editPage = () => {
     let inclusion = [];
     let exclution = [];
@@ -267,6 +276,7 @@ const PendingEdit = (props) => {
       })
       .then(
         (response) => {
+          deleteComment(comment.commentId);
           props.history.push("/projectManagement");
         },
         (error) => {
