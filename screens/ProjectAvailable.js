@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Text, View, SafeAreaView, Image, FlatList } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import { Button, Card } from "react-native-paper";
+
+import { Button, Card, Dialog, Portal, Paragraph } from "react-native-paper";
 const ProjectAvailable = (props) => {
+  //6088450a1d33f72de4f71af3,6087e84553a55240a84d07b8
+  const projectList = "";
   const [projectAvailable, setProjectAvailable] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [title, setTitile] = useState("");
@@ -11,8 +14,11 @@ const ProjectAvailable = (props) => {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [visible, setVisible] = React.useState(false);
 
-  const projectList = "6088450a1d33f72de4f71af3,6087e84553a55240a84d07b8";
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
   useEffect(() => {
     loadProjects();
   }, [selectedId]);
@@ -104,7 +110,9 @@ const ProjectAvailable = (props) => {
             bottom: 30,
             right: 30,
           }}
-          onPress={() => props.history.push("/Homepage")}
+          onPress={() => {
+            props.history.push("/Homepage");
+          }}
         >
           log out
         </Button>
@@ -234,7 +242,25 @@ const ProjectAvailable = (props) => {
           </View>
         </View>
       </View>
-
+      <Portal>
+        <Dialog
+          style={{ width: 300, alignSelf: "center" }}
+          visible={projectList == ""}
+          onDismiss={hideDialog}
+        >
+          <Dialog.Title>Alert</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>
+              There is no suitable project for you, if you still get interested.
+              Please click below button to leave your contact details. As long
+              as there is a available project, we will contact you soom
+            </Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Click</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
       {/* View of Footer*/}
       <View
         style={{
