@@ -234,7 +234,7 @@ const ProjectUploading = (props) => {
         needHealth: isHealthy,
         needEnglish: isEnglishFluent,
         workerNeed: workerNeed,
-        state: "pending",
+        state: "New Upload",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,

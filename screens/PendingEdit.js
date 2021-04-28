@@ -11,9 +11,17 @@ import {
   Platform,
   TextInput as NativeTextInput,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import moment, { max } from "moment";
-import { Button, Card, TextInput } from "react-native-paper";
+import {
+  Button,
+  Card,
+  TextInput,
+  Paragraph,
+  Dialog,
+  Portal,
+} from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
@@ -48,7 +56,13 @@ const PendingEdit = (props) => {
   const [gender, setGender] = useState("");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
+  const [comment, setComment] = useState({});
+  const [commentDisplay, setCommentDisplay] = useState("");
+  const [visible, setVisible] = React.useState(false);
 
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
   // const userId = "606d1642b2fff30342232416";
   const projectId = props.location.projectKey;
   // const userId = Local.getItem("userId");
@@ -56,7 +70,16 @@ const PendingEdit = (props) => {
   const loadComment = () => {
     axios.get(`http://localhost:12345/api/comment/?pId=${projectId}`).then(
       (response) => {
-        console.log(response.data);
+        if (response.data.length > 0) {
+          setComment({
+            commentId: response.data[0]._id,
+            title: response.data[0].title,
+            subjectNo: response.data[0].subjectNo,
+            location: response.data[0].location,
+            duration: response.data[0].duration,
+            description: response.data[0].description,
+          });
+        }
       },
       (error) => {
         console.log(error);
@@ -83,7 +106,6 @@ const PendingEdit = (props) => {
           setIsSmoking(response.data.isSmoking);
           setIsLactating(response.data.isLactating);
           setPlaningPragnant(response.data.isPlaningPragnant);
-
           setHealthy(response.data.needHealth);
           setEnglishFluent(response.data.needEnglish);
           setGender(response.data.gender);
@@ -200,19 +222,26 @@ const PendingEdit = (props) => {
   const projectUpload = () => {
     const currentDate = moment().format("DD/MM/YY");
     let tmpQuestion = [];
+    let workerNeed = false;
 
     for (let i = 0; i < Question.length; i++) {
+      if (Question[i].description.split("-")[0] == "Worker Need ") {
+        workerNeed = true;
+      }
       tmpQuestion.push(Question[i].description);
     }
 
     let tmpExclusionQuestion = [];
 
     for (let i = 0; i < exclusionQuesion.length; i++) {
+      if (exclusionQuesion[i].description.split("-")[0] == "Worker Need ") {
+        workerNeed = true;
+      }
       tmpExclusionQuestion.push(exclusionQuesion[i].description);
     }
+
     axios
-      .post("http://localhost:12345/api/project", {
-        userId: userId,
+      .put(`http://localhost:12345/api/project/all/${projectId}`, {
         title: Title,
         description: Description,
         location: Location,
@@ -220,6 +249,9 @@ const PendingEdit = (props) => {
         duration: Duration,
         createdDate: currentDate,
         date: Date,
+        needHealth: isHealthy,
+        needEnglish: isEnglishFluent,
+        workerNeed: workerNeed,
         state: "New Upload",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
@@ -390,7 +422,28 @@ const PendingEdit = (props) => {
               alignItems: "center",
             }}
           >
-            <Text style={styles.subTitle}>Project titile: </Text>
+            <TouchableOpacity
+              disabled={
+                comment.title == "" || comment.title == null ? true : false
+              }
+              onPress={() => {
+                showDialog();
+                setCommentDisplay(comment.title);
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  marginLeft: 10,
+                  color:
+                    comment.title == "" || comment.title == null
+                      ? "#00205B"
+                      : "red",
+                }}
+              >
+                Project titile:{" "}
+              </Text>
+            </TouchableOpacity>
             <TextInput
               mode="outlined"
               value={Title}
@@ -400,7 +453,31 @@ const PendingEdit = (props) => {
           </View>
           <View style={{ flex: 6, flexDirection: "row" }}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.subTitle}>Project description: </Text>
+              <TouchableOpacity
+                disabled={
+                  comment.description == "" || comment.description == null
+                    ? true
+                    : false
+                }
+                onPress={() => {
+                  showDialog();
+                  setCommentDisplay(comment.description);
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginLeft: 10,
+
+                    color:
+                      comment.description == "" || comment.description == null
+                        ? "#00205B"
+                        : "red",
+                  }}
+                >
+                  Project description:{" "}
+                </Text>
+              </TouchableOpacity>
               <TextInput
                 mode="outlined"
                 multiline={true}
@@ -458,7 +535,30 @@ const PendingEdit = (props) => {
             </View>
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.subTitle}>Location: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.location == "" || comment.location == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.location);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.location == "" || comment.location == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Location:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={Location}
@@ -477,7 +577,30 @@ const PendingEdit = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Number of Subjects: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.subjectNo == "" || comment.subjectNo == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.subjectNo);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.subjectNo == "" || comment.subjectNo == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Number of Subjects:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={SubjectNo}
@@ -496,7 +619,30 @@ const PendingEdit = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Study Duration: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.duration == "" || comment.duration == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.duration);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.duration == "" || comment.duration == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Study Duration:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={Duration}
@@ -963,12 +1109,27 @@ const PendingEdit = (props) => {
             </View>
           </View>
         </View>
+        <Portal>
+          <Dialog
+            style={{ width: 600, alignSelf: "center" }}
+            visible={visible}
+            onDismiss={hideDialog}
+          >
+            <Dialog.Title>Comment</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>{commentDisplay}</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>Back</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </ScrollView>
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Button
           mode="contained"
           style={{ width: 150, alignSelf: "center", margin: 20 }}
-          onPress={() => console.log("sd")}
+          onPress={() => projectUpload()}
         >
           Update
         </Button>
