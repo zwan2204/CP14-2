@@ -8,8 +8,22 @@ import axios from "axios";
 
 const userID = localStorage.getItem("userId");
 
-export const updateUserInfo = () => {
-
+export const updateUserInfo = ({userInfo}) => {
+    console.log(userInfo);
+    axios
+        .put(`http://localhost:12345/api/users/update/${userID}`, {
+            gender: userInfo["gender"],
+            english: userInfo["english"],
+            healthy: userInfo["healthy"],
+            isPregnant: userInfo["isPregnant"],
+            isSmoking: userInfo["isSmoking"],
+            isLactating: userInfo["isLactating"],
+            isPlanning: userInfo["isPlanning"],
+        })
+        .then(
+            (response) => {getProjects();},
+            (error) => {console.log(error);}
+        );
 }
 
 export const getUserInfo = ({setGet}) => {

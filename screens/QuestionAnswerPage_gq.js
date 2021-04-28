@@ -14,7 +14,7 @@ import { styles } from "../styles.js";
 import axios from "axios";
 import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
 import getUserAge from "../screens/QuestionnaireModule_data";
-import {getUserInfo} from "../screens/QuestionnaireModule_data";
+import {getUserInfo, updateUserInfo} from "../screens/QuestionnaireModule_data";
 
 
 let currentData = [];
@@ -209,14 +209,14 @@ const QuestionAnswerPage = (props) => {
     /* get user's age */
     let userAge = getUserAge();
 
-    /* The data pass to the Demo page */
+    /* retrieve user general information data */
     const [getUserData, setGet] = useState(false);
     const reducer = (state, action) => ({ ...state, ...action });
-    const [demoInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
+    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
 
     /* error messages: restrict moving to the next page */
-    const showingDemoError = (demoInfo.gender == "" || demoInfo.healthy == "" ||
-        demoInfo.location == "" || demoInfo.english == "") ? true : false;
+    const showingDemoError = (userInfo.gender == "" || userInfo.healthy == "" ||
+        userInfo.location == "" || userInfo.english == "") ? true : false;
     const showingGeneralAmptyError = (step == 1 && currentData.length == 0) ? true : false;
     const showingSpecificAmptyError = (step == 2 && currentData.length == 0) ? true : false;
     const [showingNoMatchMessage, setShowingMessage] = useState(false);
@@ -266,13 +266,13 @@ const QuestionAnswerPage = (props) => {
                     (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
                     (userAge >= ageRange[0] || userAge <= ageRange[1])) {
                 //filter projects based on user's selections.
-                if (item.gender == demoInfo.gender && 
-                        item.healthy == demoInfo.healthy && 
-                        item.smoking == demoInfo.smoking && 
-                        item.pregnant == demoInfo.pregnant &&
-                        item.lactating == demoInfo.lactating && 
-                        item.planning == demoInfo.planning &&
-                        item.english == demoInfo.english) {
+                if (item.gender == userInfo.gender && 
+                        item.healthy == userInfo.healthy && 
+                        item.smoking == userInfo.smoking && 
+                        item.pregnant == userInfo.pregnant &&
+                        item.lactating == userInfo.lactating && 
+                        item.planning == userInfo.planning &&
+                        item.english == userInfo.english) {
                     availabelData.push(item.projectID);
                 } else {
                     removedlData[item.projectID] = 1;
@@ -523,7 +523,7 @@ const QuestionAnswerPage = (props) => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(demoInfo)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -567,7 +567,7 @@ const QuestionAnswerPage = (props) => {
                                 extraData={selectedId}
                             />}
                             {step == 0 && getUserData &&
-                            <QuestionDemo setDemoInfo={setDemoInfo} demoInfo={demoInfo}></QuestionDemo>}
+                            <QuestionDemo setDemoInfo={setDemoInfo} userInfo={userInfo}></QuestionDemo>}
                         </ScrollView>
                     </View>
                     {/* {setSmoking, setPregnant, setLactating, setPlanning, setLocation} */}
@@ -674,7 +674,8 @@ const QuestionAnswerPage = (props) => {
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? washProjects(DATA_Demo) : null,
                                     //check questions are completed or not.
-                                    (step == 0 || checkCompleteAllQuestions() ? (stepForward(true), console.log("aaa")) : null))}}>
+                                    (step == 0 || checkCompleteAllQuestions() ? 
+                                        (stepForward(true), updateUserInfo({userInfo})) : null))}}>
                                 <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
                     </View>

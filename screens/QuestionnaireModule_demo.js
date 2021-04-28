@@ -6,16 +6,16 @@ import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 import axios from "axios";
 
-export function QuestionDemo({setDemoInfo, demoInfo}) {
-    console.log("aaaa: "+demoInfo);
-    let gender_default = demoInfo["gender"];
-    let healthy_default = demoInfo["healthy"];
-    let english_default = demoInfo["english"];
-    let location_default = demoInfo["location"];
-    let isPregnant_default = demoInfo["isPregnant"];
-    let isSmoking_default = demoInfo["isSmoking"];
-    let isLactating_default = demoInfo["isLactating"];
-    let isPlanning_default = demoInfo["isPlanning"];
+export function QuestionDemo({setDemoInfo, userInfo}) {
+    console.log("aaaa: "+userInfo);
+    let gender_default = userInfo["gender"];
+    let healthy_default = userInfo["healthy"];
+    let english_default = userInfo["english"];
+    let location_default = userInfo["location"];
+    let isPregnant_default = userInfo["isPregnant"];
+    let isSmoking_default = userInfo["isSmoking"];
+    let isLactating_default = userInfo["isLactating"];
+    let isPlanning_default = userInfo["isPlanning"];
 
     const[gender, setGender_thisPage] = useState("");
     const[healthy, setHealthy_thisPage] = useState("");

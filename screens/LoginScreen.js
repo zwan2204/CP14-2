@@ -129,9 +129,7 @@ class LoginScreen extends React.Component {
             onPress={this.userLogin}
             style={{ marginTop: 40 }}
           >
-            <Link to="/questionnaire" style={{ color: "white" }}>
               LOGIN
-            </Link>
           </Button>
 
           <Button mode="text" onPress={() => history.push("/register")}>
