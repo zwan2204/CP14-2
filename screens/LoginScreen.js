@@ -42,11 +42,7 @@ class LoginScreen extends React.Component {
           } else if (role === "Admin") {
             history.push("/worker");
           } else {
-<<<<<<< HEAD
             history.push("/questionnaire");
-=======
-            //history.push("/participant");
->>>>>>> preview
           }
         },
         (error) => {
@@ -133,7 +129,7 @@ class LoginScreen extends React.Component {
             onPress={this.userLogin}
             style={{ marginTop: 40 }}
           >
-              LOGIN
+            LOGIN
           </Button>
 
           <Button mode="text" onPress={() => history.push("/register")}>
