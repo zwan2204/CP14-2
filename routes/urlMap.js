@@ -11,3 +11,4 @@ export const QUESTIONNAIRE_URL = "/questionnaire";
 export const QUESTIONNAIRE_SPECIFIC_URL = "/questionnaire_sq";
 export const PROJECT_APPROVAL_URL = "/projectApproval";
 export const ANTDD_URL = "/antdd";
+export const PROJECT_PRIVIEW = "/projectPreview";

@@ -693,7 +693,7 @@ const ProjectUploading = (props) => {
             }}
           />
           <CheckBox
-            title="Planning on becoming pargnent"
+            title="Planning on becoming pragnent"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             checked={isPlaningPragnent}
