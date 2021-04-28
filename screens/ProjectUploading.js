@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { TextInputMask } from "react-native-masked-text";
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +13,8 @@ import {
   Platform,
   TextInput as NativeTextInput,
   Image,
-  Alert
 } from "react-native";
-import moment from "moment";
+import moment, { max } from "moment";
 import { Button, Card, TextInput } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -21,7 +22,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 import uuid from "react-native-uuid";
 import Footer from "./Footer";
-const ProjectUploading = props => {
+const ProjectUploading = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -38,32 +39,84 @@ const ProjectUploading = props => {
   const [Date, setDate] = useState("");
   const [Question, setQuestion] = useState([]);
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
-  const [data, setdata] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
-  const userId = "606d1642b2fff30342232416";
 
+  const [isPragnent, setIsPragnent] = React.useState(false);
+  const [isSmoking, setIsSmoking] = React.useState(false);
+  const [isLactating, setIsLactating] = React.useState(false);
+  const [isPlaningPragnent, setPlaningPragnent] = React.useState(false);
+  const [gender, setGender] = useState("");
+  const [minAge, setMinAge] = useState("null");
+  const [maxAge, setMaxAge] = useState("null");
+  const userId = localStorage.getItem("userId");
+  // const userId = "606d1642b2fff30342232416";
+  const projectId = props.location.projectKey;
+  // const userId = Local.getItem("userId");
+
+  const editPage = () => {
+    if (projectId) {
+      const ediInfo = JSON.parse(localStorage.getItem(projectId));
+      setApprovalNumber(ediInfo.approvalNumber);
+      setGovernanceNumber(ediInfo.governance);
+      setTitle(ediInfo.title);
+      setDescription(ediInfo.description);
+      setLocation(ediInfo.location);
+      setSubjectNo(ediInfo.subjectNo);
+      setDuration(ediInfo.duration);
+      setDate(ediInfo.date);
+      setQuestion(ediInfo.InclusionCriteria);
+      setExclusionQuestion(ediInfo.ExclusionCriteria);
+      setIsPragnent(ediInfo.isPragnent);
+      setIsSmoking(ediInfo.isSmoking);
+      setIsLactating(ediInfo.isLactating);
+      setPlaningPragnent(ediInfo.isPlaningPragnent);
+      setGender(ediInfo.gender);
+      setMinAge(ediInfo.ageGroup.split(",")[0]);
+      setMaxAge(ediInfo.ageGroup.split(",")[1]);
+    }
+  };
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
-      type: "application/pdf"
+      type: "application/pdf",
     });
     if (result.type == "success") {
       let newfile = {
         uri: result.uri,
-        type: `test/${result.name.split(".")[1]}`,
-        name: `test.${result.name.split(".")[1]}`
+        type: `application/${result.name.split(".")[1]}`,
+        name: `project.${result.name.split(".")[1]}`,
       };
 
-      handleUpload(newfile);
+      const data = new FormData();
+      data.append("file", JSON.stringify(newfile));
+
+      fetch("http://localhost:12345/upload", {
+        method: "POST",
+
+        // send our base64 string as POST request
+        body: data,
+      })
+        .then(async (r) => {
+          let data = await r.json();
+          setImage(data.url);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
   useEffect(() => {
     getQuestion();
+    editPage();
   }, []);
 
   const storeData = async () => {
     const currentDate = moment().format("DD/MM/YY");
-    const documentId = uuid.v4();
+    let documentId = "";
+    if (projectId) {
+      documentId = projectId.split(",")[1];
+    } else {
+      documentId = uuid.v4();
+    }
+
     const data = {
       title: Title,
       description: Description,
@@ -76,7 +129,13 @@ const ProjectUploading = props => {
       ExclusionCriteria: exclusionQuesion,
       approvalNumber: ApprovalNumber,
       governance: Governance,
-      fileUpload: image
+      fileUpload: image,
+      isPragnent: isPragnent,
+      isSmoking: isSmoking,
+      isLactating: isLactating,
+      isPlaningPragnent: isPlaningPragnent,
+      gender: gender,
+      ageGroup: `${minAge},${maxAge}`,
     };
 
     try {
@@ -84,25 +143,6 @@ const ProjectUploading = props => {
       await AsyncStorage.setItem(`${userId},${documentId}`, jsonValue);
       props.history.push("/projectManagement");
     } catch (e) {}
-  };
-
-  const handleUpload = image => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "employeeapp");
-    data.append("cloud_name", "dzjg12m3b");
-
-    fetch("https://api.cloudinary.com/v1_1/dzjg12m3b/image/upload", {
-      method: "post",
-      body: data
-    })
-      .then(res => res.json())
-      .then(data => {
-        setImage(data.url);
-      })
-      .catch(err => {
-        console.log("upload false");
-      });
   };
 
   const addItem = (() => {
@@ -121,7 +161,7 @@ const ProjectUploading = props => {
       return () => {
         Question.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
         });
 
         setQuestion(Question.slice(0));
@@ -141,7 +181,7 @@ const ProjectUploading = props => {
       return () => {
         exclusionQuesion.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
         });
 
         setExclusionQuestion(exclusionQuesion.slice(0));
@@ -175,19 +215,25 @@ const ProjectUploading = props => {
         duration: Duration,
         createdDate: currentDate,
         date: Date,
-        state: "pending",
+        state: "New Upload",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
-        fileUpload: image
+        fileUpload: image,
+        isPragnent: isPragnent,
+        isSmoking: isSmoking,
+        isLactating: isLactating,
+        isPlaningPragnent: isPlaningPragnent,
+        gender: gender,
+        ageGroup: `${minAge},${maxAge}`,
       })
       .then(
-        response => {
+        (response) => {
           props.history.push("/projectManagement");
           console.log(response);
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -196,34 +242,34 @@ const ProjectUploading = props => {
   const getQuestion = () => {
     let questions = [];
     axios.get("http://localhost:12345/api/question").then(
-      response => {
+      (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let question = {
             label: response.data[i].name,
-            value: response.data[i].name
+            value: response.data[i].name,
           };
           questions.push(question);
         }
 
         setQuestionBank(questions);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const removeItem = key => {
-    setQuestion(Question.slice().filter(item => item.key !== key));
+  const removeItem = (key) => {
+    setQuestion(Question.slice().filter((item) => item.key !== key));
   };
 
-  const removeExclusion = key => {
+  const removeExclusion = (key) => {
     setExclusionQuestion(
-      exclusionQuesion.slice().filter(item => item.key !== key)
+      exclusionQuesion.slice().filter((item) => item.key !== key)
     );
   };
 
-  const renderList = Question.map(item => {
+  const renderList = Question.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
@@ -236,7 +282,7 @@ const ProjectUploading = props => {
     );
   });
 
-  const renderExclusonList = exclusionQuesion.map(item => {
+  const renderExclusonList = exclusionQuesion.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
@@ -274,7 +320,7 @@ const ProjectUploading = props => {
         style={{
           height: 140,
           backgroundColor: "#00205B",
-          flexDirection: "row"
+          flexDirection: "row",
         }}
       >
         <Image
@@ -290,9 +336,9 @@ const ProjectUploading = props => {
             height: 37,
             position: "absolute",
             bottom: 30,
-            right: 30
+            right: 30,
           }}
-          onPress={() => console.log("Pessed")}
+          onPress={() => props.history.push("/Homepage")}
         >
           log out
         </Button>
@@ -306,8 +352,8 @@ const ProjectUploading = props => {
             flex: 1,
             flexDirection: "row",
             ...(Platform.OS !== "android" && {
-              zIndex: 10
-            })
+              zIndex: 10,
+            }),
           }}
         >
           <Text
@@ -315,7 +361,7 @@ const ProjectUploading = props => {
               fontWeight: "bold",
               fontSize: 35,
               color: "gray",
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             New Project
@@ -337,7 +383,7 @@ const ProjectUploading = props => {
               flex: 1,
               marginBottom: 10,
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Text style={styles.subTitle}>Project titile: </Text>
@@ -345,7 +391,7 @@ const ProjectUploading = props => {
               mode="outlined"
               value={Title}
               style={{ width: 800, height: 30, marginLeft: 10 }}
-              onChangeText={text => setTitle(text)}
+              onChangeText={(text) => setTitle(text)}
             />
           </View>
           <View style={{ flex: 6, flexDirection: "row" }}>
@@ -358,28 +404,28 @@ const ProjectUploading = props => {
                 value={Description}
                 style={{
                   height: 130,
-                  marginHorizontal: 10
+                  marginHorizontal: 10,
                 }}
-                render={innerProps => (
+                render={(innerProps) => (
                   <NativeTextInput
                     {...innerProps}
                     style={[
                       innerProps.style,
                       {
                         paddingTop: 8,
-                        paddingBottom: 8
-                      }
+                        paddingBottom: 8,
+                      },
                     ]}
                   />
                 )}
-                onChangeText={text => setDescription(text)}
+                onChangeText={(text) => setDescription(text)}
               />
 
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 15
+                  marginTop: 15,
                 }}
               >
                 <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
@@ -387,14 +433,14 @@ const ProjectUploading = props => {
                   mode="outlined"
                   value={ApprovalNumber}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
-                  onChangeText={text => setApprovalNumber(text)}
+                  onChangeText={(text) => setApprovalNumber(text)}
                 />
               </View>
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 15
+                  marginTop: 15,
                 }}
               >
                 <Text style={styles.subTitle}>Governance Approval Number:</Text>
@@ -402,7 +448,7 @@ const ProjectUploading = props => {
                   mode="outlined"
                   value={Governance}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
-                  onChangeText={text => setGovernanceNumber(text)}
+                  onChangeText={(text) => setGovernanceNumber(text)}
                 />
               </View>
             </View>
@@ -415,16 +461,16 @@ const ProjectUploading = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setLocation(text)}
+                  onChangeText={(text) => setLocation(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -434,16 +480,16 @@ const ProjectUploading = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setSubjectNo(text)}
+                  onChangeText={(text) => setSubjectNo(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Study Duration: </Text>
@@ -451,14 +497,14 @@ const ProjectUploading = props => {
                   mode="outlined"
                   value={Duration}
                   style={{ height: 30, margin: 10, flex: 1 }}
-                  onChangeText={text => setDuration(text)}
+                  onChangeText={(text) => setDuration(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Start Date: </Text>
@@ -468,9 +514,9 @@ const ProjectUploading = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setDate(text)}
+                  onChangeText={(text) => setDate(text)}
                 />
               </View>
               <Button
@@ -486,23 +532,194 @@ const ProjectUploading = props => {
           <Text
             style={{
               marginTop: 20,
-
-              fontSize: 20,
-              color: "#00205B"
+              fontSize: 30,
+              color: "#00205B",
             }}
           >
             Criteria
           </Text>
         </View>
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 20,
+            color: "#00205B",
+          }}
+        >
+          Basic Demographic criteria
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            ...(Platform.OS !== "android" && {
+              zIndex: 10,
+            }),
+          }}
+        >
+          <DropDownPicker
+            items={[
+              {
+                label: "Male",
+                value: "Male",
+              },
+              {
+                label: "Female",
+                value: "Female",
+              },
+              {
+                label: "Not required",
+                value: "Not required",
+              },
+            ]}
+            defaultValue={gender == "" ? null : gender}
+            containerStyle={{
+              height: 40,
+              width: 300,
+              marginTop: 8,
+              marginRight: 10,
+            }}
+            selectedLabelStyle={{
+              color: "#00205B",
+            }}
+            placeholder="Select allow gender"
+            itemStyle={{
+              justifyContent: "flex-start",
+            }}
+            dropDownStyle={{ backgroundColor: "#fafafa" }}
+            onChangeItem={(item) => setGender(item.value)}
+          />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: 15,
+                color: "#00205B",
+              }}
+            >
+              Minimum age:
+            </Text>
+            <TextInputMask
+              type={"custom"}
+              options={{
+                mask: "99",
+              }}
+              style={{
+                borderWidth: 1,
+                height: 37,
+                width: 40,
+                borderColor: "gray",
+                marginLeft: 10,
+                padding: 5,
+                borderRadius: 3,
+              }}
+              // dont forget to set the "value" and "onChangeText" props
+              value={minAge == "null" ? "" : minAge}
+              onChangeText={(text) => {
+                text == "" ? setMinAge("null") : setMinAge(text);
+              }}
+            />
+          </View>
 
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: 15,
+                color: "#00205B",
+                marginLeft: 10,
+              }}
+            >
+              Maximum age:
+            </Text>
+            <TextInputMask
+              type={"custom"}
+              options={{
+                mask: "99",
+              }}
+              style={{
+                borderWidth: 1,
+                height: 37,
+                width: 40,
+                borderColor: "gray",
+                marginLeft: 10,
+                padding: 5,
+                borderRadius: 3,
+              }}
+              // dont forget to set the "value" and "onChangeText" props
+              value={maxAge == "null" ? "" : maxAge}
+              onChangeText={(text) => {
+                text == "" ? setMaxAge("null") : setMaxAge(text);
+              }}
+            />
+          </View>
+        </View>
+
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 20,
+            color: "#00205B",
+          }}
+        >
+          Exclusion Demographic criteria
+        </Text>
+        <View style={{ flexDirection: "row" }}>
+          <CheckBox
+            title="Pragnent
+              "
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isPragnent}
+            onPress={() => {
+              setIsPragnent(!isPragnent);
+            }}
+          />
+
+          <CheckBox
+            title="Smoking"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isSmoking}
+            onPress={() => {
+              setIsSmoking(!isSmoking);
+            }}
+          />
+          <CheckBox
+            title="Lactating"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isLactating}
+            onPress={() => {
+              setIsLactating(!isLactating);
+            }}
+          />
+          <CheckBox
+            title="Planning on becoming pargnent"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={isPlaningPragnent}
+            onPress={() => {
+              setPlaningPragnent(!isPlaningPragnent);
+            }}
+          />
+        </View>
+
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 20,
+            color: "#00205B",
+          }}
+        >
+          General and specific criteria
+        </Text>
         {/* Question input area*/}
         <View>
           <View
             style={{
               flexDirection: "row",
               ...(Platform.OS !== "android" && {
-                zIndex: 10
-              })
+                zIndex: 10,
+              }),
             }}
           >
             {/*First input bar*/}
@@ -511,29 +728,29 @@ const ProjectUploading = props => {
               items={[
                 {
                   label: "INCLUSION",
-                  value: "INCLUSION"
+                  value: "INCLUSION",
                 },
                 {
                   label: "EXCLUSION",
-                  value: "EXCLUSION"
-                }
+                  value: "EXCLUSION",
+                },
               ]}
               placeholder="Select Type"
               containerStyle={{
                 height: 40,
                 width: 140,
                 marginRight: 10,
-                marginTop: 8
+                marginTop: 8,
               }}
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
-                color: "red"
+                color: "red",
               }}
               itemStyle={{
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={item => setCriteriaType(item.value)}
+              onChangeItem={(item) => setCriteriaType(item.value)}
             />
 
             {/*Second input bar*/}
@@ -541,36 +758,36 @@ const ProjectUploading = props => {
               items={[
                 {
                   label: "Are you",
-                  value: "Are you"
+                  value: "Are you",
                 },
                 {
                   label: "Do you have",
-                  value: "Do you have"
+                  value: "Do you have",
                 },
                 {
                   label: "Are you a",
-                  value: "Are you a"
+                  value: "Are you a",
                 },
                 {
                   label: "Are you symptomatic with",
-                  value: "Are you symptomatic with"
-                }
+                  value: "Are you symptomatic with",
+                },
               ]}
               containerStyle={{
                 height: 40,
                 width: 300,
                 marginTop: 8,
-                marginRight: 10
+                marginRight: 10,
               }}
               selectedLabelStyle={{
-                color: "#00205B"
+                color: "#00205B",
               }}
               placeholder="Select Question prefix"
               itemStyle={{
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={item => setQuestionPrefix(item.value)}
+              onChangeItem={(item) => setQuestionPrefix(item.value)}
             />
 
             <DropDownPicker
@@ -583,32 +800,32 @@ const ProjectUploading = props => {
               containerStyle={{
                 height: 40,
                 width: 40,
-                marginTop: 8
+                marginTop: 8,
               }}
               defaultValue=""
               itemStyle={{
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
               selectedLabelStyle={{
-                display: "none"
+                display: "none",
               }}
               dropDownStyle={{ width: 340 }}
               dropDownMaxHeight={300}
-              onChangeItem={item => setCriteriaDetail(item.value)}
+              onChangeItem={(item) => setCriteriaDetail(item.value)}
             />
             <TextInput
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
               style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
-              onChangeText={text => setCriteriaDetail(text)}
+              onChangeText={(text) => setCriteriaDetail(text)}
             />
           </View>
 
           <View
             style={{
               flexDirection: "row",
-              marginVertical: 20
+              marginVertical: 20,
             }}
           >
             <CheckBox
@@ -642,7 +859,7 @@ const ProjectUploading = props => {
                       left: 0,
                       top: 30,
                       fontSize: 30,
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Question Preview:
@@ -653,7 +870,7 @@ const ProjectUploading = props => {
                       width: 68,
                       top: 20,
                       position: "absolute",
-                      right: 0
+                      right: 0,
                     }}
                     onPress={() => addItem()}
                   >
@@ -665,7 +882,7 @@ const ProjectUploading = props => {
                     style={{
                       fontSize: 20,
                       fontWeight: "bold",
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Inclusion Quetsions:
@@ -679,7 +896,7 @@ const ProjectUploading = props => {
                       fontSize: 20,
                       fontWeight: "bold",
                       marginTop: 30,
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Exclusion Quetsions:
@@ -701,7 +918,7 @@ const ProjectUploading = props => {
               style={{
                 flex: 1,
                 padding: 20,
-                marginTop: 100
+                marginTop: 100,
               }}
             >
               <View>
@@ -751,26 +968,26 @@ const ProjectUploading = props => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1
+    flex: 1,
   },
   modalButtonView: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 10
+    padding: 10,
   },
   mycard: {
     margin: 5,
-    padding: 8
+    padding: 8,
   },
   cardView: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 6
+    padding: 6,
   },
   subTitle: {
     fontSize: 20,
     color: "#00205B",
-    marginLeft: 10
+    marginLeft: 10,
   },
   text: { fontSize: 20 },
 
@@ -780,7 +997,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     // backgroundColor: "#b8e6ff",
     flex: 1,
-    justifyContent: "flex-end"
-  }
+    justifyContent: "flex-end",
+  },
 });
 export default ProjectUploading;

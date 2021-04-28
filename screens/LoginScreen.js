@@ -15,10 +15,10 @@ class LoginScreen extends React.Component {
     super(props);
     this.state = {
       email: "@",
-      password: ""
+      password: "",
     };
   }
-  pickRole = role => {
+  pickRole = (role) => {
     this.setState({ role: role });
   };
 
@@ -27,25 +27,25 @@ class LoginScreen extends React.Component {
     axios
       .post("http://localhost:12345/api/auth", {
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       })
       .then(
-        response => {
+        (response) => {
           console.log(response);
           const userId = response.data.userId;
           const role = response.data.userRole;
           this.props.storeUserInfo(userId, role);
           AsyncStorage.setItem("role", role);
           AsyncStorage.setItem("userId", userId);
-          if (role === "Admin" || role === "Project Manager") {
+          if (role === "Project Manager") {
             history.push("/projectManagement");
-          } else if (role === "Health Care Workers") {
+          } else if (role === "Admin") {
             history.push("/worker");
           } else {
             history.push("/questionnaire");
           }
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -67,7 +67,7 @@ class LoginScreen extends React.Component {
           style={{
             flex: 1,
             flexDirection: "column",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <View
@@ -75,7 +75,7 @@ class LoginScreen extends React.Component {
               justifyContent: "center",
               textAlign: "center",
               alignItems: "center",
-              marginTop: 80
+              marginTop: 80,
             }}
           >
             <Text
@@ -83,7 +83,7 @@ class LoginScreen extends React.Component {
                 color: "#00205B",
                 fontSize: 20,
                 fontWeight: "bold",
-                paddingBottom: 70
+                paddingBottom: 70,
               }}
             >
               Log In
@@ -93,14 +93,14 @@ class LoginScreen extends React.Component {
               style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text style={{ justifyContent: "flex-start" }}>Email: </Text>
               <TextInput
                 mode="outlined"
                 style={{ height: 30, alignSelf: "flex-end" }}
-                onChangeText={text => this.setState({ email: text })}
+                onChangeText={(text) => this.setState({ email: text })}
               />
             </View>
             <HelperText type="error" visible={this.hasErrors()}>
@@ -111,7 +111,7 @@ class LoginScreen extends React.Component {
               style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text style={{ alignItems: "flex-start" }}>Password: </Text>
@@ -119,7 +119,7 @@ class LoginScreen extends React.Component {
                 mode="outlined"
                 style={{ height: 30 }}
                 secureTextEntry={true}
-                onChangeText={text => this.setState({ password: text })}
+                onChangeText={(text) => this.setState({ password: text })}
               />
             </View>
           </View>
@@ -158,14 +158,14 @@ class LoginScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    userId: state.user.userId
+    userId: state.user.userId,
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  storeUserInfo: (id, role) => dispatch(storeUserInfo(id, role))
+const mapDispatchToProps = (dispatch) => ({
+  storeUserInfo: (id, role) => dispatch(storeUserInfo(id, role)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

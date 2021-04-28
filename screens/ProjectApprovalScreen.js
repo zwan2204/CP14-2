@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  TextInput as NativeTextInput
+  TextInput as NativeTextInput,
 } from "react-native";
 import { styles } from "../styles.js";
 import { Button, Dialog, TextInput } from "react-native-paper";
@@ -18,10 +18,21 @@ export default class ProjectApprovalScreen extends React.Component {
     super(props);
     this.state = {
       isModalVisible: false,
-      pendingComment: "",
+      titleComment: "",
+      descriptionComment: "",
+      ethicsComment: "",
+      governanceComment: "",
+      locationComment: "",
+      subjectNoComment: "",
+      durationComment: "",
+      dateComment: "",
+      inclusionComment: "",
+      exclusionComment: "",
       commentBoarderColor: "black",
       projectId: this.props.location.state.projectId,
-      projectInfo: []
+      projectState: this.props.location.state.projectState,
+      projectInfo: [],
+      project: "",
     };
   }
 
@@ -33,44 +44,80 @@ export default class ProjectApprovalScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
+  changeTitleColor = () => {
+    if (this.state.titleComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
   componentWillMount() {
     console.log(this.props.location.state.projectId);
+    console.log(this.props.location.state.projectState);
   }
 
   componentDidMount() {
     this.getProjectInfo();
   }
 
+  updateState = () => {
+    axios
+      .put(
+        `http://localhost:12345/api/project/${this.props.location.state.projectId}`,
+        {
+          state: "pending",
+        }
+      )
+      .then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  leaveComment = () => {
+    const { history } = this.props;
+    axios
+      .post(`http://localhost:12345/api/comment/`, {
+        projectId: this.state.projectId,
+        title: this.state.titleComment,
+        description: this.state.descriptionComment,
+        location: this.state.locationComment,
+        subjectNo: this.state.subjectNoComment,
+        duration: this.state.durationComment,
+        date: this.state.date,
+        approvalNumber: this.state.approvalNumber,
+        governance: this.state.governance,
+        InclusionCriteria: this.state.InclusionCriteria,
+        ExclusionCriteria: this.state.ExclusionCriteria,
+      })
+      .then(
+        (response) => {
+          this.updateState();
+          history.push("/worker");
+          console.log(response);
+          console.log(this.stateprojectState);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
   getProjectInfo = () => {
-    let projectInfos = [];
     axios
       .get(
         `http://localhost:12345/api/project/${this.props.location.state.projectId}`
       )
       .then(
-        response => {
-          console.log(response.data);
-          let title: response.data.title;
-          let description: response.data.description;
-          let location: response.data.location;
-          let subjectNo: response.data.subjectNo;
-          let duration: response.data.duration;
-          let date: response.data.date;
-          let eNumber: response.data.approvalNumber;
-          let governance: response.data.governance;
-
-          projectInfos.push(title);
-          projectInfos.push(description);
-          projectInfos.push(location);
-          projectInfos.push(subjectNo);
-          projectInfos.push(duration);
-          projectInfos.push(date);
-          projectInfos.push(eNumber);
-          projectInfos.push(governance);
-          this.setState({ projectInfo: projectInfos });
-          console.log(this.state.projectInfo);
+        (response) => {
+          this.setState({ project: response.data });
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -85,7 +132,7 @@ export default class ProjectApprovalScreen extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row"
+            flexDirection: "row",
           }}
         >
           <Image
@@ -100,7 +147,7 @@ export default class ProjectApprovalScreen extends React.Component {
               height: 37,
               position: "absolute",
               bottom: 30,
-              right: 30
+              right: 30,
             }}
             onPress={() => console.log()}
           >
@@ -123,7 +170,7 @@ export default class ProjectApprovalScreen extends React.Component {
               style={{
                 backgroundColor: "white",
                 width: 120,
-                height: 37
+                height: 37,
               }}
             >
               Cancel
@@ -137,21 +184,22 @@ export default class ProjectApprovalScreen extends React.Component {
                 flex: 1,
                 marginBottom: 10,
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text style={styles.subTitle}>Project titile: </Text>
               <Text
                 style={{
-                  width: 800,
-                  height: 30,
+                  width: 500,
                   marginLeft: 10,
                   borderWidth: 1,
                   borderColor: "black",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
-                onChangeText={text => setTitle(text)}
-              />
+              >
+                {" "}
+                {this.state.project.title}
+              </Text>
             </View>
             <View style={{ flex: 6, flexDirection: "row" }}>
               <View style={{ flex: 1 }}>
@@ -172,23 +220,23 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.state.pendingComment,
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
-                        render={innerProps => (
+                        render={(innerProps) => (
                           <NativeTextInput
                             {...innerProps}
                             style={[
                               innerProps.style,
                               {
                                 paddingTop: 8,
-                                paddingBottom: 8
-                              }
+                                paddingBottom: 8,
+                              },
                             ]}
                           />
                         )}
-                        value={this.state.pendingComment}
-                        onChangeText={text =>
-                          this.setState({ pendingComment: text })
+                        value={this.state.titleComment}
+                        onChangeText={(text) =>
+                          this.setState({ titleComment: text })
                         }
                       />
                       <Dialog.Actions>
@@ -204,51 +252,21 @@ export default class ProjectApprovalScreen extends React.Component {
                         height: 130,
                         marginHorizontal: 10,
                         borderWidth: 1,
-                        borderColor: "black",
-                        borderRadius: 5
+                        borderColor: this.changeTitleColor(),
+                        borderRadius: 5,
                       }}
                     >
-                      ijasdfljsklfndskjfkngmlewjfknmdlewjfngfkmeljfn,ekdmsjnkjsdjfksmlvnxkchvoisjofjdfioefo;hasofas;dfsiofj
+                      {" "}
+                      {this.state.project.description}{" "}
                     </Text>
                   </TouchableOpacity>
                 </View>
-
-                {/* <View>
-                                    <View style={styles.containerStyle}>
-                                        <Modal style={styles.containerStyle}
-                                            visible={this.state.isModalVisible}
-                                            onOk={this.handleOk}
-                                            onDismiss={this.handleCancel} >
-                                            <TextInput
-                                            multiline={true}
-                                            textAlignVertical="top"
-                                            style={{
-                                                height: 100,
-                                                marginHorizontal: 10,
-                                                borderWidth: 1, borderColor: "black", borderRadius: 5
-                                            }}/>
-                                            <Button mode="text" onPress={this.handleCancel}>DONE</Button>
-
-
-                                        </Modal> </View>
-                                    <TouchableOpacity onPress={this.showModal}>
-                                        <Text
-                                            multiline={true}
-                                            textAlignVertical="top"
-                                            style={{
-                                                height: 130,
-                                                marginHorizontal: 10,
-                                                borderWidth: 1, borderColor: "black", borderRadius: 5
-                                            }}>ijasdfljsklfndskjfkngmlewjfknmdlewjfngfkmeljfn,ekdmsjnkjsdjfksmlvnxkchvoisjofjdfioefo;hasofas;dfsiofj</Text>
-                                    </TouchableOpacity>
-
-                                </View> */}
 
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: 15
+                    marginTop: 15,
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
@@ -259,16 +277,18 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
-                    onChangeText={text => setApprovalNumber(text)}
-                  />
+                  >
+                    {" "}
+                    {this.state.project.approvalNumber}{" "}
+                  </Text>
                 </View>
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: 15
+                    marginTop: 15,
                   }}
                 >
                   <Text style={styles.subTitle}>
@@ -281,10 +301,12 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
-                    onChangeText={text => setGovernanceNumber(text)}
-                  />
+                  >
+                    {" "}
+                    {this.state.project.governance}
+                  </Text>
                 </View>
               </View>
               <View style={{ flex: 1 }}>
@@ -297,16 +319,18 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
-                    onChangeText={text => setLocation(text)}
-                  />
+                  >
+                    {" "}
+                    {this.state.project.location}{" "}
+                  </Text>
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center"
+                    alignItems: "center",
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -317,16 +341,18 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
-                    onChangeText={text => setSubjectNo(text)}
-                  />
+                  >
+                    {" "}
+                    {this.state.project.subjectNo}{" "}
+                  </Text>
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center"
+                    alignItems: "center",
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
@@ -337,16 +363,18 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
-                    onChangeText={text => setDuration(text)}
-                  />
+                  >
+                    {" "}
+                    {this.state.project.duration}{" "}
+                  </Text>
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center"
+                    alignItems: "center",
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
@@ -357,14 +385,20 @@ export default class ProjectApprovalScreen extends React.Component {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
-                    onChangeText={text => setDate(text)}
-                  />
+                  >
+                    {" "}
+                    {this.state.project.date}{" "}
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <Button onPress={this.leaveComment}>Pending</Button>
+          <Button>Authorize</Button>
         </View>
       </SafeAreaView>
     );
