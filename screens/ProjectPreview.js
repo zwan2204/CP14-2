@@ -28,10 +28,10 @@ const ProjectPreview = (props) => {
   const [Question, setQuestion] = useState([]);
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
 
-  const [isPragnent, setIsPragnent] = React.useState(false);
+  const [isPragnant, setIsPragnant] = React.useState(false);
   const [isSmoking, setIsSmoking] = React.useState(false);
   const [isLactating, setIsLactating] = React.useState(false);
-  const [isPlaningPragnent, setPlaningPragnent] = React.useState(false);
+  const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
   // const userId = "606d1642b2fff30342232416";
@@ -57,10 +57,10 @@ const ProjectPreview = (props) => {
         setSubjectNo(response.data.subjectNo);
         setDuration(response.data.duration);
         setDate(response.data.date);
-        setIsPragnent(response.data.isPragnent);
+        setIsPragnant(response.data.isPragnant);
         setIsSmoking(response.data.isSmoking);
         setIsLactating(response.data.isLactating);
-        setPlaningPragnent(response.data.isPlaningPragnent);
+        setPlaningPragnant(response.data.isPlaningPragnant);
         setGender(response.data.gender);
         setAge(response.data.ageGroup);
 
@@ -405,10 +405,10 @@ const ProjectPreview = (props) => {
         </Text>
         <View style={{ flexDirection: "row" }}>
           <CheckBox
-            title="Pragnent"
+            title="Pragnant"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={isPragnent}
+            checked={isPragnant}
           />
 
           <CheckBox
@@ -424,10 +424,10 @@ const ProjectPreview = (props) => {
             checked={isLactating}
           />
           <CheckBox
-            title="Planning on becoming pragnent"
+            title="Planning on becoming pragnant"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={isPlaningPragnent}
+            checked={isPlaningPragnant}
           />
         </View>
 

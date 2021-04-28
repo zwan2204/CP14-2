@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -20,9 +18,9 @@ import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
-import uuid from "react-native-uuid";
 import Footer from "./Footer";
-const ProjectUploading = (props) => {
+
+const PendingEdit = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -48,33 +46,71 @@ const ProjectUploading = (props) => {
   const [gender, setGender] = useState("");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
-  const userId = localStorage.getItem("userId");
+
   // const userId = "606d1642b2fff30342232416";
   const projectId = props.location.projectKey;
   // const userId = Local.getItem("userId");
 
+  const loadComment = () => {
+    axios.get(`http://localhost:12345/api/comment/?pId=${projectId}`).then(
+      (response) => {
+        console.log(response.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   const editPage = () => {
+    let inclusion = [];
+    let exclution = [];
     if (projectId) {
-      const ediInfo = JSON.parse(localStorage.getItem(projectId));
-      setApprovalNumber(ediInfo.approvalNumber);
-      setGovernanceNumber(ediInfo.governance);
-      setTitle(ediInfo.title);
-      setDescription(ediInfo.description);
-      setLocation(ediInfo.location);
-      setSubjectNo(ediInfo.subjectNo);
-      setDuration(ediInfo.duration);
-      setDate(ediInfo.date);
-      setQuestion(ediInfo.InclusionCriteria);
-      setExclusionQuestion(ediInfo.ExclusionCriteria);
-      setIsPragnant(ediInfo.isPragnant);
-      setIsSmoking(ediInfo.isSmoking);
-      setIsLactating(ediInfo.isLactating);
-      setPlaningPragnant(ediInfo.isPlaningPragnant);
-      setGender(ediInfo.gender);
-      setMinAge(ediInfo.ageGroup.split(",")[0]);
-      setMaxAge(ediInfo.ageGroup.split(",")[1]);
+      axios.get(`http://localhost:12345/api/project/${projectId}`).then(
+        (response) => {
+          setTitle(response.data.title);
+          setDescription(response.data.description);
+          setImage(response.data.fileUpload);
+          setApprovalNumber(response.data.approvalNumber);
+          setGovernanceNumber(response.data.governance);
+          setLocation(response.data.location);
+          setSubjectNo(response.data.subjectNo);
+          setDuration(response.data.duration);
+          setDate(response.data.date);
+          setIsPragnant(response.data.isPragnant);
+          setIsSmoking(response.data.isSmoking);
+          setIsLactating(response.data.isLactating);
+          setPlaningPragnant(response.data.isPlaningPragnant);
+          setGender(response.data.gender);
+          setMinAge(response.data.ageGroup.split(",")[0]);
+          setMaxAge(response.data.ageGroup.split(",")[1]);
+
+          for (let i = 0; i < response.data.InclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.InclusionCriteria[i],
+            };
+            inclusion.push(criteria);
+          }
+
+          for (let i = 0; i < response.data.ExclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.ExclusionCriteria[i],
+            };
+            exclution.push(criteria);
+          }
+
+          setQuestion(inclusion);
+          setExclusionQuestion(exclution);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   };
+
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
@@ -106,44 +142,8 @@ const ProjectUploading = (props) => {
   useEffect(() => {
     getQuestion();
     editPage();
+    loadComment();
   }, []);
-
-  const storeData = async () => {
-    const currentDate = moment().format("DD/MM/YY");
-    let documentId = "";
-    if (projectId) {
-      documentId = projectId.split(",")[1];
-    } else {
-      documentId = uuid.v4();
-    }
-
-    const data = {
-      title: Title,
-      description: Description,
-      location: Location,
-      subjectNo: SubjectNo,
-      duration: Duration,
-      createdDate: currentDate,
-      date: Date,
-      InclusionCriteria: Question,
-      ExclusionCriteria: exclusionQuesion,
-      approvalNumber: ApprovalNumber,
-      governance: Governance,
-      fileUpload: image,
-      isPragnant: isPragnant,
-      isSmoking: isSmoking,
-      isLactating: isLactating,
-      isPlaningPragnant: isPlaningPragnant,
-      gender: gender,
-      ageGroup: `${minAge},${maxAge}`,
-    };
-
-    try {
-      const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem(`${userId},${documentId}`, jsonValue);
-      props.history.push("/projectManagement");
-    } catch (e) {}
-  };
 
   const addItem = (() => {
     if (CriteriaType == "INCLUSION") {
@@ -195,21 +195,14 @@ const ProjectUploading = (props) => {
   const projectUpload = () => {
     const currentDate = moment().format("DD/MM/YY");
     let tmpQuestion = [];
-    let workerNeed = false;
 
     for (let i = 0; i < Question.length; i++) {
-      if (Question[i].description.split("-")[0] == "Worker Need ") {
-        workerNeed = true;
-      }
       tmpQuestion.push(Question[i].description);
     }
 
     let tmpExclusionQuestion = [];
 
     for (let i = 0; i < exclusionQuesion.length; i++) {
-      if (exclusionQuesion[i].description.split("-")[0] == "Worker Need ") {
-        workerNeed = true;
-      }
       tmpExclusionQuestion.push(exclusionQuesion[i].description);
     }
     axios
@@ -222,7 +215,6 @@ const ProjectUploading = (props) => {
         duration: Duration,
         createdDate: currentDate,
         date: Date,
-        workerNeed: workerNeed,
         state: "New Upload",
         governance: Governance,
         InclusionCriteria: tmpQuestion,
@@ -239,7 +231,6 @@ const ProjectUploading = (props) => {
       .then(
         (response) => {
           props.history.push("/projectManagement");
-          console.log(response);
         },
         (error) => {
           console.log(error);
@@ -953,18 +944,9 @@ const ProjectUploading = (props) => {
         <Button
           mode="contained"
           style={{ width: 150, alignSelf: "center", margin: 20 }}
-          onPress={() => storeData()}
+          onPress={() => console.log("sd")}
         >
-          Save Draft
-        </Button>
-        <Button
-          mode="contained"
-          style={{ width: 100, alignSelf: "center", margin: 20 }}
-          onPress={() => {
-            projectUpload();
-          }}
-        >
-          Create
+          Update
         </Button>
       </View>
 
@@ -1008,4 +990,4 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
-export default ProjectUploading;
+export default PendingEdit;

@@ -16,6 +16,7 @@ import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";
 import antdd from "../screens/antdd";
 import ProjectPreview from "../screens/ProjectPreview";
 import ProjectAvailable from "../screens/ProjectAvailable";
+import PendingEdit from "../screens/PendingEdit";
 import {
   LOGIN_URL,
   REGISTER_URL,
@@ -29,6 +30,7 @@ import {
   PROJECT_APPROVAL_URL,
   PROJECT_PRIVIEW,
   PROJECT_AVAILABLE,
+  PENDING_EDIT,
 } from "./urlMap";
 import { store } from "../redux";
 import { Provider } from "react-redux";
@@ -44,6 +46,9 @@ const Routes = () => (
           path={PROJECT_MANAGEMENT_URL}
           component={ProjectManagement}
         />
+
+        <Route exact path={PENDING_EDIT} component={PendingEdit} />
+
         <Route
           exact
           path={PARTICIPANT_INFO_URL}

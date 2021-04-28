@@ -104,10 +104,10 @@ const ProjectManagement = (props) => {
     let values = [];
     let incompleteProjects = [];
     const uncheckRemain = [
-      "isPragnent",
+      "isPragnant",
       "isSmoking",
       "isLactating",
-      "isPlaningPragnent",
+      "isPlaningPragnant",
     ];
     try {
       keys = await AsyncStorage.getAllKeys();
@@ -207,7 +207,16 @@ const ProjectManagement = (props) => {
             disabled={item.state == "New Upload" ? true : false}
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
-            onPress={() => updateState(item.key)}
+            onPress={() => {
+              if (item.state == "pending") {
+                props.history.push({
+                  pathname: "/pendingEdit",
+                  projectKey: item.key, // your data array of objects
+                });
+              } else if (item.state == "Authorized") {
+                updateState();
+              }
+            }}
           >
             {item.state == "Authorized" ? "Release" : "Edit"}
           </Button>

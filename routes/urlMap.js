@@ -13,3 +13,4 @@ export const PROJECT_APPROVAL_URL = "/projectApproval";
 export const ANTDD_URL = "/antdd";
 export const PROJECT_PRIVIEW = "/projectPreview";
 export const PROJECT_AVAILABLE = "/projectAvailable";
+export const PENDING_EDIT = "/pendingEdit";
