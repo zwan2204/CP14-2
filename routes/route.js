@@ -15,7 +15,7 @@ import ProtectedRoute from "./protetctedRoute";
 import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";
 import antdd from "../screens/antdd";
 import ProjectPreview from "../screens/ProjectPreview";
-
+import ProjectAvailable from "../screens/ProjectAvailable";
 import {
   LOGIN_URL,
   REGISTER_URL,
@@ -28,6 +28,7 @@ import {
   PROJECT_MANAGEMENT_URL,
   PROJECT_APPROVAL_URL,
   PROJECT_PRIVIEW,
+  PROJECT_AVAILABLE,
 } from "./urlMap";
 import { store } from "../redux";
 import { Provider } from "react-redux";
@@ -48,6 +49,7 @@ const Routes = () => (
           path={PARTICIPANT_INFO_URL}
           component={ParticipantInfoScreen}
         />
+        <Route exact path={PROJECT_AVAILABLE} component={ProjectAvailable} />
         <Route exact path={PROJECT_PRIVIEW} component={ProjectPreview} />
         <Route exact path={PARTICIPANT_URL} component={ParticipantPage} />
         <Route exact path={REGISTER_URL} component={SignupScreen} />

@@ -147,7 +147,7 @@ const ProjectManagement = (props) => {
 
   const updateState = (id) => {
     axios
-      .put(`http://localhost:12345/api/project/state/${id}`, {
+      .put(`http://localhost:12345/api/project/${id}`, {
         state: "Recruiting",
       })
       .then(
