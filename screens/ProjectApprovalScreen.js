@@ -192,9 +192,11 @@ export default class ProjectApprovalScreen extends React.Component {
                 style={{
                   width: 500,
                   marginLeft: 10,
+                  height: 30,
                   borderWidth: 1,
                   borderColor: "black",
                   borderRadius: 5,
+                  fontSize: 20
                 }}
               >
                 {" "}
@@ -395,11 +397,56 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
             </View>
           </View>
+          <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 3, paddingLeft: 10 }}>
+            <View style={{ flex: 1 }}>
+              <View style={{ height: 70 }}>
+                <Text
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 30,
+                    fontSize: 30,
+                    color: "#00205B"
+                  }}
+                >
+                  Question Preview
+                  </Text>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: "#00205B"
+                  }}
+                >
+                  Inclusion Quetsions:
+                  </Text>
+                <View></View>
+              </View>
+
+              <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginTop: 30,
+                    color: "#00205B"
+                  }}
+                >
+                  Exclusion Quetsions:
+                  </Text>
+                <View></View>
+              </View>
+            </View>
+          </View>
         </View>
+        </View>
+
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Button onPress={this.leaveComment}>Pending</Button>
           <Button>Authorize</Button>
         </View>
+
       </SafeAreaView>
     );
   }

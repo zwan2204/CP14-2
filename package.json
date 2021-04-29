@@ -15,6 +15,7 @@
     "antd-mobile": "^2.3.4",
     "axios": "^0.21.1",
     "expo": "^39.0.5",
+    "expo-cli": "^4.4.3",
     "expo-document-picker": "~8.4.0",
     "expo-status-bar": "~1.0.2",
     "moment": "^2.29.1",
