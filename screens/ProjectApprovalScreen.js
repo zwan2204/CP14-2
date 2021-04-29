@@ -86,14 +86,14 @@ export default class ProjectApprovalScreen extends React.Component {
         projectId: this.state.projectId,
         title: this.state.titleComment,
         description: this.state.descriptionComment,
-        // location: this.state.locationComment,
-        // subjectNo: this.state.subjectNoComment,
-        // duration: this.state.durationComment,
-        // date: this.state.date,
-        // approvalNumber: this.state.approvalNumber,
-        // governance: this.state.governance,
-        // InclusionCriteria: this.state.InclusionCriteria,
-        // ExclusionCriteria: this.state.ExclusionCriteria,
+        location: this.state.locationComment,
+        subjectNo: this.state.subjectNoComment,
+        duration: this.state.durationComment,
+        date: this.state.date,
+        approvalNumxsber: this.state.approvalNumber,
+        governance: this.state.governance,
+        InclusionCriteria: this.state.InclusionCriteria,
+        ExclusionCriteria: this.state.ExclusionCriteria,
       })
       .then(
         (response) => {
@@ -159,7 +159,7 @@ export default class ProjectApprovalScreen extends React.Component {
         <View style={{ margin: 20 }}>
           <View style={{ flexDirection: "row", paddingBottom: 20 }}>
             <Text style={{ fontSize: 35, color: "grey", flex: 1 }}>
-              Project list
+              Project Information
               <Text style={{ fontSize: 10, color: "red", paddingLeft: 20 }}>
                 *You can leave comments by clicking a text field
               </Text>
@@ -206,8 +206,9 @@ export default class ProjectApprovalScreen extends React.Component {
                 <Text style={styles.subTitle}>Project description: </Text>
 
                 <View>
-                  <Portal style={styles.containerStyle}>
+                  <Portal>
                     <Dialog
+                    style={{width: 500, alignSelf: "center"}}
                       visible={this.state.isModalVisible}
                       onDismiss={this.handleCancel}
                     >
@@ -240,7 +241,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         }
                       />
                       <Dialog.Actions>
-                        <Button onPress={this.handleCancel}>Done</Button>
+                        <Button onPress={this.handleCancel}>Submit</Button>
                       </Dialog.Actions>
                     </Dialog>
                   </Portal>
@@ -395,51 +396,37 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
             </View>
           </View>
+          {/* project criteria questions */}
           <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 3, paddingLeft: 10 }}>
-            <View style={{ flex: 1 }}>
-              <View style={{ height: 70 }}>
-                <Text
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 30,
-                    fontSize: 30,
-                    color: "#00205B"
-                  }}
-                >
-                  Question Preview
+            <View style={{ flex: 3, paddingLeft: 10 }}>
+              <View style={{ flex: 1 }}>
+                <View style={{ height: 70 }}>
+                  <Text
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 30,
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      color: "#00205B"
+                    }}
+                  >
+                    Question Preview
                   </Text>
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: "#00205B"
-                  }}
-                >
-                  Inclusion Quetsions:
-                  </Text>
-                <View></View>
-              </View>
-
-              <View>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    marginTop: 30,
-                    color: "#00205B"
-                  }}
-                >
-                  Exclusion Quetsions:
-                  </Text>
-                <View></View>
+                </View>
+                <View>
+                <Text style={{ fontSize: 15, marginTop: 15, color: "#00205B" }}> Inclusion Quetsions: </Text>
+                  <View></View>
+                </View>
+                <View>
+                  <Text style={{ fontSize: 15, marginTop: 30, color: "#00205B" }}> Exclusion Quetsions: </Text>
+                  <View></View>
+                </View>
               </View>
             </View>
           </View>
         </View>
-        </View>
-        
+
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Button onPress={this.leaveComment}>Pending</Button>
           <Button>Authorize</Button>
