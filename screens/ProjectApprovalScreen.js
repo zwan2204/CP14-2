@@ -10,7 +10,7 @@ import {
   TextInput as NativeTextInput,
 } from "react-native";
 import { styles } from "../styles.js";
-import { Button, Dialog, TextInput } from "react-native-paper";
+import { Button, Dialog, Portal, TextInput } from "react-native-paper";
 import axios from "axios";
 
 export default class ProjectApprovalScreen extends React.Component {
@@ -86,14 +86,14 @@ export default class ProjectApprovalScreen extends React.Component {
         projectId: this.state.projectId,
         title: this.state.titleComment,
         description: this.state.descriptionComment,
-        location: this.state.locationComment,
-        subjectNo: this.state.subjectNoComment,
-        duration: this.state.durationComment,
-        date: this.state.date,
-        approvalNumber: this.state.approvalNumber,
-        governance: this.state.governance,
-        InclusionCriteria: this.state.InclusionCriteria,
-        ExclusionCriteria: this.state.ExclusionCriteria,
+        // location: this.state.locationComment,
+        // subjectNo: this.state.subjectNoComment,
+        // duration: this.state.durationComment,
+        // date: this.state.date,
+        // approvalNumber: this.state.approvalNumber,
+        // governance: this.state.governance,
+        // InclusionCriteria: this.state.InclusionCriteria,
+        // ExclusionCriteria: this.state.ExclusionCriteria,
       })
       .then(
         (response) => {
@@ -206,7 +206,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <Text style={styles.subTitle}>Project description: </Text>
 
                 <View>
-                  <View style={styles.containerStyle}>
+                  <Portal style={styles.containerStyle}>
                     <Dialog
                       visible={this.state.isModalVisible}
                       onDismiss={this.handleCancel}
@@ -243,7 +243,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         <Button onPress={this.handleCancel}>Done</Button>
                       </Dialog.Actions>
                     </Dialog>
-                  </View>
+                  </Portal>
                   <TouchableOpacity onPress={this.showModal}>
                     <Text
                       multiline={true}
@@ -395,7 +395,51 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
             </View>
           </View>
+          <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 3, paddingLeft: 10 }}>
+            <View style={{ flex: 1 }}>
+              <View style={{ height: 70 }}>
+                <Text
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 30,
+                    fontSize: 30,
+                    color: "#00205B"
+                  }}
+                >
+                  Question Preview
+                  </Text>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: "#00205B"
+                  }}
+                >
+                  Inclusion Quetsions:
+                  </Text>
+                <View></View>
+              </View>
+
+              <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginTop: 30,
+                    color: "#00205B"
+                  }}
+                >
+                  Exclusion Quetsions:
+                  </Text>
+                <View></View>
+              </View>
+            </View>
+          </View>
         </View>
+        </View>
+        
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Button onPress={this.leaveComment}>Pending</Button>
           <Button>Authorize</Button>

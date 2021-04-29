@@ -258,4 +258,10 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
   },
+
+  subTitle: {
+    fontSize: 20,
+    color: "#00205B",
+    marginLeft: 10
+},
 });

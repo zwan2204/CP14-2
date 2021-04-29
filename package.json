@@ -27,7 +27,7 @@
     "react-native-fs": "^2.17.0",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-masked-text": "^1.13.0",
-    "react-native-paper": "^4.7.2",
+    "react-native-paper": "^4.8.1",
     "react-native-sectioned-multi-select": "^0.8.1",
     "react-native-table-component": "^1.2.1",
     "react-native-uuid": "^2.0.1",
