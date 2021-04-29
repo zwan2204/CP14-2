@@ -14,7 +14,9 @@ import ProjectManagement from "../screens/ProjectManagement";
 import ProtectedRoute from "./protetctedRoute";
 import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";
 import antdd from "../screens/antdd";
-
+import ProjectPreview from "../screens/ProjectPreview";
+import ProjectAvailable from "../screens/ProjectAvailable";
+import PendingEdit from "../screens/PendingEdit";
 import {
   LOGIN_URL,
   REGISTER_URL,
@@ -26,7 +28,9 @@ import {
   QUESTIONNAIRE_SPECIFIC_URL,
   PROJECT_MANAGEMENT_URL,
   PROJECT_APPROVAL_URL,
-  ANTDD_URL
+  PROJECT_PRIVIEW,
+  PROJECT_AVAILABLE,
+  PENDING_EDIT,
 } from "./urlMap";
 import { store } from "../redux";
 import { Provider } from "react-redux";
@@ -36,21 +40,22 @@ const Routes = () => (
       <Switch>
         <Redirect exact from="/" to={LOGIN_URL} />
         <Route exact path={LOGIN_URL} component={LoginScreen} />
-        <ProtectedRoute
-          exact
-          path={PROJECT_UPLOAD_URL}
-          component={ProjectUploading}
-        />
-        <ProtectedRoute
+        <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
+        <Route
           exact
           path={PROJECT_MANAGEMENT_URL}
           component={ProjectManagement}
         />
+
+        <Route exact path={PENDING_EDIT} component={PendingEdit} />
+
         <Route
           exact
           path={PARTICIPANT_INFO_URL}
           component={ParticipantInfoScreen}
         />
+        <Route exact path={PROJECT_AVAILABLE} component={ProjectAvailable} />
+        <Route exact path={PROJECT_PRIVIEW} component={ProjectPreview} />
         <Route exact path={PARTICIPANT_URL} component={ParticipantPage} />
         <Route exact path={REGISTER_URL} component={SignupScreen} />
         <Route exact path={WORKER_URL} component={WorkerScreen} />
@@ -60,9 +65,11 @@ const Routes = () => (
           path={QUESTIONNAIRE_SPECIFIC_URL}
           component={QuestionSpecificPage}
         />
-        <Route exact path={PROJECT_APPROVAL_URL} component={ProjectApprovalScreen} />
-        <Route exact path={ANTDD_URL} component={antdd} />
-
+        <Route
+          exact
+          path={PROJECT_APPROVAL_URL}
+          component={ProjectApprovalScreen}
+        />
       </Switch>
     </Provider>
   </BrowserRouter>

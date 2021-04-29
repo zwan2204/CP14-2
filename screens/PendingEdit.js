@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -13,16 +11,24 @@ import {
   Platform,
   TextInput as NativeTextInput,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import moment, { max } from "moment";
-import { Button, Card, TextInput } from "react-native-paper";
+import {
+  Button,
+  Card,
+  TextInput,
+  Paragraph,
+  Dialog,
+  Portal,
+} from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
-import uuid from "react-native-uuid";
 import Footer from "./Footer";
-const ProjectUploading = (props) => {
+
+const PendingEdit = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -47,40 +53,100 @@ const ProjectUploading = (props) => {
   const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
   const [isHealthy, setHealthy] = React.useState(false);
   const [isEnglishFluent, setEnglishFluent] = React.useState(false);
-
   const [gender, setGender] = useState("");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
-  const userId = localStorage.getItem("userId");
+  const [comment, setComment] = useState({});
+  const [commentDisplay, setCommentDisplay] = useState("");
+  const [visible, setVisible] = React.useState(false);
+
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
   // const userId = "606d1642b2fff30342232416";
   const projectId = props.location.projectKey;
   // const userId = Local.getItem("userId");
 
+  const loadComment = () => {
+    axios.get(`http://localhost:12345/api/comment/?pId=${projectId}`).then(
+      (response) => {
+        if (response.data.length > 0) {
+          setComment({
+            commentId: response.data[0]._id,
+            title: response.data[0].title,
+            subjectNo: response.data[0].subjectNo,
+            location: response.data[0].location,
+            duration: response.data[0].duration,
+            description: response.data[0].description,
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const deleteComment = (commentId) => {
+    axios.delete(`http://localhost:12345/api/comment/${commentId}`).then(
+      (response) => {},
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   const editPage = () => {
+    let inclusion = [];
+    let exclution = [];
     if (projectId) {
-      const ediInfo = JSON.parse(localStorage.getItem(projectId));
-      setApprovalNumber(ediInfo.approvalNumber);
-      setGovernanceNumber(ediInfo.governance);
-      setTitle(ediInfo.title);
-      setDescription(ediInfo.description);
-      setLocation(ediInfo.location);
-      setSubjectNo(ediInfo.subjectNo);
-      setHealthy(ediInfo.isHealthy);
-      setEnglishFluent(ediInfo.isEnglishFluent);
-      setImage(ediInfo.fileUpload);
-      setDuration(ediInfo.duration);
-      setDate(ediInfo.date);
-      setQuestion(ediInfo.InclusionCriteria);
-      setExclusionQuestion(ediInfo.ExclusionCriteria);
-      setIsPragnant(ediInfo.isPragnant);
-      setIsSmoking(ediInfo.isSmoking);
-      setIsLactating(ediInfo.isLactating);
-      setPlaningPragnant(ediInfo.isPlaningPragnant);
-      setGender(ediInfo.gender);
-      setMinAge(ediInfo.ageGroup.split(",")[0]);
-      setMaxAge(ediInfo.ageGroup.split(",")[1]);
+      axios.get(`http://localhost:12345/api/project/${projectId}`).then(
+        (response) => {
+          setTitle(response.data.title);
+          setDescription(response.data.description);
+          setImage(response.data.fileUpload);
+          setApprovalNumber(response.data.approvalNumber);
+          setGovernanceNumber(response.data.governance);
+          setLocation(response.data.location);
+          setSubjectNo(response.data.subjectNo);
+          setDuration(response.data.duration);
+          setDate(response.data.date);
+          setIsPragnant(response.data.isPragnant);
+          setIsSmoking(response.data.isSmoking);
+          setIsLactating(response.data.isLactating);
+          setPlaningPragnant(response.data.isPlaningPragnant);
+          setHealthy(response.data.needHealth);
+          setEnglishFluent(response.data.needEnglish);
+          setGender(response.data.gender);
+          setMinAge(response.data.ageGroup.split(",")[0]);
+          setMaxAge(response.data.ageGroup.split(",")[1]);
+
+          for (let i = 0; i < response.data.InclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.InclusionCriteria[i],
+            };
+            inclusion.push(criteria);
+          }
+
+          for (let i = 0; i < response.data.ExclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.ExclusionCriteria[i],
+            };
+            exclution.push(criteria);
+          }
+
+          setQuestion(inclusion);
+          setExclusionQuestion(exclution);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   };
+
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
@@ -112,46 +178,8 @@ const ProjectUploading = (props) => {
   useEffect(() => {
     getQuestion();
     editPage();
+    loadComment();
   }, []);
-
-  const storeData = async () => {
-    const currentDate = moment().format("DD/MM/YY");
-    let documentId = "";
-    if (projectId) {
-      documentId = projectId.split(",")[1];
-    } else {
-      documentId = uuid.v4();
-    }
-
-    const data = {
-      title: Title,
-      description: Description,
-      location: Location,
-      subjectNo: SubjectNo,
-      duration: Duration,
-      createdDate: currentDate,
-      date: Date,
-      InclusionCriteria: Question,
-      ExclusionCriteria: exclusionQuesion,
-      approvalNumber: ApprovalNumber,
-      governance: Governance,
-      fileUpload: image,
-      isPragnant: isPragnant,
-      isHealthy: isHealthy,
-      isEnglishFluent: isEnglishFluent,
-      isSmoking: isSmoking,
-      isLactating: isLactating,
-      isPlaningPragnant: isPlaningPragnant,
-      gender: gender,
-      ageGroup: `${minAge},${maxAge}`,
-    };
-
-    try {
-      const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem(`${userId},${documentId}`, jsonValue);
-      props.history.push("/projectManagement");
-    } catch (e) {}
-  };
 
   const addItem = (() => {
     if (CriteriaType == "INCLUSION") {
@@ -222,8 +250,7 @@ const ProjectUploading = (props) => {
     }
 
     axios
-      .post("http://localhost:12345/api/project", {
-        userId: userId,
+      .put(`http://localhost:12345/api/project/all/${projectId}`, {
         title: Title,
         description: Description,
         location: Location,
@@ -249,8 +276,8 @@ const ProjectUploading = (props) => {
       })
       .then(
         (response) => {
+          deleteComment(comment.commentId);
           props.history.push("/projectManagement");
-          console.log(response);
         },
         (error) => {
           console.log(error);
@@ -405,7 +432,28 @@ const ProjectUploading = (props) => {
               alignItems: "center",
             }}
           >
-            <Text style={styles.subTitle}>Project titile: </Text>
+            <TouchableOpacity
+              disabled={
+                comment.title == "" || comment.title == null ? true : false
+              }
+              onPress={() => {
+                showDialog();
+                setCommentDisplay(comment.title);
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  marginLeft: 10,
+                  color:
+                    comment.title == "" || comment.title == null
+                      ? "#00205B"
+                      : "red",
+                }}
+              >
+                Project titile:{" "}
+              </Text>
+            </TouchableOpacity>
             <TextInput
               mode="outlined"
               value={Title}
@@ -415,7 +463,31 @@ const ProjectUploading = (props) => {
           </View>
           <View style={{ flex: 6, flexDirection: "row" }}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.subTitle}>Project description: </Text>
+              <TouchableOpacity
+                disabled={
+                  comment.description == "" || comment.description == null
+                    ? true
+                    : false
+                }
+                onPress={() => {
+                  showDialog();
+                  setCommentDisplay(comment.description);
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginLeft: 10,
+
+                    color:
+                      comment.description == "" || comment.description == null
+                        ? "#00205B"
+                        : "red",
+                  }}
+                >
+                  Project description:{" "}
+                </Text>
+              </TouchableOpacity>
               <TextInput
                 mode="outlined"
                 multiline={true}
@@ -473,7 +545,30 @@ const ProjectUploading = (props) => {
             </View>
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.subTitle}>Location: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.location == "" || comment.location == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.location);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.location == "" || comment.location == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Location:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={Location}
@@ -492,7 +587,30 @@ const ProjectUploading = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Number of Subjects: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.subjectNo == "" || comment.subjectNo == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.subjectNo);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.subjectNo == "" || comment.subjectNo == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Number of Subjects:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={SubjectNo}
@@ -511,7 +629,30 @@ const ProjectUploading = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Study Duration: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.duration == "" || comment.duration == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.duration);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.duration == "" || comment.duration == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Study Duration:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={Duration}
@@ -669,6 +810,7 @@ const ProjectUploading = (props) => {
                 text == "" ? setMaxAge("null") : setMaxAge(text);
               }}
             />
+
             <CheckBox
               title="Need speek fluent english"
               checkedIcon="dot-circle-o"
@@ -977,23 +1119,29 @@ const ProjectUploading = (props) => {
             </View>
           </View>
         </View>
+        <Portal>
+          <Dialog
+            style={{ width: 600, alignSelf: "center" }}
+            visible={visible}
+            onDismiss={hideDialog}
+          >
+            <Dialog.Title>Comment</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>{commentDisplay}</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>Back</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </ScrollView>
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Button
           mode="contained"
           style={{ width: 150, alignSelf: "center", margin: 20 }}
-          onPress={() => storeData()}
+          onPress={() => projectUpload()}
         >
-          Save Draft
-        </Button>
-        <Button
-          mode="contained"
-          style={{ width: 100, alignSelf: "center", margin: 20 }}
-          onPress={() => {
-            projectUpload();
-          }}
-        >
-          Create
+          Update
         </Button>
       </View>
 
@@ -1037,4 +1185,4 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
-export default ProjectUploading;
+export default PendingEdit;

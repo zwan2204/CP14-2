@@ -12,16 +12,18 @@ import {
 } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
+import getUserAge from "../screens/QuestionnaireModule_data";
+import {getUserInfo, updateUserInfo} from "../screens/QuestionnaireModule_data";
+
 
 let currentData = [];
 
 let DATA_Demo = [
     {
         projectID: 1,
-        age: "null,65",
-        gender: "Male",
+        age: "null,18",
+        gender: "male",
         healthy: "Yes",
         english: "Yes",
         smoking: false,
@@ -33,7 +35,7 @@ let DATA_Demo = [
     {
         projectID: 2,
         age: "18,65",
-        gender: "Male",
+        gender: "male",
         english: "Yes",
         healthy: "Yes",
         smoking: false,
@@ -45,7 +47,7 @@ let DATA_Demo = [
     {
         projectID: 3,
         age: "18,65",
-        gender: "Male",
+        gender: "male",
         english: "Yes",
         healthy: "Yes",
         smoking: false,
@@ -57,7 +59,7 @@ let DATA_Demo = [
     {
         projectID: 4,
         age: "18,null",
-        gender: "Male",
+        gender: "male",
         english: "Yes",
         healthy: "Yes",
         smoking: false,
@@ -97,7 +99,7 @@ let DATA_General = [
     },
 
     {
-        question: 'Do you have the history of significant multiple and/or severe allergies?',
+        question: 'Do you have the history of significant multiple and/or severe allergies2?',
         inclusionIDList: [3, 1],
         exclusionIDList: [],
         stateYes: false,
@@ -174,6 +176,7 @@ let DATA_Specific = [
 ];
 
 let availableProjects = [];
+// let userInformation = getUserInfo();
 
 
 const QuestionAnswerPage = (props) => {
@@ -203,24 +206,17 @@ const QuestionAnswerPage = (props) => {
 
     var num = 0;
 
-    /* The data pass to the Demo page */
-    const [age, setAge] = useState(25);
-    const initialDemo = {
-        gender: "",
-        healthy: "",
-        location: "",
-        english: "",
-        smoking: false,
-        pregnant: false,
-        lactating: false,
-        planning: false
-    };
+    /* get user's age */
+    let userAge = getUserAge();
+
+    /* retrieve user general information data */
+    const [getUserData, setGet] = useState(false);
     const reducer = (state, action) => ({ ...state, ...action });
-    const [demoInfo, setDemoInfo] = useReducer(reducer, initialDemo);
+    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
 
     /* error messages: restrict moving to the next page */
-    const showingDemoError = (demoInfo.gender == "" || demoInfo.healthy == "" ||
-        demoInfo.location == "" || demoInfo.english == "") ? true : false;
+    const showingDemoError = (userInfo.gender == "" || userInfo.healthy == "" ||
+        userInfo.location == "" || userInfo.english == "") ? true : false;
     const showingGeneralAmptyError = (step == 1 && currentData.length == 0) ? true : false;
     const showingSpecificAmptyError = (step == 2 && currentData.length == 0) ? true : false;
     const [showingNoMatchMessage, setShowingMessage] = useState(false);
@@ -260,23 +256,23 @@ const QuestionAnswerPage = (props) => {
         let availabelData = [];
         let removedlData = {};
         tempData.forEach(item => {
-            //filter projects based on age
-            let userage = 25; ////////////////////////////delete
+            //filter projects based on age.
             const ageRange = item.age.split(",");
             for (let i = 0; i < ageRange.length; i++) {
                 ageRange[i] = parseInt(ageRange[i]);
             }
             if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                    (isNaN(ageRange[0]) && userage <= ageRange[1]) ||
-                    (userage >= ageRange[0] && isNaN(ageRange[1])) ||
-                    (userage >= ageRange[0] || userage <= ageRange[1])) {
-                if (item.gender == demoInfo.gender && 
-                        item.healthy == demoInfo.healthy && 
-                        item.smoking == demoInfo.smoking && 
-                        item.pregnant == demoInfo.pregnant &&
-                        item.lactating == demoInfo.lactating && 
-                        item.planning == demoInfo.planning &&
-                        item.english == demoInfo.english) {
+                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                    (userAge >= ageRange[0] || userAge <= ageRange[1])) {
+                //filter projects based on user's selections.
+                if (item.gender == userInfo.gender && 
+                        item.healthy == userInfo.healthy && 
+                        item.smoking == userInfo.smoking && 
+                        item.pregnant == userInfo.pregnant &&
+                        item.lactating == userInfo.lactating && 
+                        item.planning == userInfo.planning &&
+                        item.english == userInfo.english) {
                     availabelData.push(item.projectID);
                 } else {
                     removedlData[item.projectID] = 1;
@@ -398,14 +394,17 @@ const QuestionAnswerPage = (props) => {
     const removeThisQuestion = (item) => {
         if ((item.stateYes == false) && 
             (item.stateNo == false) && removedProjects && removedProjectSizeZero) {
-            /* check whether the IDs in the inclusionIDList are all included in the removedProjects list */
+            /* check whether the IDs in the inclusionIDList are all included 
+            in the removedProjects list */
             for (let index = 0; index < item.inclusionIDList.length; index++) {
-                /* if an ID is not in the list, this question should not be removed, return false */
+                /* if an ID is not in the list, this question should not be removed, 
+                return false */
                 if (removedProjects[item.inclusionIDList[index]] == null) {
                     return false;
                 }
             }
-            /* check whether the IDs in the exclusionIDList are all included in the removedProjects list */
+            /* check whether the IDs in the exclusionIDList are all included in the 
+            removedProjects list */
             for (let index = 0; index < item.exclusionIDList.length; index++) {
                 // if (!removedProjects.includes(item.exclusionIDList[index])) {
                 if (removedProjects[item.exclusionIDList[index]] == null) {
@@ -464,7 +463,7 @@ const QuestionAnswerPage = (props) => {
     const Item = ({item}) => {
         /* needs to be changed, need to get the total number of questions*/
         num += 1;
-        if (num == 5) {
+        if (num == 1) {
             sleep(100);
             availableProjects = getAvailableProjects();
             if (availableProjects.length == 0) {
@@ -524,7 +523,7 @@ const QuestionAnswerPage = (props) => {
             <View style={{height: "75%"}}>
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(availableProjects)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -563,12 +562,12 @@ const QuestionAnswerPage = (props) => {
                             {step != 0 && 
                             <FlatList
                                 data={currentData} 
-                                renderItem={renderItem} 
+                                renderItem={renderItem}
                                 keyExtractor={item => item.question} 
                                 extraData={selectedId}
                             />}
-                            {step == 0 && 
-                            <QuestionDemo setDemoInfo={setDemoInfo}></QuestionDemo>}
+                            {step == 0 && getUserData &&
+                            <QuestionDemo setDemoInfo={setDemoInfo} userInfo={userInfo}></QuestionDemo>}
                         </ScrollView>
                     </View>
                     {/* {setSmoking, setPregnant, setLactating, setPlanning, setLocation} */}
@@ -629,7 +628,7 @@ const QuestionAnswerPage = (props) => {
                             {backgroundColor: step >= 3 ? "#00205B" : "white"}]}>                        
                             <Text style={{color: step >= 3 ? "white" : "grey", paddingLeft:5}}>4</Text>
                             <Text style={styles.processBarText}>
-                                Available Projects
+                                Eligible Projects
                             </Text>
                         </View>
                     </View>
@@ -638,16 +637,16 @@ const QuestionAnswerPage = (props) => {
                 {/* Button to next page */}
                 <View style={styles.extraInformation}>
                     {(showingNoMatchMessage || showingGeneralAmptyError || showingSpecificAmptyError) ? 
-                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                    <Text style={styles.questionMsg}>
                         *Sorry, no project matches your condition.
                     </Text> :
                     showingNotCompleteMsg ? 
-                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                    <Text style={styles.questionMsg}>
                         *Please complete all questions.
                     </Text> : null}
 
                     {showingDemoError && 
-                    <Text style={{opacity: 1, fontSize: "1.2em", color:"red"}}>
+                    <Text style={styles.questionMsg}>
                         *Please complete the first four questions.
                     </Text>}
 
@@ -675,7 +674,8 @@ const QuestionAnswerPage = (props) => {
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? washProjects(DATA_Demo) : null,
                                     //check questions are completed or not.
-                                    (step == 0 || checkCompleteAllQuestions() ? stepForward(true) : null))}}>
+                                    (step == 0 || checkCompleteAllQuestions() ? 
+                                        (stepForward(true), updateUserInfo({userInfo})) : null))}}>
                                 <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
                     </View>

@@ -9,25 +9,12 @@ import {
   Image,
   View,
   ScrollView,
-  Platform,
-  TextInput as NativeTextInput,
-  Alert
 } from "react-native";
 
-import {
-  Button,
-  Card,
-  TextInput,
-  Colors,
-  DataTable,
-  IconButton
-} from "react-native-paper";
+import { Button, Colors, DataTable, IconButton } from "react-native-paper";
 import axios from "axios";
-import DropDownPicker from "react-native-dropdown-picker";
-import * as DocumentPicker from "expo-document-picker";
-import { CheckBox } from "react-native-elements";
 
-const ProjectManagement = props => {
+const ProjectManagement = (props) => {
   const [incompleteDrop, setIncompleteDrop] = useState("none");
   const [unreleasedDrop, setUnreleasedDrop] = useState("none");
   const [releasedDrop, setReleasedDrop] = useState("none");
@@ -35,7 +22,8 @@ const ProjectManagement = props => {
   const [unreleasedProject, setUnreleasedProject] = useState([]);
   const [releasedProject, setReleasedProject] = useState([]);
   const [incompleteProject, setIncompleteProject] = useState([]);
-  const userId = "606d1642b2fff30342232416";
+  const userId = localStorage.getItem("userId");
+  // const userId = "606d1642b2fff30342232416";
   useEffect(() => {
     getProjects();
     getLocalStorage();
@@ -65,18 +53,18 @@ const ProjectManagement = props => {
     }
   };
 
-  const deleteProject = projectId => {
+  const deleteProject = (projectId) => {
     axios.delete(`http://localhost:12345/api/project/${projectId}`).then(
-      response => {
+      (response) => {
         getProjects();
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const deleteIncomplete = async id => {
+  const deleteIncomplete = async (id) => {
     try {
       await AsyncStorage.removeItem(id);
       getLocalStorage();
@@ -87,13 +75,13 @@ const ProjectManagement = props => {
     let unreleasedProjects = [];
     let releasedProjects = [];
     axios.get(`http://localhost:12345/api/project/?user=${userId}`).then(
-      response => {
+      (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let project = {
             key: response.data[i]._id,
             title: response.data[i].title,
             createdDate: response.data[i].createdDate,
-            state: response.data[i].state
+            state: response.data[i].state,
           };
           if (response.data[i].state != "Recruiting") {
             unreleasedProjects.push(project);
@@ -105,7 +93,7 @@ const ProjectManagement = props => {
         setReleasedProject(releasedProjects);
         setUnreleasedProject(unreleasedProjects);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
@@ -115,6 +103,14 @@ const ProjectManagement = props => {
     let keys = [];
     let values = [];
     let incompleteProjects = [];
+    const uncheckRemain = [
+      "isPragnant",
+      "isSmoking",
+      "isLactating",
+      "isPlaningPragnant",
+      "isHealthy",
+      "isEnglishFluent",
+    ];
     try {
       keys = await AsyncStorage.getAllKeys();
       values = await AsyncStorage.multiGet(keys);
@@ -125,11 +121,13 @@ const ProjectManagement = props => {
           let JsonKeys = Object.keys(JSON.parse(values[i][1]));
 
           for (let x = 0; x < JsonKeys.length; x++) {
-            if (
-              JSON.parse(values[i][1])[JsonKeys[x]].length == 0 ||
-              !JSON.parse(values[i][1])[JsonKeys[x]]
-            ) {
-              remainTask++;
+            if (uncheckRemain.indexOf(JsonKeys[x]) < 0) {
+              if (
+                JSON.parse(values[i][1])[JsonKeys[x]].length == 0 ||
+                !JSON.parse(values[i][1])[JsonKeys[x]]
+              ) {
+                remainTask++;
+              }
             }
           }
 
@@ -137,7 +135,7 @@ const ProjectManagement = props => {
             key: values[i][0],
             title: JSON.parse(values[i][1]).title,
             createdDate: JSON.parse(values[i][1]).createdDate,
-            state: remainTask
+            state: remainTask,
           };
 
           incompleteProjects.push(project);
@@ -149,14 +147,39 @@ const ProjectManagement = props => {
     }
   };
 
-  const incompleteRender = incompleteProject.map(item => {
+  const updateState = (id) => {
+    axios
+      .put(`http://localhost:12345/api/project/${id}`, {
+        state: "Recruiting",
+      })
+      .then(
+        (response) => {
+          getProjects();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  const incompleteRender = incompleteProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
         <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
         <DataTable.Cell numeric>{`${item.state} tasks left`}</DataTable.Cell>
         <DataTable.Cell numeric>
-          <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
+          <Button
+            mode="outlined"
+            compact="true"
+            labelStyle={{ fontSize: 10 }}
+            onPress={() =>
+              props.history.push({
+                pathname: "/projectUpload",
+                projectKey: item.key, // your data array of objects
+              })
+            }
+          >
             Edit
           </Button>
           <Button
@@ -173,13 +196,32 @@ const ProjectManagement = props => {
     );
   });
 
-  const unreleasedRender = unreleasedProject.map(item => {
+  const unreleasedRender = unreleasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${unreleasedDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
         <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
         <DataTable.Cell numeric>{item.state}</DataTable.Cell>
         <DataTable.Cell numeric>
+          <Button
+            mode="outlined"
+            compact="true"
+            disabled={item.state == "New Upload" ? true : false}
+            style={{ marginHorizontal: 5 }}
+            labelStyle={{ fontSize: 10 }}
+            onPress={() => {
+              if (item.state == "pending") {
+                props.history.push({
+                  pathname: "/pendingEdit",
+                  projectKey: item.key, // your data array of objects
+                });
+              } else if (item.state == "Authorized") {
+                updateState();
+              }
+            }}
+          >
+            {item.state == "Authorized" ? "Release" : "Edit"}
+          </Button>
           <Button
             mode="outlined"
             compact="true"
@@ -194,15 +236,25 @@ const ProjectManagement = props => {
     );
   });
 
-  const releasedRender = releasedProject.map(item => {
+  const releasedRender = releasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${releasedDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
         <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
         <DataTable.Cell numeric>{item.state}</DataTable.Cell>
         <DataTable.Cell numeric>
-          <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
-            Edit
+          <Button
+            mode="outlined"
+            compact="true"
+            labelStyle={{ fontSize: 10 }}
+            onPress={() =>
+              props.history.push({
+                pathname: "/projectPreview",
+                projectKey: item.key, // your data array of objects
+              })
+            }
+          >
+            Check
           </Button>
           <Button
             mode="outlined"
@@ -225,7 +277,7 @@ const ProjectManagement = props => {
         style={{
           height: 140,
           backgroundColor: "#00205B",
-          flexDirection: "row"
+          flexDirection: "row",
         }}
       >
         <Image
@@ -241,9 +293,9 @@ const ProjectManagement = props => {
             height: 37,
             position: "absolute",
             bottom: 30,
-            right: 30
+            right: 30,
           }}
-          onPress={() => console.log()}
+          onPress={() => props.history.push("/Homepage")}
         >
           log out
         </Button>
@@ -257,7 +309,7 @@ const ProjectManagement = props => {
               fontWeight: "bold",
               fontSize: 35,
               color: "gray",
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             My Projects
@@ -331,7 +383,7 @@ const ProjectManagement = props => {
         style={{
           height: 70,
           backgroundColor: "#00205B",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <Text style={{ color: "white", fontSize: 17, marginLeft: 10 }}>
@@ -345,7 +397,7 @@ const ProjectManagement = props => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 export default ProjectManagement;
