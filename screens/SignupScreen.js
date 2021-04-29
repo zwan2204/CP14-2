@@ -36,7 +36,13 @@ export default class SignupScreen extends React.Component {
         email: this.state.email,
         gender: this.state.gender,
         staffId: this.staffId,
-        dob: this.state.dob
+        dob: this.state.dob,
+        healthy: false,
+        english: false,
+        isPragnant: false,
+        isSmoking: false,
+        isLactating: false,
+        isPlanning: false
       })
       .then(
         response => {
@@ -68,11 +74,24 @@ export default class SignupScreen extends React.Component {
             />
           </View>
 
-          <View style={{ alignItems: "center", flexDirection: "column", flex: 1 }}>
+          <View
+            style={{ alignItems: "center", flexDirection: "column", flex: 1 }}
+          >
             <View style={{ alignItems: "center", margin: 30 }}>
-              <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}> Create New Account </Text>
+              <Text
+                style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}
+              >
+                {" "}
+                Create New Account{" "}
+              </Text>
             </View>
-            <View style={{ marginTop: 20, marginBottom: 30, flexDirection: "column" }}>
+            <View
+              style={{
+                marginTop: 20,
+                marginBottom: 30,
+                flexDirection: "column"
+              }}
+            >
               <Text style={styles.subTitle}>Please choose your role: </Text>
               <Picker
                 style={styles.picker}
@@ -81,7 +100,10 @@ export default class SignupScreen extends React.Component {
               >
                 <Picker.Item label="Participant" value="Participant" />
                 <Picker.Item label="Project Manager" value="Project Manager" />
-                <Picker.Item label="Health Care Workers" value="Health Care Workers" />
+                <Picker.Item
+                  label="Health Care Workers"
+                  value="Health Care Workers"
+                />
                 <Picker.Item label="NSWHP staff" value="Admin" />
               </Picker>
             </View>
@@ -110,7 +132,7 @@ export default class SignupScreen extends React.Component {
               />
               <Button
                 mode="text"
-                onPress={() => history.push("/participantInfo")}
+                onPress={this.userSignup}
                 style={{ marginBottom: 0 }}
               >
                 Signup
@@ -145,7 +167,13 @@ export default class SignupScreen extends React.Component {
                 Create New Account
               </Text>
             </View>
-            <View style={{ marginTop: 20, marginBottom: 30, flexDirection: "column" }}>
+            <View
+              style={{
+                marginTop: 20,
+                marginBottom: 30,
+                flexDirection: "column"
+              }}
+            >
               <Text style={styles.subTitle}>Please choose your role: </Text>
               <Picker
                 style={styles.picker}
