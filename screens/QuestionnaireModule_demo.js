@@ -1,13 +1,11 @@
 /** @format */
 
 import React, { useState } from "react";
-import { Image, Text, View, SafeAreaView, CheckBox } from "react-native";
+import { Text, View, SafeAreaView, CheckBox } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
-import axios from "axios";
 
 export function QuestionDemo({setDemoInfo, userInfo}) {
-    console.log("aaaa: "+userInfo);
     let gender_default = userInfo["gender"];
     let healthy_default = userInfo["healthy"];
     let english_default = userInfo["english"];
@@ -18,8 +16,8 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
     let isPlanning_default = userInfo["isPlanning"];
 
     const[gender, setGender_thisPage] = useState("");
-    const[healthy, setHealthy_thisPage] = useState("");
-    const[english, setEnglish_thisPage] = useState("");
+    const[healthy, setHealthy_thisPage] = useState(healthy_default);
+    const[english, setEnglish_thisPage] = useState(english_default);
     const[curLocation, setcurLocatio_thisPage] = useState("");
     const[isPregnant, setPregnant_thisPage] = useState(false);
     const[isSmoking, setSmoking_thisPage] = useState(false);
@@ -35,6 +33,11 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
 
     const pickHealthy = healthy => {
         if (healthy !== 0) {
+            if (healthy == "true") {
+                healthy = true;
+            } else if (healthy == "false") {
+                healthy = false;
+            }
             setDemoInfo({healthy: healthy});
             setHealthy_thisPage(healthy);
         }
@@ -42,6 +45,11 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
 
     const pickEnglish = english => {
         if (english !== 0) {
+            if (english == "true") {
+                english = true;
+            } else if (english == "false") {
+                english = false;
+            }
             setDemoInfo({english: english});
             setEnglish_thisPage(english);
         }
@@ -132,17 +140,13 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
                         selectedValue={healthy}
                         onValueChange={pickHealthy}
                         >
-                        {healthy_default == "" ? <Picker.Item label={""} value="0"/> : null}
+                        {healthy_default == undefined ? <Picker.Item label={"Yes/No"} value="0"/> : null}
                         <Picker.Item
-                            label={healthy_default == "" ? "Yes" :
-                                (healthy_default == "yes" ? "Yes" : "No")} 
-                            value={healthy_default == "" ? "yes" :
-                                (healthy_default == "yes" ? "yes" : "no")} />
+                            label={healthy_default ? "Yes" : "No"} 
+                            value={healthy_default ? true : false} />
                         <Picker.Item 
-                            label={healthy_default == "" ? "No" :
-                                (healthy_default == "yes" ? "No" : "Yes")}
-                            value={healthy_default == "" ? "no" :
-                                (healthy_default == "yes" ? "no" : "yes")} />
+                            label={healthy_default ? "No" : "Yes"}
+                            value={healthy_default ? false : true} />
                     </Picker>
   
                     <Picker
@@ -150,17 +154,13 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
                         selectedValue={english}
                         onValueChange={pickEnglish}
                         >
-                        {english_default == "" ? <Picker.Item label={"Yes/No"} value="0"/> : null}
+                        {english_default == undefined ? <Picker.Item label={"Yes/No"} value="0"/> : null}
                         <Picker.Item
-                            label={english_default == "" ? "Yes" :
-                                (english_default == "yes" ? "Yes" : "No")} 
-                            value={english_default == "" ? "yes" :
-                                (english_default == "yes" ? "yes" : "no")} />
+                            label={english_default ? "Yes" : "No"} 
+                            value={english_default ? true : false} />
                         <Picker.Item 
-                            label={english_default == "" ? "No" :
-                                (english_default == "yes" ? "No" : "Yes")}
-                            value={english_default == "" ? "no" :
-                                (english_default == "yes" ? "no" : "yes")} />
+                            label={english_default ? "No" : "Yes"}
+                            value={english_default ? false : true} />
                     </Picker>
   
                     <Picker

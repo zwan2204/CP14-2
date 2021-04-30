@@ -9,7 +9,6 @@ import ParticipantPage from "../screens/ParticipantPage";
 import SignupScreen from "../screens/SignupScreen";
 import WorkerScreen from "../screens/WorkerPage";
 import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq";
-import QuestionSpecificPage from "../screens/QuestionAnswerPage_sq";
 import ProjectManagement from "../screens/ProjectManagement";
 import ProtectedRoute from "./protetctedRoute";
 import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";
@@ -23,7 +22,6 @@ import {
   PROJECT_UPLOAD_URL,
   WORKER_URL,
   QUESTIONNAIRE_URL,
-  QUESTIONNAIRE_SPECIFIC_URL,
   PROJECT_MANAGEMENT_URL,
   PROJECT_APPROVAL_URL,
 } from "./urlMap";
@@ -50,11 +48,6 @@ const Routes = () => (
         <Route exact path={REGISTER_URL} component={SignupScreen} />
         <Route exact path={WORKER_URL} component={WorkerScreen} />
         <Route exact path={QUESTIONNAIRE_URL} component={QuestionAnswerPage} />
-        <Route
-          exact
-          path={QUESTIONNAIRE_SPECIFIC_URL}
-          component={QuestionSpecificPage}
-        />
         <Route
           exact
           path={PROJECT_APPROVAL_URL}

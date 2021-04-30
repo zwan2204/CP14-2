@@ -1,17 +1,222 @@
 /** @format */
 
-import React, { Component, useState } from "react";
-import { Image, Text, View, SafeAreaView, CheckBox } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { styles } from "../styles.js";
+import { useState } from "react";
 import axios from "axios";
+
 
 const userID = localStorage.getItem("userId");
 
+export const getProjects = ({setGeQuestions, setSpQuestions, setWrQuestions, 
+    setEProjects, setRemovedProjects, setLoading, userInfo}, userAge) => {
+    setLoading(true);
+    let eligibleProjects = [];
+    let removedProjects = {};
+
+    axios.get(`http://localhost:12345/api/project`).then(
+        (response) => {
+            for (let i = 0; i < Object.keys(response.data).length; i++) {
+                
+                let project = response.data[i];
+
+                if (userInfo.location == "home" || userInfo.location == "gp") {
+                    //location match
+                    if (!project.workerNeed) {
+                        //age match
+                        const ageRange = project.ageGroup.split(",");
+
+                        for (let i = 0; i < ageRange.length; i++) {
+                            ageRange[i] = parseInt(ageRange[i]);
+                        }
+
+                        if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                                (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                                (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                                (userAge >= ageRange[0] || userAge <= ageRange[1])) {
+                            //filter projects based on user's selections.
+                            if (userInfo.gender == project.gender &&
+                                    userInfo.healthy == project.needHealth && 
+                                    userInfo.isSmoking == project.isSmoking && 
+                                    userInfo.isPregnant == project.isPregnant &&
+                                    userInfo.isLactating == project.isLactating && 
+                                    userInfo.isPlanning == project.isPlanningPregnant &&
+                                    userInfo.english == project.needEnglish) {
+                                eligibleProjects.push(project._id);
+                            } else {
+                                removedProjects[project._id] = 1;
+                            }
+                        } else {
+                            removedProjects[project._id] = 1;
+                        }
+                    }
+                }
+                if (userInfo.location == "clinic" || userInfo.location == "hospital") {
+                    //location match
+                    if (project.workerNeed) {
+                        //age match
+                        const ageRange = project.ageGroup.split(",");
+                        
+                        for (let i = 0; i < ageRange.length; i++) {
+                            ageRange[i] = parseInt(ageRange[i]);
+                        }
+
+                        if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                                (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                                (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                                (userAge >= ageRange[0] || userAge <= ageRange[1])) {
+                            //filter projects based on user's selections.
+                            if (userInfo.gender == project.gender &&
+                                    userInfo.healthy == project.needHealth && 
+                                    userInfo.isSmoking == project.isSmoking && 
+                                    userInfo.isPregnant == project.isPregnant &&
+                                    userInfo.isLactating == project.isLactating && 
+                                    userInfo.isPlanning == project.isPlanningPregnant &&
+                                    userInfo.english == project.needEnglish) {
+                                eligibleProjects.push(project._id);
+                            } else {
+                                removedProjects[project._id] = 1;
+                            }
+                        } else {
+                            removedProjects[project._id] = 1;
+                        }
+                    }
+                }
+            }
+            setRemovedProjects(removedProjects);
+            setEProjects(eligibleProjects);
+            getQuestions({setLoading, setGeQuestions, setSpQuestions, setWrQuestions, eligibleProjects});
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+}
+
+export function washQuestions(questions, eligibleProjects) {
+    let filteredQuestions = [];
+
+    questions.forEach(item => {
+        let shouldRemove = true;
+        for(let index = 0; index < item.inclusionIDList.length; index++) {
+            for (let index_2 = 0; index_2 < eligibleProjects.length; index_2++) {
+                if (eligibleProjects[index_2] == item.inclusionIDList[index]) {
+                    shouldRemove = false;
+                    break;
+                }
+            }
+            if (!shouldRemove) {break;}
+        }
+        for(let index = 0; index < item.exclusionIDList.length; index++) {
+            if (!shouldRemove) {break;}
+            for (let index_2 = 0; index_2 < eligibleProjects.length; index_2++) {
+                if (eligibleProjects[index_2] == item.exclusionIDList[index]) {
+                    shouldRemove = false;
+                    break;
+                }
+            }
+            if (!shouldRemove) {break;}
+        }
+        if (!shouldRemove) {
+            filteredQuestions.push(item);
+        }
+    });
+    return filteredQuestions;
+}
+
+export const getQuestions = ({setLoading, setGeQuestions, setSpQuestions, setWrQuestions, 
+        eligibleProjects}) => {
+    let generalQuestions = [];
+    let specificQuestions = [];
+    let workerQuestions = [];
+    let filter = {}; //check duplicated questions
+
+    axios.get(`http://localhost:12345/api/question`).then(
+        (response) => {
+            for (let i = 0; i < Object.keys(response.data).length; i++) {
+                let tempQuestion = {};
+                let question = response.data[i];
+
+                //if the question already exists in the lists
+                if (filter[question.name] != null) {
+                    if (question.general) {
+                        for (let i = 0; i < generalQuestions.length; i++) {
+                            if (question.name == generalQuestions[i]["question"]) {
+                                if (question.inclusion) {
+                                    generalQuestions[i]["inclusionIDList"].push(question.project);
+                                } else {
+                                    generalQuestions[i]["exclusionIDList"].push(question.project);
+                                }
+                            }
+                        }
+                    } else if (!question.general) {
+                        for (let i = 0; i < generalQuestions.length; i++) {
+                            if (question.name == specificQuestions[i]["question"]) {
+                                if (question.inclusion) {
+                                    specificQuestions[i]["inclusionIDList"].push(question.project);
+                                } else {
+                                    specificQuestions[i]["exclusionIDList"].push(question.project);
+                                }
+                            }
+                        }
+                    } else if (question.worker) {
+                        for (let i = 0; i < generalQuestions.length; i++) {
+                            if (question.name == workerQuestions[i]["question"]) {
+                                if (question.inclusion) {
+                                    workerQuestions[i]["inclusionIDList"].push(question.project);
+                                } else {
+                                    workerQuestions[i]["exclusionIDList"].push(question.project);
+                                }
+                            }
+                        }
+                    }
+
+                } else if (question.general) { //create a new question adding to the general list
+                    filter[question.name] = 1;
+                    tempQuestion["ID"] = question._id;
+                    tempQuestion["question"] = question.name;
+                    tempQuestion["inclusionIDList"] = [question.inclusion ? question.project : []];
+                    tempQuestion["exclusionIDList"] = [question.inclusion ? [] : question.project];
+                    tempQuestion["stateYes"] = false;
+                    tempQuestion["stateNo"] = false;
+                    tempQuestion["state"] = "notCompleted";
+                    generalQuestions.push(tempQuestion);
+                } else if (!question.general) { //create a new question adding to the specific list
+                    filter[question.name] = 1;
+                    tempQuestion["ID"] = question._id;
+                    tempQuestion["question"] = question.name;
+                    tempQuestion["inclusionIDList"] = [question.inclusion ? question.project : []];
+                    tempQuestion["exclusionIDList"] = [question.inclusion ? [] : question.project];
+                    tempQuestion["stateYes"] = false;
+                    tempQuestion["stateNo"] = false;
+                    tempQuestion["state"] = "notCompleted";
+                    specificQuestions.push(tempQuestion);
+                } else if (question.worker) { //create a new question adding to the worker list
+                    filter[question.name] = 1;
+                    tempQuestion["ID"] = question._id;
+                    tempQuestion["question"] = question.name;
+                    tempQuestion["inclusionIDList"] = [question.inclusion ? question.project : []];
+                    tempQuestion["exclusionIDList"] = [question.inclusion ? [] : question.project];
+                    tempQuestion["stateYes"] = false;
+                    tempQuestion["stateNo"] = false;
+                    tempQuestion["state"] = "notCompleted";
+                    workerQuestions.push(tempQuestion);
+                }
+            }
+            //remove all questions that are not in the eligibale Projects list.
+            setGeQuestions(washQuestions(generalQuestions, eligibleProjects)); 
+            setSpQuestions(washQuestions(specificQuestions, eligibleProjects));
+            setWrQuestions(washQuestions(workerQuestions, eligibleProjects));
+            setLoading(false);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+}
+
+
 export const updateUserInfo = ({userInfo}) => {
-    console.log(userInfo);
     axios
-        .put(`http://localhost:12345/api/users/update/${userID}`, {
+        .put(`http://localhost:12345/api/users/${userID}`, {
             gender: userInfo["gender"],
             english: userInfo["english"],
             healthy: userInfo["healthy"],
@@ -21,7 +226,6 @@ export const updateUserInfo = ({userInfo}) => {
             isPlanning: userInfo["isPlanning"],
         })
         .then(
-            (response) => {getProjects();},
             (error) => {console.log(error);}
         );
 }
@@ -63,7 +267,7 @@ const getUserAge = () => {
 }
 export default getUserAge;
 
-const  getAge = (dateString)=>{
+const getAge = (dateString)=>{
     var regroupData = dateString.split("/");
     var newDate = regroupData[2] + "/" + regroupData[1] + "/" + regroupData[0];
     var today = new Date();
