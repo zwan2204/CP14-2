@@ -11,10 +11,10 @@ import {
     FlatList,
 } from "react-native";
 import {styles} from "../styles.js";
-import {QuestionDemo} from "./QuestionnaireModule_demo.js";
-import {HealhcareWorkerLoginView} from "./QuestionnaireModule_WorkerLogin";
-import getUserAge from "./QuestionnaireModule_data";
-import {getUserInfo, updateUserInfo, getProjects} from "./QuestionnaireModule_data";
+import {QuestionDemo} from "../modules/QuestionnaireModule_demo.js";
+import {HealhcareWorkerLoginView} from "../modules/QuestionnaireModule_WorkerLogin";
+import getUserAge from "../modules/QuestionnaireModule_data";
+import {getUserInfo, updateUserInfo, getProjects} from "../modules/QuestionnaireModule_data";
 
 
 const QuestionAnswerPage = (props) => {

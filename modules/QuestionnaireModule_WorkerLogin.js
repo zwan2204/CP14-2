@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { styles } from "../styles.js";
 import { TextInput } from "react-native-paper";
-import {identifyWorker} from "../screens/QuestionnaireModule_data";
+import {identifyWorker} from "../modules/QuestionnaireModule_data";
 
 export function HealhcareWorkerLoginView({setNeedLogin, setHandDevice, stepForward}) {
     const[email, setEmail] = useState("");
