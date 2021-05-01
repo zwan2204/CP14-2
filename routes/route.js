@@ -8,7 +8,7 @@ import ParticipantInfoScreen from "../screens/ParticipantInfoScreen";
 import ParticipantPage from "../screens/ParticipantPage";
 import SignupScreen from "../screens/SignupScreen";
 import WorkerScreen from "../screens/WorkerPage";
-import QuestionAnswerPage from "../screens/QuestionAnswerPage_gq";
+import QuestionAnswerPage from "../screens/QuestionAnswerPage";
 import ProjectManagement from "../screens/ProjectManagement";
 import ProtectedRoute from "./protetctedRoute";
 import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";

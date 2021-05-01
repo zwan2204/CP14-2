@@ -215,19 +215,18 @@ export const getQuestions = ({setLoading, setGeQuestions, setSpQuestions, setWrQ
 
 
 export const updateUserInfo = ({userInfo}) => {
-    axios
-        .put(`http://localhost:12345/api/users/${userID}`, {
-            gender: userInfo["gender"],
-            english: userInfo["english"],
-            healthy: userInfo["healthy"],
-            isPregnant: userInfo["isPregnant"],
-            isSmoking: userInfo["isSmoking"],
-            isLactating: userInfo["isLactating"],
-            isPlanning: userInfo["isPlanning"],
-        })
-        .then(
-            (error) => {console.log(error);}
-        );
+    axios.put(`http://localhost:12345/api/users/${userID}`, {
+        gender: userInfo["gender"],
+        english: userInfo["english"],
+        healthy: userInfo["healthy"],
+        isPregnant: userInfo["isPregnant"],
+        isSmoking: userInfo["isSmoking"],
+        isLactating: userInfo["isLactating"],
+        isPlanning: userInfo["isPlanning"],
+    })
+    .then(
+        (error) => {console.log(error);}
+    );
 }
 
 export const identifyWorker = ({setIdentify, setMsg, setNeedLogin, setHandDevice}, email, password) => {

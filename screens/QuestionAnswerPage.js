@@ -8,16 +8,13 @@ import {
     SafeAreaView, 
     Image, 
     ScrollView, 
-    FlatList, 
+    FlatList,
 } from "react-native";
-import { styles } from "../styles.js";
-import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
-import {HealhcareWorkerLoginView} from "../screens/QuestionnaireModule_WorkerLogin";
-import getUserAge from "../screens/QuestionnaireModule_data";
-import {getUserInfo, updateUserInfo, getProjects} from "../screens/QuestionnaireModule_data";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { storeProjectsInfo } from "../redux/actions/projectAction";
-import { connect } from "react-redux";
+import {styles} from "../styles.js";
+import {QuestionDemo} from "./QuestionnaireModule_demo.js";
+import {HealhcareWorkerLoginView} from "./QuestionnaireModule_WorkerLogin";
+import getUserAge from "./QuestionnaireModule_data";
+import {getUserInfo, updateUserInfo, getProjects} from "./QuestionnaireModule_data";
 
 
 const QuestionAnswerPage = (props) => {
@@ -112,9 +109,10 @@ const QuestionAnswerPage = (props) => {
             }
             eligibleProjects_string = eligibleProjects_string.substring
                 (0, eligibleProjects_string.length - 1);
-            storeProjectsInfo(eligibleProjects_string);
-            AsyncStorage.setItem("projects", eligibleProjects_string);
-            history.push("/projectAvailable");
+            history.push({
+                pathname: "/projectAvailable",
+                projectIDs: eligibleProjects_string
+            });
         }
     }
 
