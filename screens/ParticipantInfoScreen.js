@@ -8,90 +8,90 @@ import axios from "axios";
 import { Button } from "react-native-paper";
 
 export default class ParticipantInfoScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            gender: "",
-            dob: "",
-            healthy: "",
-            english: "",
-            curLocation: "",
-            isPragnent: false,
-            isSmoking: false,
-            isLactating: false,
-            isPlanning: false
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      gender: "",
+      dob: "",
+      healthy: "",
+      english: "",
+      curLocation: "",
+      isPragnant: false,
+      isSmoking: false,
+      isLactating: false,
+      isPlanning: false,
+    };
+  }
+
+  userSignup = () => {
+    const { navigate } = this.props.navigation;
+    axios
+      .post("http://localhost:12345/api/users", {
+        fullName: this.state.fullName,
+        password: this.state.password,
+        role: this.state.role,
+        email: this.state.email,
+        gender: this.state.gender,
+        dob: this.state.dob,
+        healthy: this.state.healthy,
+        english: this.state.english,
+        curLocation: this.state.curLocation,
+        isPragnant: this.state.isPragnant,
+        isSmoking: this.state.isSmoking,
+        isLactating: this.state.isLactating,
+        isPlanning: this.state.isPlanning,
+      })
+      .then(
+        (response) => {
+          console.log(response);
+          navigate("Login");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  pickGender = (gender) => {
+    if (gender !== 0) {
+      this.setState({ gender: gender });
     }
+  };
 
-    userSignup = () => {
-        const { navigate } = this.props.navigation;
-        axios
-            .post("http://localhost:12345/api/users", {
-                fullName: this.state.fullName,
-                password: this.state.password,
-                role: this.state.role,
-                email: this.state.email,
-                gender: this.state.gender,
-                dob: this.state.dob,
-                healthy: this.state.healthy,
-                english: this.state.english,
-                curLocation: this.state.curLocation,
-                isPragnent: this.state.isPragnent,
-                isSmoking: this.state.isSmoking,
-                isLactating: this.state.isLactating,
-                isPlanning: this.state.isPlanning
-            })
-            .then(
-                response => {
-                    console.log(response);
-                    navigate("Login");
-                },
-                error => {
-                    console.log(error);
-                }
-            );
-    };
+  pickHealthy = (healthy) => {
+    if (healthy !== 0) {
+      this.setState({ healthy: healthy });
+    }
+  };
 
-    pickGender = gender => {
-        if (gender !== 0) {
-            this.setState({ gender: gender });
-        }
-    };
+  pickLocation = (curLocation) => {
+    if (curLocation !== 0) {
+      this.setState({ curLocation: curLocation });
+    }
+  };
 
-    pickHealthy = healthy => {
-        if (healthy !== 0) {
-            this.setState({ healthy: healthy });
-        }
-    };
+  pickEnglish = (english) => {
+    if (english !== 0) {
+      this.setState({ english: english });
+    }
+  };
 
-    pickLocation = curLocation => {
-        if (curLocation !== 0) {
-            this.setState({ curLocation: curLocation });
-        }
-    };
+  setPragnant = (isPragnant) => {
+    this.setState({ isPragnant: !this.state.isPragnant });
+  };
 
-    pickEnglish = english => {
-        if (english !== 0) {
-            this.setState({ english: english });
-        }
-    };
+  setSmoking = (isSmoking) => {
+    this.setState({ isSmoking: !this.state.isSmoking });
+  };
 
-    setPragnent = isPragnent => {
-        this.setState({ isPragnent: !this.state.isPragnent });
-    };
+  setLactating = (isLactating) => {
+    this.setState({ isLactating: !this.state.isLactating });
+  };
 
-    setSmoking = isSmoking => {
-        this.setState({ isSmoking: !this.state.isSmoking });
-    };
+  setPlanning = (isPlanning) => {
+    this.setState({ isPlanning: !this.state.isPlanning });
+  };
 
-    setLactating = isLactating => {
-        this.setState({ isLactating: !this.state.isLactating });
-    };
-
-    setPlanning = isPlanning => {
-        this.setState({ isPlanning: !this.state.isPlanning });
-    };
-  
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -100,7 +100,7 @@ export default class ParticipantInfoScreen extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row"
+            flexDirection: "row",
           }}
         >
           <Image
@@ -114,7 +114,7 @@ export default class ParticipantInfoScreen extends React.Component {
           style={{
             alignItems: "center",
             flexDirection: "row",
-            paddingTop: "5%"
+            paddingTop: "5%",
           }}
         >
           <View
@@ -188,10 +188,10 @@ export default class ParticipantInfoScreen extends React.Component {
           </Text>
           <View style={{ flexDirection: "row" }}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Pragnent</Text>
+              <Text style={styles.checkBox}>Pragnant</Text>
               <CheckBox
-                value={this.state.isPragnent}
-                onValueChange={this.setPragnent}
+                value={this.state.isPragnant}
+                onValueChange={this.setPragnant}
               />
             </View>
             <View style={{ flexDirection: "row" }}>
@@ -209,7 +209,7 @@ export default class ParticipantInfoScreen extends React.Component {
               />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Planning on becoming pragnent</Text>
+              <Text style={styles.checkBox}>Planning on becoming pragnant</Text>
               <CheckBox
                 value={this.state.isPlanning}
                 onValueChange={this.setPlanning}

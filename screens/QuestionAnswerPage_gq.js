@@ -114,7 +114,7 @@ const QuestionAnswerPage = (props) => {
                 (0, eligibleProjects_string.length - 1);
             storeProjectsInfo(eligibleProjects_string);
             AsyncStorage.setItem("projects", eligibleProjects_string);
-            history.push("/");
+            history.push("/projectAvailable");
         }
     }
 

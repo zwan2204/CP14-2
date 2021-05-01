@@ -104,10 +104,12 @@ const ProjectManagement = (props) => {
     let values = [];
     let incompleteProjects = [];
     const uncheckRemain = [
-      "isPragnent",
+      "isPragnant",
       "isSmoking",
       "isLactating",
-      "isPlaningPragnent",
+      "isPlaningPragnant",
+      "isHealthy",
+      "isEnglishFluent",
     ];
     try {
       keys = await AsyncStorage.getAllKeys();
@@ -147,7 +149,7 @@ const ProjectManagement = (props) => {
 
   const updateState = (id) => {
     axios
-      .put(`http://localhost:12345/api/project/state/${id}`, {
+      .put(`http://localhost:12345/api/project/${id}`, {
         state: "Recruiting",
       })
       .then(
@@ -207,7 +209,16 @@ const ProjectManagement = (props) => {
             disabled={item.state == "New Upload" ? true : false}
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
-            onPress={() => updateState(item.key)}
+            onPress={() => {
+              if (item.state == "pending") {
+                props.history.push({
+                  pathname: "/pendingEdit",
+                  projectKey: item.key, // your data array of objects
+                });
+              } else if (item.state == "Authorized") {
+                updateState();
+              }
+            }}
           >
             {item.state == "Authorized" ? "Release" : "Edit"}
           </Button>
@@ -232,8 +243,18 @@ const ProjectManagement = (props) => {
         <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
         <DataTable.Cell numeric>{item.state}</DataTable.Cell>
         <DataTable.Cell numeric>
-          <Button mode="outlined" compact="true" labelStyle={{ fontSize: 10 }}>
-            Edit
+          <Button
+            mode="outlined"
+            compact="true"
+            labelStyle={{ fontSize: 10 }}
+            onPress={() =>
+              props.history.push({
+                pathname: "/projectPreview",
+                projectKey: item.key, // your data array of objects
+              })
+            }
+          >
+            Check
           </Button>
           <Button
             mode="outlined"

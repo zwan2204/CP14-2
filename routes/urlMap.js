@@ -10,3 +10,6 @@ export const WORKER_URL = "/worker";
 export const QUESTIONNAIRE_URL = "/questionnaire";
 export const PROJECT_APPROVAL_URL = "/projectApproval";
 export const ANTDD_URL = "/antdd";
+export const PROJECT_PRIVIEW = "/projectPreview";
+export const PROJECT_AVAILABLE = "/projectAvailable";
+export const PENDING_EDIT = "/pendingEdit";

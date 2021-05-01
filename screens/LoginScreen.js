@@ -129,7 +129,7 @@ class LoginScreen extends React.Component {
             onPress={this.userLogin}
             style={{ marginTop: 40 }}
           >
-              LOGIN
+            LOGIN
           </Button>
 
           <Button mode="text" onPress={() => history.push("/questionnaire")}>
