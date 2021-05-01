@@ -12,10 +12,15 @@ import {
 } from "react-native";
 import { styles } from "../styles.js";
 import {QuestionDemo} from "../screens/QuestionnaireModule_demo.js";
+import {HealhcareWorkerLoginView} from "../screens/QuestionnaireModule_WorkerLogin";
 import getUserAge from "../screens/QuestionnaireModule_data";
 import {getUserInfo, updateUserInfo, getProjects} from "../screens/QuestionnaireModule_data";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storeProjectsInfo } from "../redux/actions/projectAction";
+import { connect } from "react-redux";
 
-const QuestionAnswerPage = () => {
+
+const QuestionAnswerPage = (props) => {
     /* adjust the scroll bar */
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
     const [contentSize, setContentSize] = React.useState(0);
@@ -27,9 +32,6 @@ const QuestionAnswerPage = () => {
     /* 0 means on the page of personal information page, 1 means general question page
     2 means specific question page */
     const [step, setStep] = useState(0);
-    
-    /* questions needs to answer by workers */
-    const [requireHCWorker, setRequireHCW] = useState(false);
 
     /* this is used to set sub-title of the page */
     const [subTitle, setSubTitle] = useState("Demographic Information");
@@ -39,6 +41,17 @@ const QuestionAnswerPage = () => {
 
     /* get user's age */
     let userAge = getUserAge();
+
+    /* retrieve user general information data */
+    const [getUserData, setGet] = useState(false);
+    const reducer = (state, action) => ({ ...state, ...action });
+    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
+
+    /* check the need of workers */
+    let requireHCWorker = (userInfo.location == "clinic" || 
+        userInfo.location == "hospital") ? true : false;
+    const [handDevice, setHandDevice] = useState(false);
+    const [needLogin, setNeedLogin] = useState(false);
 
     /* set up all types of questions and projects */
     const [eligibleProjects, setEProjects] = useState([]);
@@ -50,15 +63,10 @@ const QuestionAnswerPage = () => {
     let currentQuestions = 
         step == 1 ? generalQuestions :
         (step == 2 ? specificQuestions :
-        (step == 3 ? workerQuestions : null));
+        (requireHCWorker && step == 3 ? workerQuestions : null));
     const [numQuestions, setNumQuestions] = useState(0);
     const [selectedId, setSelectedId] = useState(null);
     var num = 0; //current question index
-
-    /* retrieve user general information data */
-    const [getUserData, setGet] = useState(false);
-    const reducer = (state, action) => ({ ...state, ...action });
-    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
 
     /* messages: restrict moving to the next page */
     const showingDemoMsg = (userInfo.gender == "" || userInfo.location == "") ? true : false;
@@ -68,10 +76,12 @@ const QuestionAnswerPage = () => {
 
     /* when data is loading */
     const [isLoading, setLoading] = useState(false);
+    const { history } = props;
 
+    
     const stepForward = (isForward) => {
         let currentStep = step;
-        if (isForward && currentStep < 3) {
+        if (isForward && currentStep < 4) {
             currentStep += 1;
         }
         if (!isForward && currentStep > 0) {
@@ -88,13 +98,23 @@ const QuestionAnswerPage = () => {
         } else if (step == 1) {
             setSubTitle("General Questions");
             setButtonText("Next");
-            // currentQuestions = washQuestions(generalQuestions, availableProjects);
         } else if (step == 2) {
             setSubTitle("Specific Questions");
+            setButtonText(requireHCWorker ? "Next" : "Submit");
+        } else if (step == 3 && requireHCWorker) {
+            setSubTitle("Medical Condition");
             setButtonText("Submit");
-            // currentQuestions = washQuestions(specificQuestions, availableProjects);
-        } else {
-            /* send eligible project's IDs */
+            setHandDevice(true);
+        } else if ((step == 3 && !requireHCWorker) || (step == 4 && requireHCWorker)) {
+            let eligibleProjects_string = "";
+            for (let i = 0; i < eligibleProjects.length; i++) {
+                eligibleProjects_string = eligibleProjects_string + eligibleProjects[i] + ","
+            }
+            eligibleProjects_string = eligibleProjects_string.substring
+                (0, eligibleProjects_string.length - 1);
+            storeProjectsInfo(eligibleProjects_string);
+            AsyncStorage.setItem("projects", eligibleProjects_string);
+            history.push("/");
         }
     }
 
@@ -318,9 +338,44 @@ const QuestionAnswerPage = () => {
             </View> 
             :
             <View style={{height: "75%"}}>
+                {handDevice ?
+                <View style={styles.handDeviceContinaer}>
+                    <View style={styles.opacityBackground}></View>
+                    {needLogin ?
+                    <HealhcareWorkerLoginView
+                        setNeedLogin={setNeedLogin} setHandDevice={setHandDevice} 
+                            stepForward={stepForward}>
+                    </HealhcareWorkerLoginView>
+                    :
+                    <View style={styles.handDeviceInner}>
+                        <View style={styles.handDeviceText}>
+                            <Text style={{fontSize:"1.4em", paddingTop:"5%"}}>
+                                Please hand this device over to one of 
+                                our staff members to examine your medical conditon.
+                            </Text>
+                        </View>
+                        <View style={styles.handDeviceButtonContianer}>
+                            <TouchableOpacity
+                                onPress={() => {setHandDevice(false), stepForward(false)}}
+                                style={styles.handDeviceButtonStyle}
+                            >
+                                <Text style={{color:"white"}}>Cancel</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={() => {setNeedLogin(true)}}
+                                style={styles.handDeviceButtonStyle}
+                            >
+                                <Text style={{color:"white"}}>Continue</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    }
+                </View> : null}
+                
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects, removedProjects, specificQuestions, currentQuestions)}>
+                    <Text style={styles.titleInfoP1}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -372,7 +427,7 @@ const QuestionAnswerPage = () => {
                             </QuestionDemo>}
                         </ScrollView>
                     </View>
-                    {/* {setSmoking, setPregnant, setLactating, setPlanning, setLocation} */}
+
                     {/* scroll bar */}
                     <View style={styles.scrollBarContainer}>
                         <View 
@@ -427,10 +482,13 @@ const QuestionAnswerPage = () => {
                                 Specific Questions
                             </Text>
                         </View>
+
+                        {requireHCWorker &&
                         <View style={[
                             styles.processBarPole, 
                             {backgroundColor: step >= 3 ? "#00205B" : "white"}]}>
-                        </View>
+                        </View>}
+                        {requireHCWorker &&
                         <View style={[
                             styles.processBarCircle , 
                             {backgroundColor: step >= 3 ? "#00205B" : "white"}]}>                        
@@ -438,11 +496,31 @@ const QuestionAnswerPage = () => {
                                 4
                             </Text>
                             <Text style={styles.processBarText}>
+                                Medical Condition
+                            </Text>
+                        </View>
+                        }
+
+                        <View style={[
+                            styles.processBarPole, 
+                            {backgroundColor: step >= (requireHCWorker ? 4 : 3) ? 
+                                "#00205B" : "white"}]}>
+                        </View>
+                        <View style={[
+                            styles.processBarCircle , 
+                            {backgroundColor: step >= (requireHCWorker ? 4 : 3) ? 
+                                "#00205B" : "white"}]}>                        
+                            <Text style={{color: step >= (requireHCWorker ? 4 : 3) ? 
+                                    "white" : "grey", paddingLeft:5}}>
+                                {requireHCWorker ? "5" : "4"}
+                            </Text>
+                            <Text style={styles.processBarText}>
                                 Eligible Projects
                             </Text>
                         </View>
                     </View>
                 </View>
+                
 
                 {/* Button to next page */}
                 <View style={styles.extraInformation}>
@@ -490,7 +568,7 @@ const QuestionAnswerPage = () => {
                                             setWrQuestions, setEProjects, setRemovedProjects, 
                                             setLoading, userInfo}, userAge) : null,
                                     //check questions are completed or not.
-                                    (step == 0 || checkCompleteAllQuestions() ? 
+                                    (step == 0 || checkCompleteAllQuestions() ?
                                             (stepForward(true), updateUserInfo({userInfo})) : null))}}
                         >
                             <Text style={{color: "white"}}>{buttonText}</Text>

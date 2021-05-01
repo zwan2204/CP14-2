@@ -179,7 +179,7 @@ export const getQuestions = ({setLoading, setGeQuestions, setSpQuestions, setWrQ
                     tempQuestion["stateNo"] = false;
                     tempQuestion["state"] = "notCompleted";
                     generalQuestions.push(tempQuestion);
-                } else if (!question.general) { //create a new question adding to the specific list
+                } else if (!question.general && !question.worker) { //create a new question adding to the specific list
                     filter[question.name] = 1;
                     tempQuestion["ID"] = question._id;
                     tempQuestion["question"] = question.name;
@@ -189,7 +189,7 @@ export const getQuestions = ({setLoading, setGeQuestions, setSpQuestions, setWrQ
                     tempQuestion["stateNo"] = false;
                     tempQuestion["state"] = "notCompleted";
                     specificQuestions.push(tempQuestion);
-                } else if (question.worker) { //create a new question adding to the worker list
+                } else if (!question.general && question.worker) { //create a new question adding to the worker list
                     filter[question.name] = 1;
                     tempQuestion["ID"] = question._id;
                     tempQuestion["question"] = question.name;
@@ -228,6 +228,30 @@ export const updateUserInfo = ({userInfo}) => {
         .then(
             (error) => {console.log(error);}
         );
+}
+
+export const identifyWorker = ({setIdentify, setMsg, setNeedLogin, setHandDevice}, email, password) => {
+    axios.post("http://localhost:12345/api/auth", {
+        email: email,
+        password: password,
+        })
+        .then(
+        (response) => {
+            const role = response.data.userRole;
+            if (role == "Health Care Workers") {
+                setIdentify(true);
+                setNeedLogin(false);
+                setHandDevice(false);
+            } else {
+                setMsg("Sorry, you are not an healthcare worker");
+                setIdentify(false);
+            }
+        },
+        (error) => {
+            setMsg("Sorry, you are not registered in the system");
+            setIdentify(false);
+        }
+    );
 }
 
 export const getUserInfo = ({setGet}) => {

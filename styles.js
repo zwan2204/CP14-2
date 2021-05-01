@@ -259,6 +259,70 @@ export const styles = StyleSheet.create({
         color:"red", 
         position:"absolute", 
         top:0
+    },
+
+    handDeviceContinaer:{
+        width:"100%",
+        height:"100%",
+        flexDirection:"row",
+        alignContent:"center", 
+        alignItems:"center", 
+        justifyContent:"center", 
+        position:"absolute", 
+        zIndex:1
+    },
+
+    opacityBackground:{
+        height:"100%", 
+        width:"100%", 
+        backgroundColor:"white", 
+        opacity:0.9
+    },
+
+    handDeviceInner:{
+        width:"40%", 
+        height:"40%", 
+        borderColor:"#00205B", 
+        borderRadius:15, 
+        borderWidth:3, 
+        backgroundColor:"white", 
+        position:"absolute"
+    },
+
+    handDeviceText:{
+        width:"100%", 
+        height:"50%", 
+        justifyContent:"center", 
+        padding:"8%"
+    },
+
+    handDeviceButtonContianer:{
+        width:"100%", 
+        height:"50%", 
+        flexDirection:"row", 
+        justifyContent:"space-evenly", 
+        alignContent:"center", 
+        alignItems:"center"
+    },
+
+    handDeviceButtonStyle:{
+        width:"15%", 
+        height:"28%", 
+        backgroundColor:"#00205B", 
+        borderRadius:5, 
+        justifyContent:"center", 
+        alignContent:"center", 
+        alignItems:"center"
+    },
+
+    workerLoginButtonStyle:{
+        width:"15%", 
+        height:"50%", 
+        backgroundColor:"#00205B", 
+        borderRadius:5, 
+        justifyContent:"center", 
+        alignContent:"center", 
+        alignItems:"center"
     }
 
 })

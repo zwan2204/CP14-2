@@ -132,7 +132,7 @@ class LoginScreen extends React.Component {
               LOGIN
           </Button>
 
-          <Button mode="text" onPress={() => history.push("/register")}>
+          <Button mode="text" onPress={() => history.push("/questionnaire")}>
             Signup
           </Button>
         </View>
