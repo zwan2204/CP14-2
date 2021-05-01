@@ -252,7 +252,7 @@ const ProjectAvailable = (props) => {
             <Paragraph>
               There is no suitable project for you, if you still get interested.
               Please click below button to leave your contact details. As long
-              as there is a available project, we will contact you soom
+              as there is a available project, we will contact you by email.
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>

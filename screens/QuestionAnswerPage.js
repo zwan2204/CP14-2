@@ -9,6 +9,7 @@ import {
     Image, 
     ScrollView, 
     FlatList,
+    ActivityIndicator,
 } from "react-native";
 import {styles} from "../styles.js";
 import {QuestionDemo} from "../modules/QuestionnaireModule_demo.js";
@@ -331,8 +332,11 @@ const QuestionAnswerPage = (props) => {
             </View>
             
             {isLoading ? 
-            <View>
-                <Text>Loading Data</Text>
+            <View style={styles.loadingStyle}>
+                <ActivityIndicator size="large" color="#00205B"/>
+                <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
+                    Loading Questions
+                </Text>
             </View> 
             :
             <View style={{height: "75%"}}>

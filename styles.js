@@ -322,6 +322,14 @@ export const styles = StyleSheet.create({
         justifyContent:"center", 
         alignContent:"center", 
         alignItems:"center"
+    },
+
+    loadingStyle:{
+        height: "75%", 
+        width:"100%", 
+        alignContent:"center", 
+        alignItems:"center", 
+        justifyContent:"center"
     }
 
 })
