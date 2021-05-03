@@ -48,7 +48,7 @@ const ProjectUploading = (props) => {
   const [isHealthy, setHealthy] = React.useState(false);
   const [isEnglishFluent, setEnglishFluent] = React.useState(false);
 
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("Not required");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
   const userId = localStorage.getItem("userId");
@@ -591,7 +591,7 @@ const ProjectUploading = (props) => {
                 value: "Not required",
               },
             ]}
-            defaultValue={gender == "" ? null : gender}
+            defaultValue={gender == "Not required" ? null : gender}
             containerStyle={{
               height: 40,
               width: 300,

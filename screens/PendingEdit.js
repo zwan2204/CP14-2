@@ -53,7 +53,7 @@ const PendingEdit = (props) => {
   const [isPlanningPregnant, setPlanningPregnant] = React.useState(false);
   const [isHealthy, setHealthy] = React.useState(false);
   const [isEnglishFluent, setEnglishFluent] = React.useState(false);
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("Not required");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
   const [comment, setComment] = useState({});
@@ -732,7 +732,7 @@ const PendingEdit = (props) => {
                 value: "Not required",
               },
             ]}
-            defaultValue={gender == "" ? null : gender}
+            defaultValue={gender == "Not required" ? null : gender}
             containerStyle={{
               height: 40,
               width: 300,
