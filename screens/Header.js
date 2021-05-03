@@ -13,7 +13,7 @@ export default class Header extends React.Component {
     return (
       <View
         style={{
-          height: 140,
+          height: "15%",
           backgroundColor: "#00205B",
           flexDirection: "row"
         }}

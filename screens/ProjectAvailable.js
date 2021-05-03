@@ -6,6 +6,7 @@ import axios from "axios";
 import { Button, Card, Dialog, Portal, Paragraph } from "react-native-paper";
 const ProjectAvailable = (props) => {
     const projectList = props.location.projectIDs;
+    const hcWorker = props.location.hcWorker;
   const [projectAvailable, setProjectAvailable] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [title, setTitile] = useState("");
@@ -198,7 +199,7 @@ const ProjectAvailable = (props) => {
                     color: "#00205B",
                   }}
                 >
-                  Demography？
+                  Demographic Information
                 </Text>
               </View>
               <View
@@ -225,6 +226,24 @@ const ProjectAvailable = (props) => {
                 <Text style={{ color: "white", paddingLeft: 5 }}>3</Text>
                 <Text style={styles.processBarText}>Specific Questions</Text>
               </View>
+
+                {hcWorker &&
+              <View
+                style={[styles.processBarPole, { backgroundColor: "#00205B" }]}
+              ></View>
+                }
+                {hcWorker &&
+              <View
+                style={[
+                  styles.processBarCircle,
+                  { backgroundColor: "#00205B" },
+                ]}
+              >
+                <Text style={{ color: "white", paddingLeft: 5 }}>4</Text>
+                <Text style={styles.processBarText}>Medical Condition</Text>
+              </View>
+              }
+
               <View
                 style={[styles.processBarPole, { backgroundColor: "#00205B" }]}
               ></View>
@@ -234,8 +253,8 @@ const ProjectAvailable = (props) => {
                   { backgroundColor: "#00205B" },
                 ]}
               >
-                <Text style={{ color: "white", paddingLeft: 5 }}>4</Text>
-                <Text style={styles.processBarText}>Available Projects</Text>
+                <Text style={{ color: "white", paddingLeft: 5 }}>{hcWorker ? 5 : 4}</Text>
+                <Text style={styles.processBarText}>Eligible Projects</Text>
               </View>
             </View>
           </View>

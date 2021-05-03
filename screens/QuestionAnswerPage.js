@@ -16,6 +16,7 @@ import {QuestionDemo} from "../modules/QuestionnaireModule_demo.js";
 import {HealhcareWorkerLoginView} from "../modules/QuestionnaireModule_WorkerLogin";
 import getUserAge from "../modules/QuestionnaireModule_data";
 import {getUserInfo, updateUserInfo, getProjects} from "../modules/QuestionnaireModule_data";
+import Header from "../screens/Header";
 
 
 const QuestionAnswerPage = (props) => {
@@ -112,7 +113,8 @@ const QuestionAnswerPage = (props) => {
                 (0, eligibleProjects_string.length - 1);
             history.push({
                 pathname: "/projectAvailable",
-                projectIDs: eligibleProjects_string
+                projectIDs: eligibleProjects_string,
+                hcWorker: requireHCWorker
             });
         }
     }
@@ -324,12 +326,12 @@ const QuestionAnswerPage = (props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* header view */}
-            <View style={{height: "20%", backgroundColor: "#00205B", flexDirection: "row"}}>
+            {/* <View style={{height: "20%", backgroundColor: "#00205B", flexDirection: "row"}}>
                 <Image 
                     style={{width: 200, height: 100, left: 100, top: 40}} 
                     source={require('../assets/header.png')}/>
-            </View>
+            </View> */}
+            <Header/>
             
             {isLoading ? 
             <View style={styles.loadingStyle}>
