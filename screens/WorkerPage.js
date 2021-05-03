@@ -6,13 +6,10 @@ import {
   View,
   SafeAreaView,
   Image,
-  TextInput,
-  TouchableOpacity,
 } from "react-native";
 import { styles } from "../styles.js";
 import { DataTable, Button, Colors, IconButton } from "react-native-paper";
 import axios from "axios";
-import { Link } from 'react-router-dom';
 
 export default class WorkerPage extends React.Component {
   constructor(props) {
@@ -45,7 +42,7 @@ export default class WorkerPage extends React.Component {
           };
           if (response.data[i].state === "pending" || response.data[i].state === "New Upload") {
             unauthorizedProjects.push(project);
-          } else {
+          } else if (response.data[i].state === "Authorized") {
             authorizedProjects.push(project);
           }
         }
@@ -105,7 +102,7 @@ export default class WorkerPage extends React.Component {
               bottom: 30,
               right: 30,
             }}
-            onPress={() => console.log()}
+            onPress={() => history.push("/Homepage")}
           >
             log out
           </Button>

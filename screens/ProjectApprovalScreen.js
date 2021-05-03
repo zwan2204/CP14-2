@@ -81,6 +81,24 @@ export default class ProjectApprovalScreen extends React.Component {
       );
   };
 
+  authorizeProject = () => {
+    const { history } = this.props;
+    axios.put(`http://localhost:12345/api/project/${this.props.location.state.projectId}`,
+      {
+        state: "Authorized",
+      }
+    )
+    .then(
+      (response) => {
+        history.push("/worker");
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   leaveComment = () => {
     const { history } = this.props;
     axios
@@ -244,6 +262,7 @@ export default class ProjectApprovalScreen extends React.Component {
                     </Dialog>
                   </Portal>
                   <TouchableOpacity onPress={this.showModal}>
+
                     <Text
                       multiline={true}
                       textAlignVertical="top"
@@ -435,12 +454,16 @@ export default class ProjectApprovalScreen extends React.Component {
             </View>
           </View>
         </View>
-
+        
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Button onPress={this.leaveComment}>Pending</Button>
-          <Button>Authorize</Button>
+          {this.state.titleComment === "" ?
+            (<View>
+              <Button onPress={this.authorizeProject}>Authorize</Button>
+            </View>) :
+            (<View>
+              <Button onPress={this.leaveComment}>Pending</Button>
+            </View>)}
         </View>
-
       </SafeAreaView>
     );
   }
