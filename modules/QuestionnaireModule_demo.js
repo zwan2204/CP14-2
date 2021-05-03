@@ -118,21 +118,21 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
                         {gender_default == "" ? <Picker.Item label={"Your gender:"} value="0"/> : null}
                         <Picker.Item 
                             label={gender_default == "" ? "Male" : capitalize(gender_default)} 
-                            value={gender_default == "" ? "male" : gender_default} />
+                            value={gender_default == "" ? "Male" : gender_default} />
                         <Picker.Item 
                             label={gender_default == "" ? "Female" : 
-                                (gender_default == "male" ? "Female" :
-                                (gender_default == "female" ? "Male" : "Male"))} 
-                            value={gender_default == "" ? "female" : 
-                                (gender_default == "male" ? "female" : 
-                                (gender_default == "female" ? "male" : "male"))} />
+                                (gender_default == "Male" ? "Female" :
+                                (gender_default == "Female" ? "Male" : "Male"))} 
+                            value={gender_default == "" ? "Female" : 
+                                (gender_default == "Male" ? "Female" : 
+                                (gender_default == "Female" ? "Male" : "Male"))} />
                         <Picker.Item
-                            label={gender_default == "" ? "Other" : 
-                                (gender_default == "male" ? "Other" :
-                                (gender_default == "female" ? "Other" : "Female"))} 
-                            value={gender_default == "" ? "other" : 
-                                (gender_default == "male" ? "other" : 
-                                (gender_default == "female" ? "other" : "female"))} />
+                            label={gender_default == "" ? "Not required" : 
+                                (gender_default == "Male" ? "Not required" :
+                                (gender_default == "Female" ? "Not required" : "Female"))} 
+                            value={gender_default == "" ? "Not required" : 
+                                (gender_default == "Male" ? "Not required" : 
+                                (gender_default == "Female" ? "Not required" : "Female"))} />
                     </Picker>
   
                     <Picker
