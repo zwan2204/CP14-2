@@ -325,7 +325,7 @@ export const styles = StyleSheet.create({
     },
 
     loadingStyle:{
-        height: "75%", 
+        height: "80%", 
         width:"100%", 
         alignContent:"center", 
         alignItems:"center", 

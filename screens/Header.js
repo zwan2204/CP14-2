@@ -6,7 +6,9 @@ import { Image, View } from "react-native";
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+        width: 0
+    };
   }
 
   render() {
@@ -14,12 +16,18 @@ export default class Header extends React.Component {
       <View
         style={{
           height: "15%",
+          width:"100%",
           backgroundColor: "#00205B",
-          flexDirection: "row"
+          flexDirection: "row",
+          alignContent:"center",
+          alignItems:"center"
         }}
       >
         <Image
-          style={{ width: 200, height: 100, left: 100, top: 20 }}
+          style={{ width: this.state.width, height: "80%", left: "10%"}}
+          onLayout={e => {
+            this.setState({ width: e.nativeEvent.layout.height * 2});
+          }}
           source={require("../assets/header.png")}
         />
       </View>

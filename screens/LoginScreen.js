@@ -9,7 +9,9 @@ import { useHistory, Link } from "react-router-dom";
 import { storeUserInfo } from "../redux/actions/userAction";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Header from "./Header";
+import Header from "../screens/Header";
+import Footer from "../screens/Footer";
+
 
 class LoginScreen extends React.Component {
   constructor(props) {
@@ -62,96 +64,65 @@ class LoginScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         {/* Header color */}
-        <Header />
+        <Header/>
         {/* Body */}
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              justifyContent: "center",
-              textAlign: "center",
-              alignItems: "center",
-              marginTop: 80,
-            }}
-          >
-            <Text
-              style={{
-                color: "#00205B",
-                fontSize: 20,
-                fontWeight: "bold",
-                paddingBottom: 70,
-              }}
-            >
-              Log In
-            </Text>
-
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ justifyContent: "flex-start" }}>Email: </Text>
-              <TextInput
-                mode="outlined"
-                style={{ height: 30, alignSelf: "flex-end" }}
-                onChangeText={(text) => this.setState({ email: text })}
-              />
+        <View style={{ height:"80%", width:"100%", flexDirection: "column", alignItems: "center"}}>
+            <View style={{height:"25%", justifyContent:"center", alignContent:"center"}}>
+                <Text style={{ color: "#00205B", fontSize: "2.5em", fontWeight: "bold"}}>
+                    Log In
+                </Text>
             </View>
-            <HelperText type="error" visible={this.hasErrors()}>
-              Email address is invalid!
-            </HelperText>
 
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ alignItems: "flex-start" }}>Password: </Text>
-              <TextInput
-                mode="outlined"
-                style={{ height: 30 }}
-                secureTextEntry={true}
-                onChangeText={(text) => this.setState({ password: text })}
-              />
+            <View style={{ justifyContent: "center", textAlign: "center", alignItems: "center", width:"25%"}}>
+                <View style={{width:"100%", flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
+                    <Text style={{fontSize:"1.3em", color:"#00205B"}}>
+                        Email: 
+                    </Text>
+
+                    <TextInput
+                        mode="outlined"
+                        style={{ height: 30 }}
+                        onChangeText={(text) => this.setState({ email: text })}/>
+                </View>
+                
+                <HelperText type="error" visible={this.hasErrors()}>
+                    Email address is invalid!
+                </HelperText>
+
+                <View style={{width:"100%", flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
+                    <Text style={{fontSize:"1.3em", color:"#00205B"}}>
+                        Password: 
+                    </Text>
+                    
+                    <TextInput
+                        mode="outlined"
+                        style={{ height: 30 }}
+                        secureTextEntry={true}
+                        onChangeText={(text) => this.setState({ password: text })}/>
+                </View>
             </View>
-          </View>
 
-          <Button
-            mode="contained"
-            onPress={this.userLogin}
-            style={{ marginTop: 40 }}
-          >
-            LOGIN
-          </Button>
+            <View style={{width:"100%", height:"10%", justifyContent:"center", alignContent:"center", flexDirection:"row", alignItems:"center"}}>
+                <Button
+                    mode="contained"
+                    onPress={this.userLogin}
+                    style={{ marginTop: 40 }}
+                >
+                    LOGIN
+                </Button>
+            </View>
 
-          <Button mode="text" onPress={() => history.push("/questionnaire")}>
-            Signup
-          </Button>
+            <View style={{width:"100%", height:"10%", justifyContent:"center", alignContent:"center", flexDirection:"row", alignItems:"center"}}>
+                <Text style={{color:"#00205B"}}>Don't have an account? Sign up</Text>
+                <Button mode="text" onPress={() => history.push("/register")}>
+                    here
+                </Button>
+            </View>
+
         </View>
 
-        {/* <View
-          style={{
-            height: 60,
-            width:"100%",
-            backgroundColor: "#00205B",
-            justifyContent: "center",
-            position: 'absolute',
-            bottom: 0
-          }}>
-          <Text style={{ color: "white", fontSize: 17}}>
-            NSW Health website | Disclaimer | Privacy | Copyright | Accessibility
-            | Site map
-          </Text>
-        </View> */}
+        <Footer/>
+
       </SafeAreaView>
     );
   }

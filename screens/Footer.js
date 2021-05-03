@@ -13,7 +13,7 @@ export default class Footer extends React.Component {
     return (
       <View
         style={{
-          height: 70,
+          height: "5%",
           backgroundColor: "#00205B",
           justifyContent: "center"
         }}

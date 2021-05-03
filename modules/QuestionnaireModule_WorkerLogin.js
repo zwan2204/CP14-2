@@ -52,6 +52,7 @@ export function HealhcareWorkerLoginView({setNeedLogin, setHandDevice, stepForwa
                     <TextInput
                         mode="outlined"
                         style={{color:"grey", fontSize:"1.2em", height:30, width:"30%"}}
+                        secureTextEntry={true}
                         onChangeText={(text) => setPassword(text)}/>
                 </View>
             </View>

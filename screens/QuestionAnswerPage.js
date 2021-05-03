@@ -17,6 +17,7 @@ import {HealhcareWorkerLoginView} from "../modules/QuestionnaireModule_WorkerLog
 import getUserAge from "../modules/QuestionnaireModule_data";
 import {getUserInfo, updateUserInfo, getProjects} from "../modules/QuestionnaireModule_data";
 import Header from "../screens/Header";
+import Footer from "../screens/Footer";
 
 
 const QuestionAnswerPage = (props) => {
@@ -341,7 +342,7 @@ const QuestionAnswerPage = (props) => {
                 </Text>
             </View> 
             :
-            <View style={{height: "75%"}}>
+            <View style={{height: "80%"}}>
                 {handDevice ?
                 <View style={styles.handDeviceContinaer}>
                     <View style={styles.opacityBackground}></View>
@@ -378,8 +379,8 @@ const QuestionAnswerPage = (props) => {
                 </View> : null}
                 
                 {/* title information */}
-                <View style={{flexDirection: "row", height:"10%"}}>
-                    <Text style={styles.titleInfoP1}>
+                <View style={{flexDirection: "row", height:"12%"}}>
+                    <Text style={styles.titleInfoP1} onPress={{eligibleProjects}}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -393,9 +394,15 @@ const QuestionAnswerPage = (props) => {
                         {/* General question section */}
                         {/* Title bar information */}
                         <View style={styles.partABTitleBar}>
-                            {step == 0 ? null : <Text style={styles.partABTitleText}>
+                            {step == 0 ? null : (numQuestions > 1 ? 
+                            <Text style={styles.partABTitleText}>
                                 *{numQuestions} Questions Left
-                            </Text>}
+                            </Text>
+                            :
+                            <Text style={styles.partABTitleText}>
+                                *{numQuestions} Question Left
+                            </Text>
+                            )}
                             <View style={[
                                     styles.partABTitleYesNo, 
                                     {opacity: step == 0 || showingGeneralAmptyMsg || 
@@ -583,12 +590,7 @@ const QuestionAnswerPage = (props) => {
             }
 
             {/* View of Footer*/}
-            <View style={{height: "5%", backgroundColor: "#00205B", justifyContent: "center"}}>
-                <Text style={{ color: "white", fontSize: 17, marginLeft: 10 }}>
-                    NSW Health website | Disclaimer | Privacy | Copyright | Accessibility
-                    | Site map
-                </Text>
-            </View>
+            <Footer/>
         
         </SafeAreaView>
                             
