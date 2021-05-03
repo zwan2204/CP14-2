@@ -60,17 +60,6 @@ export default class WorkerPage extends React.Component {
     );
   };
 
-  goToProcess = () => {
-    const { navigate } = this.props.navigation;
-    navigate();
-  };
-
-  processButton = () => (
-    <Button mode="contained" onPress={this.goToProcess}>
-      Process
-    </Button>
-  );
-
   setPendingIsShow = () => {
     this.setState({ pendingIsShow: !this.state.pendingIsShow });
     if (this.state.pendingIcon === "chevron-right") {
@@ -90,6 +79,7 @@ export default class WorkerPage extends React.Component {
   };
 
   render() {
+    const { history } = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <View
@@ -99,6 +89,7 @@ export default class WorkerPage extends React.Component {
             flexDirection: "row",
           }}
         >
+          {/* <Text style={{color:"red", position: "absolute"}}>Project - Version α</Text> */}
           <Image
             style={{ width: 200, height: 100, left: 100, top: 20 }}
             source={require("../assets/header.png")}
@@ -122,7 +113,7 @@ export default class WorkerPage extends React.Component {
         {/* pending projects */}
         <View style={{ margin: 20 }}>
           <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
-            Project list
+            Project list 
           </Text>
           <DataTable>
             <DataTable.Header>
@@ -150,11 +141,10 @@ export default class WorkerPage extends React.Component {
                       </DataTable.Cell>
                       <DataTable.Cell numeric>{item.state}</DataTable.Cell>
                       <DataTable.Cell numeric>
-                        <Link to={{
+                        <Button mode="contained" onPress={() => this.props.history.push({
                           pathname: "/projectApproval",
-                          state: {projectId: item.key, projectState: item.state}
-                        }}> process</Link>
-                        {/* <Button>Process</Button> */}
+                          state: { projectId: item.key, projectState: item.state }
+                        })}>process</Button>
                       </DataTable.Cell>
                     </DataTable.Row>
                   );
@@ -184,22 +174,25 @@ export default class WorkerPage extends React.Component {
             </DataTable.Header>
             {this.state.reviewedIsShow ? (
               <View>
-              {this.state.authorizedProject.map((item, index) => {
-                console.log(item)
-                return (
-                  <DataTable.Row key={index}>
-                    <DataTable.Cell>{item.title}</DataTable.Cell>
-                    <DataTable.Cell numeric>
-                      {item.createdDate}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric>{item.state}</DataTable.Cell>
-                    <DataTable.Cell numeric>
-                      <Button>Process</Button>
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                );
-              })}
-            </View>
+                {this.state.authorizedProject.map((item, index) => {
+                  console.log(item)
+                  return (
+                    <DataTable.Row key={index}>
+                      <DataTable.Cell>{item.title}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        {item.createdDate}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        <Button mode="contained" onPress={() => this.props.history.push({
+                          pathname: "/projectApproval",
+                          state: { projectId: item.key, projectState: item.state }
+                        })}>process</Button>
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  );
+                })}
+              </View>
             ) : (
               <View></View>
             )}

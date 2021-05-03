@@ -10,7 +10,7 @@ import {
   TextInput as NativeTextInput,
 } from "react-native";
 import { styles } from "../styles.js";
-import { Button, Dialog, Portal, TextInput } from "react-native-paper";
+import { Button, Dialog, Portal, TextInput, Card } from "react-native-paper";
 import axios from "axios";
 
 export default class ProjectApprovalScreen extends React.Component {
@@ -31,6 +31,8 @@ export default class ProjectApprovalScreen extends React.Component {
       commentBoarderColor: "black",
       projectId: this.props.location.state.projectId,
       projectState: this.props.location.state.projectState,
+      inclusionQuestion: [],
+      exclusionQuestion: [],
       projectInfo: [],
       project: "",
     };
@@ -89,11 +91,11 @@ export default class ProjectApprovalScreen extends React.Component {
         location: this.state.locationComment,
         subjectNo: this.state.subjectNoComment,
         duration: this.state.durationComment,
-        date: this.state.date,
-        approvalNumxsber: this.state.approvalNumber,
-        governance: this.state.governance,
-        InclusionCriteria: this.state.InclusionCriteria,
-        ExclusionCriteria: this.state.ExclusionCriteria,
+        date: this.state.dateComment,
+        approvalNumber: this.state.ethicsComment,
+        governance: this.state.governanceComment,
+        InclusionCriteria: this.state.InclusionComment,
+        ExclusionCriteria: this.state.ExclusionComment,
       })
       .then(
         (response) => {
@@ -116,6 +118,9 @@ export default class ProjectApprovalScreen extends React.Component {
       .then(
         (response) => {
           this.setState({ project: response.data });
+          this.setState({ inclusionQuestion: response.data.InclusionCriteria });
+          this.setState({ exclusionCriteria: response.data.ExclusionCriteria });
+          console.log(this.state.inclusionQuestion);
         },
         (error) => {
           console.log(error);
@@ -149,7 +154,7 @@ export default class ProjectApprovalScreen extends React.Component {
               bottom: 30,
               right: 30,
             }}
-            onPress={() => console.log()}
+            onPress={() => history.push("/Homepage")}
           >
             log out
           </Button>
@@ -188,20 +193,11 @@ export default class ProjectApprovalScreen extends React.Component {
               }}
             >
               <Text style={styles.subTitle}>Project titile: </Text>
-              <Text
-                style={{
-                  width: 500,
-                  marginLeft: 10,
-                  height: 30,
-                  borderWidth: 1,
-                  borderColor: "black",
-                  borderRadius: 5,
-                  fontSize: 20
-                }}
-              >
-                {" "}
-                {this.state.project.title}
-              </Text>
+              <Card>
+                <Card.Content style={{ fontSize: 15, paddingVertical: 5 }}>
+                  {this.state.project.title}
+                </Card.Content>
+              </Card>
             </View>
             <View style={{ flex: 6, flexDirection: "row" }}>
               <View style={{ flex: 1 }}>
@@ -210,7 +206,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View>
                   <Portal>
                     <Dialog
-                    style={{width: 500, alignSelf: "center"}}
+                      style={{ width: 500, alignSelf: "center" }}
                       visible={this.state.isModalVisible}
                       onDismiss={this.handleCancel}
                     >
@@ -417,8 +413,19 @@ export default class ProjectApprovalScreen extends React.Component {
                   </Text>
                 </View>
                 <View>
-                <Text style={{ fontSize: 15, marginTop: 15, color: "#00205B" }}> Inclusion Quetsions: </Text>
-                  <View></View>
+                  <Text style={{ fontSize: 15, marginTop: 15, color: "#00205B" }}> Inclusion Quetsions: </Text>
+                  {this.state.inclusionQuestion.map((item, index) => {
+                    console.log(item)
+                    return (
+                      <View style={{ padding: 5 }}>
+                        <TouchableOpacity>
+                          <Card key={index}>
+                            <Card.Content style={styles.questionCardStyle}>{item[index]}</Card.Content>
+                          </Card>
+                        </TouchableOpacity>
+                      </View>
+                    )
+                  })}
                 </View>
                 <View>
                   <Text style={{ fontSize: 15, marginTop: 30, color: "#00205B" }}> Exclusion Quetsions: </Text>
