@@ -17,10 +17,13 @@ export default class WorkerPage extends React.Component {
     this.state = {
       pendingIsShow: false,
       reviewedIsShow: false,
+      infoIsShow: false,
       pendingIcon: "chevron-right",
       reviewedIcon: "chevron-right",
+      infoIcon: "chevron-right",
       unauthorizedProject: [],
       authorizedProject: [],
+      pendinginfoProject: [],
     };
   }
 
@@ -31,6 +34,7 @@ export default class WorkerPage extends React.Component {
   getProjects = () => {
     let unauthorizedProjects = [];
     let authorizedProjects = [];
+    let pendinginfoProjects = [];
     axios.get(`http://localhost:12345/api/project/`).then(
       (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
@@ -40,16 +44,20 @@ export default class WorkerPage extends React.Component {
             createdDate: response.data[i].createdDate,
             state: response.data[i].state,
           };
-          if (response.data[i].state === "pending" || response.data[i].state === "New Upload") {
+          if (response.data[i].state === "pending") {
+            pendinginfoProjects.push(project);
+          } else if (response.data[i].state === "New Upload") {
             unauthorizedProjects.push(project);
           } else if (response.data[i].state === "Authorized") {
             authorizedProjects.push(project);
-          }
+          } 
         }
         this.setState({ unauthorizedProject: unauthorizedProjects });
         this.setState({ authorizedProject: authorizedProjects });
+        this.setState({ pendinginfoProject: pendinginfoProjects });
         console.log(this.state.unauthorizedProject);
         console.log(this.state.authorizedProject);
+        console.log(this.state.pendinginfoProject);
       },
       (error) => {
         console.log(error);
@@ -72,6 +80,15 @@ export default class WorkerPage extends React.Component {
       this.setState({ reviewedIcon: "chevron-down" });
     } else {
       this.setState({ reviewedIcon: "chevron-right" });
+    }
+  };
+
+  setInfoIsShow = () => {
+    this.setState({ infoIsShow: !this.state.infoIsShow });
+    if (this.state.infoIcon === "chevron-right") {
+      this.setState({ infoIcon: "chevron-down" });
+    } else {
+      this.setState({ infoIcon: "chevron-right" });
     }
   };
 
@@ -114,7 +131,7 @@ export default class WorkerPage extends React.Component {
           </Text>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Unauthorized Projects</DataTable.Title>
+              <DataTable.Title>Pending Projects</DataTable.Title>
               <DataTable.Title numeric>Date Created</DataTable.Title>
               <DataTable.Title numeric>State</DataTable.Title>
               <DataTable.Title numeric>
@@ -129,6 +146,48 @@ export default class WorkerPage extends React.Component {
             {this.state.pendingIsShow ? (
               <View>
                 {this.state.unauthorizedProject.map((item, index) => {
+                  console.log(item)
+                  return (
+                    <DataTable.Row key={index}>
+                      <DataTable.Cell>{item.title}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        {item.createdDate}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        <Button mode="contained" onPress={() => this.props.history.push({
+                          pathname: "/projectApproval",
+                          state: { projectId: item.key, projectState: item.state }
+                        })}>process</Button>
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  );
+                })}
+              </View>
+            ) : (
+              <View></View>
+            )}
+          </DataTable>
+        </View>
+
+        <View style={{ margin: 20 }}>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Pending information Projects</DataTable.Title>
+              <DataTable.Title numeric>Date Created</DataTable.Title>
+              <DataTable.Title numeric>State</DataTable.Title>
+              <DataTable.Title numeric>
+                <IconButton
+                  style={{ margin: 0 }}
+                  icon={this.state.infoIcon}
+                  color={Colors.red500}
+                  onPress={this.setInfoIsShow}
+                ></IconButton>
+              </DataTable.Title>
+            </DataTable.Header>
+            {this.state.infoIsShow ? (
+              <View>
+                {this.state.pendinginfoProject.map((item, index) => {
                   console.log(item)
                   return (
                     <DataTable.Row key={index}>
