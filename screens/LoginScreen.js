@@ -73,7 +73,7 @@ class LoginScreen extends React.Component {
                 </Text>
             </View>
 
-            <View style={{ justifyContent: "center", textAlign: "center", alignItems: "center", width:"25%"}}>
+            <View style={{ justifyContent: "center", textAlign: "center", alignItems: "center", width:"20%"}}>
                 <View style={{width:"100%", flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
                     <Text style={{fontSize:"1.3em", color:"#00205B"}}>
                         Email: 
@@ -83,11 +83,14 @@ class LoginScreen extends React.Component {
                         mode="outlined"
                         style={{ height: 30 }}
                         onChangeText={(text) => this.setState({ email: text })}/>
+                        
                 </View>
-                
-                <HelperText type="error" visible={this.hasErrors()}>
-                    Email address is invalid!
-                </HelperText>
+
+                <View>
+                  <HelperText type="error" visible={this.hasErrors()}>
+                          Email address is invalid! 
+                          </HelperText>
+                </View>
 
                 <View style={{width:"100%", flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
                     <Text style={{fontSize:"1.3em", color:"#00205B"}}>
