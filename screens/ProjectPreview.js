@@ -28,10 +28,10 @@ const ProjectPreview = (props) => {
   const [Question, setQuestion] = useState([]);
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
 
-  const [isPragnant, setIsPragnant] = React.useState(false);
+  const [isPregnant, setIsPregnant] = React.useState(false);
   const [isSmoking, setIsSmoking] = React.useState(false);
   const [isLactating, setIsLactating] = React.useState(false);
-  const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
+  const [isPlanningPregnant, setPlanningPregnant] = React.useState(false);
   const [isHealthy, setHealthy] = React.useState(false);
   const [isEnglishFluent, setEnglishFluent] = React.useState(false);
 
@@ -60,12 +60,12 @@ const ProjectPreview = (props) => {
         setSubjectNo(response.data.subjectNo);
         setDuration(response.data.duration);
         setDate(response.data.date);
-        setIsPragnant(response.data.isPragnant);
+        setIsPregnant(response.data.isPregnant);
         setHealthy(response.data.needHealth);
         setEnglishFluent(response.data.needEnglish);
         setIsSmoking(response.data.isSmoking);
         setIsLactating(response.data.isLactating);
-        setPlaningPragnant(response.data.isPlaningPragnant);
+        setPlanningPregnant(response.data.isPlanningPregnant);
         setGender(response.data.gender);
         setAge(response.data.ageGroup);
 
@@ -422,10 +422,10 @@ const ProjectPreview = (props) => {
         </Text>
         <View style={{ flexDirection: "row" }}>
           <CheckBox
-            title="Pragnant"
+            title="Pregnant"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={isPragnant}
+            checked={isPregnant}
           />
 
           <CheckBox
@@ -441,10 +441,10 @@ const ProjectPreview = (props) => {
             checked={isLactating}
           />
           <CheckBox
-            title="Planning on becoming pragnant"
+            title="Planning on becoming pregnant"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={isPlaningPragnant}
+            checked={isPlanningPregnant}
           />
         </View>
 

@@ -41,10 +41,10 @@ const ProjectUploading = (props) => {
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
 
-  const [isPragnant, setIsPragnant] = React.useState(false);
+  const [isPregnant, setIsPregnant] = React.useState(false);
   const [isSmoking, setIsSmoking] = React.useState(false);
   const [isLactating, setIsLactating] = React.useState(false);
-  const [isPlaningPragnant, setPlaningPragnant] = React.useState(false);
+  const [isPlanningPregnant, setPlanningPregnant] = React.useState(false);
   const [isHealthy, setHealthy] = React.useState(false);
   const [isEnglishFluent, setEnglishFluent] = React.useState(false);
 
@@ -72,10 +72,10 @@ const ProjectUploading = (props) => {
       setDate(ediInfo.date);
       setQuestion(ediInfo.InclusionCriteria);
       setExclusionQuestion(ediInfo.ExclusionCriteria);
-      setIsPragnant(ediInfo.isPragnant);
+      setIsPregnant(ediInfo.isPregnant);
       setIsSmoking(ediInfo.isSmoking);
       setIsLactating(ediInfo.isLactating);
-      setPlaningPragnant(ediInfo.isPlaningPragnant);
+      setPlanningPregnant(ediInfo.isPlanningPregnant);
       setGender(ediInfo.gender);
       setMinAge(ediInfo.ageGroup.split(",")[0]);
       setMaxAge(ediInfo.ageGroup.split(",")[1]);
@@ -136,12 +136,12 @@ const ProjectUploading = (props) => {
       approvalNumber: ApprovalNumber,
       governance: Governance,
       fileUpload: image,
-      isPragnant: isPragnant,
+      isPregnant: isPregnant,
       isHealthy: isHealthy,
       isEnglishFluent: isEnglishFluent,
       isSmoking: isSmoking,
       isLactating: isLactating,
-      isPlaningPragnant: isPlaningPragnant,
+      isPlanningPregnant: isPlanningPregnant,
       gender: gender,
       ageGroup: `${minAge},${maxAge}`,
     };
@@ -240,10 +240,10 @@ const ProjectUploading = (props) => {
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
         fileUpload: image,
-        isPragnant: isPragnant,
+        isPregnant: isPregnant,
         isSmoking: isSmoking,
         isLactating: isLactating,
-        isPlaningPragnant: isPlaningPragnant,
+        isPlanningPregnant: isPlanningPregnant,
         gender: gender,
         ageGroup: `${minAge},${maxAge}`,
       })
@@ -701,13 +701,13 @@ const ProjectUploading = (props) => {
         </Text>
         <View style={{ flexDirection: "row" }}>
           <CheckBox
-            title="Pragnant
+            title="Pregnant
               "
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={isPragnant}
+            checked={isPregnant}
             onPress={() => {
-              setIsPragnant(!isPragnant);
+              setIsPregnant(!isPregnant);
             }}
           />
 
@@ -730,12 +730,12 @@ const ProjectUploading = (props) => {
             }}
           />
           <CheckBox
-            title="Planning on becoming pragnant"
+            title="Planning on becoming pregnant"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={isPlaningPragnant}
+            checked={isPlanningPregnant}
             onPress={() => {
-              setPlaningPragnant(!isPlaningPragnant);
+              setPlanningPregnant(!isPlanningPregnant);
             }}
           />
         </View>

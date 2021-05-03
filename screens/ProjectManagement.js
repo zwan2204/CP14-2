@@ -104,10 +104,10 @@ const ProjectManagement = (props) => {
     let values = [];
     let incompleteProjects = [];
     const uncheckRemain = [
-      "isPragnant",
+      "isPregnant",
       "isSmoking",
       "isLactating",
-      "isPlaningPragnant",
+      "isPlanningPregnant",
       "isHealthy",
       "isEnglishFluent",
     ];

@@ -16,7 +16,7 @@ export default class ParticipantInfoScreen extends React.Component {
       healthy: "",
       english: "",
       curLocation: "",
-      isPragnant: false,
+      isPregnant: false,
       isSmoking: false,
       isLactating: false,
       isPlanning: false,
@@ -36,7 +36,7 @@ export default class ParticipantInfoScreen extends React.Component {
         healthy: this.state.healthy,
         english: this.state.english,
         curLocation: this.state.curLocation,
-        isPragnant: this.state.isPragnant,
+        isPregnant: this.state.isPregnant,
         isSmoking: this.state.isSmoking,
         isLactating: this.state.isLactating,
         isPlanning: this.state.isPlanning,
@@ -76,8 +76,8 @@ export default class ParticipantInfoScreen extends React.Component {
     }
   };
 
-  setPragnant = (isPragnant) => {
-    this.setState({ isPragnant: !this.state.isPragnant });
+  setPregnant = (isPregnant) => {
+    this.setState({ isPregnant: !this.state.isPregnant });
   };
 
   setSmoking = (isSmoking) => {
@@ -188,10 +188,10 @@ export default class ParticipantInfoScreen extends React.Component {
           </Text>
           <View style={{ flexDirection: "row" }}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Pragnant</Text>
+              <Text style={styles.checkBox}>Pregnant</Text>
               <CheckBox
-                value={this.state.isPragnant}
-                onValueChange={this.setPragnant}
+                value={this.state.isPregnant}
+                onValueChange={this.setPregnant}
               />
             </View>
             <View style={{ flexDirection: "row" }}>
@@ -209,7 +209,7 @@ export default class ParticipantInfoScreen extends React.Component {
               />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.checkBox}>Planning on becoming pragnant</Text>
+              <Text style={styles.checkBox}>Planning on becoming pregnant</Text>
               <CheckBox
                 value={this.state.isPlanning}
                 onValueChange={this.setPlanning}
