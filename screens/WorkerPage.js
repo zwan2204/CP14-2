@@ -6,13 +6,10 @@ import {
   View,
   SafeAreaView,
   Image,
-  TextInput,
-  TouchableOpacity,
 } from "react-native";
 import { styles } from "../styles.js";
 import { DataTable, Button, Colors, IconButton } from "react-native-paper";
 import axios from "axios";
-import { Link } from 'react-router-dom';
 
 export default class WorkerPage extends React.Component {
   constructor(props) {
@@ -20,10 +17,13 @@ export default class WorkerPage extends React.Component {
     this.state = {
       pendingIsShow: false,
       reviewedIsShow: false,
+      infoIsShow: false,
       pendingIcon: "chevron-right",
       reviewedIcon: "chevron-right",
+      infoIcon: "chevron-right",
       unauthorizedProject: [],
       authorizedProject: [],
+      pendinginfoProject: [],
     };
   }
 
@@ -34,6 +34,7 @@ export default class WorkerPage extends React.Component {
   getProjects = () => {
     let unauthorizedProjects = [];
     let authorizedProjects = [];
+    let pendinginfoProjects = [];
     axios.get(`http://localhost:12345/api/project/`).then(
       (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
@@ -43,33 +44,26 @@ export default class WorkerPage extends React.Component {
             createdDate: response.data[i].createdDate,
             state: response.data[i].state,
           };
-          if (response.data[i].state === "pending" || response.data[i].state === "New Upload") {
+          if (response.data[i].state === "pending") {
+            pendinginfoProjects.push(project);
+          } else if (response.data[i].state === "New Upload") {
             unauthorizedProjects.push(project);
-          } else {
+          } else if (response.data[i].state === "Authorized") {
             authorizedProjects.push(project);
-          }
+          } 
         }
         this.setState({ unauthorizedProject: unauthorizedProjects });
         this.setState({ authorizedProject: authorizedProjects });
+        this.setState({ pendinginfoProject: pendinginfoProjects });
         console.log(this.state.unauthorizedProject);
         console.log(this.state.authorizedProject);
+        console.log(this.state.pendinginfoProject);
       },
       (error) => {
         console.log(error);
       }
     );
   };
-
-  goToProcess = () => {
-    const { navigate } = this.props.navigation;
-    navigate();
-  };
-
-  processButton = () => (
-    <Button mode="contained" onPress={this.goToProcess}>
-      Process
-    </Button>
-  );
 
   setPendingIsShow = () => {
     this.setState({ pendingIsShow: !this.state.pendingIsShow });
@@ -89,7 +83,17 @@ export default class WorkerPage extends React.Component {
     }
   };
 
+  setInfoIsShow = () => {
+    this.setState({ infoIsShow: !this.state.infoIsShow });
+    if (this.state.infoIcon === "chevron-right") {
+      this.setState({ infoIcon: "chevron-down" });
+    } else {
+      this.setState({ infoIcon: "chevron-right" });
+    }
+  };
+
   render() {
+    const { history } = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <View
@@ -99,6 +103,7 @@ export default class WorkerPage extends React.Component {
             flexDirection: "row",
           }}
         >
+          {/* <Text style={{color:"red", position: "absolute"}}>Project - Version α</Text> */}
           <Image
             style={{ width: 200, height: 100, left: 100, top: 20 }}
             source={require("../assets/header.png")}
@@ -114,7 +119,7 @@ export default class WorkerPage extends React.Component {
               bottom: 30,
               right: 30,
             }}
-            onPress={() => console.log()}
+            onPress={() => history.push("/Homepage")}
           >
             log out
           </Button>
@@ -122,11 +127,11 @@ export default class WorkerPage extends React.Component {
         {/* pending projects */}
         <View style={{ margin: 20 }}>
           <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
-            Project list
+            Project list 
           </Text>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Unauthorized Projects</DataTable.Title>
+              <DataTable.Title>Pending Projects</DataTable.Title>
               <DataTable.Title numeric>Date Created</DataTable.Title>
               <DataTable.Title numeric>State</DataTable.Title>
               <DataTable.Title numeric>
@@ -150,11 +155,52 @@ export default class WorkerPage extends React.Component {
                       </DataTable.Cell>
                       <DataTable.Cell numeric>{item.state}</DataTable.Cell>
                       <DataTable.Cell numeric>
-                        <Link to={{
+                        <Button mode="contained" onPress={() => this.props.history.push({
                           pathname: "/projectApproval",
-                          state: {projectId: item.key, projectState: item.state}
-                        }}> process</Link>
-                        {/* <Button>Process</Button> */}
+                          state: { projectId: item.key, projectState: item.state }
+                        })}>process</Button>
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  );
+                })}
+              </View>
+            ) : (
+              <View></View>
+            )}
+          </DataTable>
+        </View>
+
+        <View style={{ margin: 20 }}>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Pending information Projects</DataTable.Title>
+              <DataTable.Title numeric>Date Created</DataTable.Title>
+              <DataTable.Title numeric>State</DataTable.Title>
+              <DataTable.Title numeric>
+                <IconButton
+                  style={{ margin: 0 }}
+                  icon={this.state.infoIcon}
+                  color={Colors.red500}
+                  onPress={this.setInfoIsShow}
+                ></IconButton>
+              </DataTable.Title>
+            </DataTable.Header>
+            {this.state.infoIsShow ? (
+              <View>
+                {this.state.pendinginfoProject.map((item, index) => {
+                  console.log(item)
+                  return (
+                    <DataTable.Row key={index}>
+                      <DataTable.Cell>{item.title}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        {item.createdDate}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        <Button mode="contained" onPress={() => this.props.history.push({
+                          pathname: "/projectApproval",
+                          state: { projectId: item.key, projectState: item.state }
+                        })}>process</Button>
                       </DataTable.Cell>
                     </DataTable.Row>
                   );
@@ -184,22 +230,25 @@ export default class WorkerPage extends React.Component {
             </DataTable.Header>
             {this.state.reviewedIsShow ? (
               <View>
-              {this.state.authorizedProject.map((item, index) => {
-                console.log(item)
-                return (
-                  <DataTable.Row key={index}>
-                    <DataTable.Cell>{item.title}</DataTable.Cell>
-                    <DataTable.Cell numeric>
-                      {item.createdDate}
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric>{item.state}</DataTable.Cell>
-                    <DataTable.Cell numeric>
-                      <Button>Process</Button>
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                );
-              })}
-            </View>
+                {this.state.authorizedProject.map((item, index) => {
+                  console.log(item)
+                  return (
+                    <DataTable.Row key={index}>
+                      <DataTable.Cell>{item.title}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        {item.createdDate}
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        <Button mode="contained" onPress={() => this.props.history.push({
+                          pathname: "/projectApproval",
+                          state: { projectId: item.key, projectState: item.state }
+                        })}>process</Button>
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  );
+                })}
+              </View>
             ) : (
               <View></View>
             )}
