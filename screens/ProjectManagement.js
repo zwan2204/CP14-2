@@ -216,7 +216,7 @@ const ProjectManagement = (props) => {
                   projectKey: item.key, // your data array of objects
                 });
               } else if (item.state == "Authorized") {
-                updateState();
+                updateState(item.key);
               }
             }}
           >
