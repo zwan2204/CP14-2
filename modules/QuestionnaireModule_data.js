@@ -18,72 +18,74 @@ export const getProjects = ({setGeQuestions, setSpQuestions, setWrQuestions,
                 
                 let project = response.data[i];
 
-                if (userInfo.location == "home" || userInfo.location == "gp") {
-                    //location match
-                    if (!project.workerNeed) {
-                        //age match
-                        const ageRange = project.ageGroup.split(",");
+                if (project.state == "Recruiting") {
+                    if (userInfo.location == "home" || userInfo.location == "gp") {
+                        //location match
+                        if (!project.workerNeed) {
+                            //age match
+                            const ageRange = project.ageGroup.split(",");
 
-                        for (let i = 0; i < ageRange.length; i++) {
-                            ageRange[i] = parseInt(ageRange[i]);
-                        }
+                            for (let i = 0; i < ageRange.length; i++) {
+                                ageRange[i] = parseInt(ageRange[i]);
+                            }
 
-                        if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                                (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
-                                (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                                (userAge >= ageRange[0] || userAge <= ageRange[1])) {
-                            //filter projects based on user's selections.
-                            if (userInfo.gender == project.gender &&
-                                    userInfo.healthy == project.needHealth && 
-                                    userInfo.isSmoking == project.isSmoking && 
-                                    userInfo.isPregnant == project.isPregnant &&
-                                    userInfo.isLactating == project.isLactating && 
-                                    userInfo.isPlanning == project.isPlanningPregnant &&
-                                    userInfo.english == project.needEnglish) {
-                                eligibleProjects.push(project._id);
+                            if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                                    (userAge >= ageRange[0] || userAge <= ageRange[1])) {
+                                //filter projects based on user's selections.
+                                if (userInfo.gender == project.gender &&
+                                        userInfo.healthy == project.needHealth && 
+                                        userInfo.isSmoking == project.isSmoking && 
+                                        userInfo.isPregnant == project.isPregnant &&
+                                        userInfo.isLactating == project.isLactating && 
+                                        userInfo.isPlanning == project.isPlanningPregnant &&
+                                        userInfo.english == project.needEnglish) {
+                                    eligibleProjects.push(project._id);
+                                } else {
+                                    removedProjects[project._id] = 1;
+                                }
                             } else {
                                 removedProjects[project._id] = 1;
                             }
-                        } else {
-                            removedProjects[project._id] = 1;
                         }
                     }
-                }
-                if (userInfo.location == "clinic" || userInfo.location == "hospital") {
-                    //location match
-                    if (project.workerNeed) {
-                        //age match
-                        const ageRange = project.ageGroup.split(",");
-                        
-                        for (let i = 0; i < ageRange.length; i++) {
-                            ageRange[i] = parseInt(ageRange[i]);
-                        }
+                    if (userInfo.location == "clinic" || userInfo.location == "hospital") {
+                        //location match
+                        if (project.workerNeed) {
+                            //age match
+                            const ageRange = project.ageGroup.split(",");
+                            
+                            for (let i = 0; i < ageRange.length; i++) {
+                                ageRange[i] = parseInt(ageRange[i]);
+                            }
 
-                        if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                                (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
-                                (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                                (userAge >= ageRange[0] || userAge <= ageRange[1])) {
-                            //filter projects based on user's selections.
-                            if (userInfo.gender == project.gender &&
-                                    userInfo.healthy == project.needHealth && 
-                                    userInfo.isSmoking == project.isSmoking && 
-                                    userInfo.isPregnant == project.isPregnant &&
-                                    userInfo.isLactating == project.isLactating && 
-                                    userInfo.isPlanning == project.isPlanningPregnant &&
-                                    userInfo.english == project.needEnglish) {
-                                eligibleProjects.push(project._id);
+                            if ((isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                                    (userAge >= ageRange[0] || userAge <= ageRange[1])) {
+                                //filter projects based on user's selections.
+                                if (userInfo.gender == project.gender &&
+                                        userInfo.healthy == project.needHealth && 
+                                        userInfo.isSmoking == project.isSmoking && 
+                                        userInfo.isPregnant == project.isPregnant &&
+                                        userInfo.isLactating == project.isLactating && 
+                                        userInfo.isPlanning == project.isPlanningPregnant &&
+                                        userInfo.english == project.needEnglish) {
+                                    eligibleProjects.push(project._id);
+                                } else {
+                                    removedProjects[project._id] = 1;
+                                }
                             } else {
                                 removedProjects[project._id] = 1;
                             }
-                        } else {
-                            removedProjects[project._id] = 1;
                         }
                     }
                 }
+                setRemovedProjects(removedProjects);
+                setEProjects(eligibleProjects);
+                getQuestions({setLoading, setGeQuestions, setSpQuestions, setWrQuestions, eligibleProjects});
             }
-            setRemovedProjects(removedProjects);
-            setEProjects(eligibleProjects);
-            getQuestions({setLoading, setGeQuestions, setSpQuestions, setWrQuestions, eligibleProjects});
         },
         (error) => {
             console.log(error);
