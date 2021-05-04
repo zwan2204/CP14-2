@@ -134,12 +134,12 @@ export const getQuestions = ({setLoading, setGeQuestions, setSpQuestions, setWrQ
             for (let i = 0; i < Object.keys(response.data).length; i++) {
                 let tempQuestion = {};
                 let question = response.data[i];
-
+                console.log(question);
                 //if the question already exists in the lists
                 if (filter[question.name] != null) {
                     if (question.general) {
                         for (let i = 0; i < generalQuestions.length; i++) {
-                            if (question.name == generalQuestions[i]["question"]) {
+                            if (question.name === generalQuestions[i]["question"]) {
                                 if (question.inclusion) {
                                     generalQuestions[i]["inclusionIDList"].push(question.project);
                                 } else {
@@ -149,7 +149,7 @@ export const getQuestions = ({setLoading, setGeQuestions, setSpQuestions, setWrQ
                         }
                     } else if (!question.general) {
                         for (let i = 0; i < generalQuestions.length; i++) {
-                            if (question.name == specificQuestions[i]["question"]) {
+                            if (question.name === specificQuestions[i]["question"]) {
                                 if (question.inclusion) {
                                     specificQuestions[i]["inclusionIDList"].push(question.project);
                                 } else {

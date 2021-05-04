@@ -380,7 +380,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={{eligibleProjects}}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo.gender)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>

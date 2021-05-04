@@ -3,7 +3,7 @@ import { Text, View, SafeAreaView, Image, FlatList } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
 
-import { Button, Card, Dialog, Portal, Paragraph } from "react-native-paper";
+import { Button, Card, Dialog, Portal, Paragraph, TextInput } from "react-native-paper";
 const ProjectAvailable = (props) => {
     const projectList = props.location.projectIDs;
     const hcWorker = props.location.hcWorker;
@@ -269,10 +269,17 @@ const ProjectAvailable = (props) => {
           <Dialog.Title>Alert</Dialog.Title>
           <Dialog.Content>
             <Paragraph>
-              There is no suitable project for you, if you still get interested.
-              Please click below button to leave your contact details. As long
-              as there is a available project, we will contact you by email.
+              There is no suitable project for you. If you still want to join us,
+              please leave your contact information below. We will email/phone 
+              you once there is an eligible project for you.
             </Paragraph>
+            <TextInput
+                        mode="outlined"
+                        style={{ height: 30 }}
+                        placeholder="Phone number:"
+                        />
+            {/* <Dialog.Input label="Phone number:"></Dialog.Input> */}
+            {/* <Dialog.Input label="Email address:"></Dialog.Input> */}
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Click</Button>
