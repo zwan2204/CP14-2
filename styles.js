@@ -259,13 +259,24 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
   },
+
   subTitle: {
     fontSize: "1.3em",
     color: "#00205B",
     
   },
+
   questionCardStyle: {
     paddingVertical: 5,
     fontSize: 15,
   },
+
+  loadingStyle: {
+    height:"80%",
+    width:"100%",
+    alignContent:"center",
+    alignItems:"center",
+    justifyContent:"center"
+  },
+
 });

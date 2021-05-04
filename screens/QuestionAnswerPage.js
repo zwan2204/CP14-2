@@ -327,11 +327,6 @@ const QuestionAnswerPage = (props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* <View style={{height: "20%", backgroundColor: "#00205B", flexDirection: "row"}}>
-                <Image 
-                    style={{width: 200, height: 100, left: 100, top: 40}} 
-                    source={require('../assets/header.png')}/>
-            </View> */}
             <Header/>
             
             {isLoading ? 
