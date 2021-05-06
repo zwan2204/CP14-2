@@ -261,9 +261,9 @@ export const styles = StyleSheet.create({
   },
 
   subTitle: {
-    fontSize: "1.3em",
+    fontSize: 20,
     color: "#00205B",
-    
+    marginLeft: 10,
   },
 
   questionCardStyle: {

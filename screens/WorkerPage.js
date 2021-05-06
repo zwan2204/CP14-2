@@ -48,7 +48,7 @@ export default class WorkerPage extends React.Component {
             pendinginfoProjects.push(project);
           } else if (response.data[i].state === "New Upload") {
             unauthorizedProjects.push(project);
-          } else if (response.data[i].state === "Authorized") {
+          } else if (response.data[i].state === "Authorized" || response.data[i].state === "Recruiting") {
             authorizedProjects.push(project);
           } 
         }
@@ -155,7 +155,7 @@ export default class WorkerPage extends React.Component {
                       </DataTable.Cell>
                       <DataTable.Cell numeric>{item.state}</DataTable.Cell>
                       <DataTable.Cell numeric>
-                        <Button mode="contained" onPress={() => this.props.history.push({
+                        <Button mode="outlined" labelStyle={{ fontSize: 10 }} onPress={() => this.props.history.push({
                           pathname: "/projectApproval",
                           state: { projectId: item.key, projectState: item.state }
                         })}>process</Button>
@@ -196,12 +196,7 @@ export default class WorkerPage extends React.Component {
                         {item.createdDate}
                       </DataTable.Cell>
                       <DataTable.Cell numeric>{item.state}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        <Button mode="contained" onPress={() => this.props.history.push({
-                          pathname: "/projectApproval",
-                          state: { projectId: item.key, projectState: item.state }
-                        })}>process</Button>
-                      </DataTable.Cell>
+                      <DataTable.Cell numeric> Request for further information </DataTable.Cell>
                     </DataTable.Row>
                   );
                 })}
@@ -240,10 +235,10 @@ export default class WorkerPage extends React.Component {
                       </DataTable.Cell>
                       <DataTable.Cell numeric>{item.state}</DataTable.Cell>
                       <DataTable.Cell numeric>
-                        <Button mode="contained" onPress={() => this.props.history.push({
+                        <Button mode="outlined" labelStyle={{ fontSize: 10 }} onPress={() => this.props.history.push({
                           pathname: "/projectApproval",
                           state: { projectId: item.key, projectState: item.state }
-                        })}>process</Button>
+                        })}>review</Button>
                       </DataTable.Cell>
                     </DataTable.Row>
                   );

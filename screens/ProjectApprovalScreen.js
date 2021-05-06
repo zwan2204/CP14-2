@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput as NativeTextInput,
+  FlatList
 } from "react-native";
 import { styles } from "../styles.js";
 import { Button, Dialog, Portal, TextInput, Card } from "react-native-paper";
@@ -18,6 +19,15 @@ export default class ProjectApprovalScreen extends React.Component {
     super(props);
     this.state = {
       isModalVisible: false,
+      isModalVisible1: false,
+      isModalVisible2: false,
+      isModalVisible3: false,
+      isModalVisible4: false,
+      isModalVisible5: false,
+      isModalVisible6: false,
+      isModalVisible7: false,
+      isModalVisible8: false,
+      isModalVisible9: false,
       titleComment: "",
       descriptionComment: "",
       ethicsComment: "",
@@ -28,7 +38,6 @@ export default class ProjectApprovalScreen extends React.Component {
       dateComment: "",
       inclusionComment: "",
       exclusionComment: "",
-      commentBoarderColor: "black",
       projectId: this.props.location.state.projectId,
       projectState: this.props.location.state.projectState,
       inclusionQuestion: [],
@@ -46,6 +55,78 @@ export default class ProjectApprovalScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
+  showModal1 = () => {
+    this.setState({ isModalVisible1: !this.state.isModalVisible1 });
+  };
+
+  handleCancel1 = () => {
+    this.setState({ isModalVisible1: !this.state.isModalVisible1 });
+  };
+
+  showModal2 = () => {
+    this.setState({ isModalVisible2: !this.state.isModalVisible2 });
+  };
+
+  handleCancel2 = () => {
+    this.setState({ isModalVisible2: !this.state.isModalVisible2 });
+  };
+
+  showModal3 = () => {
+    this.setState({ isModalVisible3: !this.state.isModalVisible3 });
+  };
+
+  handleCancel3 = () => {
+    this.setState({ isModalVisible3: !this.state.isModalVisible3 });
+  };
+
+  showModal4 = () => {
+    this.setState({ isModalVisible4: !this.state.isModalVisible4 });
+  };
+
+  handleCancel4 = () => {
+    this.setState({ isModalVisible4: !this.state.isModalVisible4 });
+  };
+
+  showModal5 = () => {
+    this.setState({ isModalVisible5: !this.state.isModalVisible5 });
+  };
+
+  handleCancel5 = () => {
+    this.setState({ isModalVisible5: !this.state.isModalVisible5 });
+  };
+
+  showModal6 = () => {
+    this.setState({ isModalVisible6: !this.state.isModalVisible6 });
+  };
+
+  handleCancel6 = () => {
+    this.setState({ isModalVisible6: !this.state.isModalVisible6 });
+  };
+
+  showModal7 = () => {
+    this.setState({ isModalVisible7: !this.state.isModalVisible7 });
+  };
+
+  handleCancel7 = () => {
+    this.setState({ isModalVisible7: !this.state.isModalVisible7 });
+  };
+
+  showModal8 = () => {
+    this.setState({ isModalVisible8: !this.state.isModalVisible8 });
+  };
+
+  handleCancel8 = () => {
+    this.setState({ isModalVisible8: !this.state.isModalVisible8 });
+  };
+
+  showModal9 = () => {
+    this.setState({ isModalVisible9: !this.state.isModalVisible9 });
+  };
+
+  handleCancel9 = () => {
+    this.setState({ isModalVisible9: !this.state.isModalVisible9 });
+  };
+
   changeTitleColor = () => {
     if (this.state.titleComment == "") {
       return "black";
@@ -54,10 +135,77 @@ export default class ProjectApprovalScreen extends React.Component {
     }
   };
 
-  componentWillMount() {
-    console.log(this.props.location.state.projectId);
-    console.log(this.props.location.state.projectState);
-  }
+  changeDescriptionColor = () => {
+    if (this.state.descriptionComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeDurationColor = () => {
+    if (this.state.durationComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeDateColor = () => {
+    if (this.state.dateComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeEthicsColor = () => {
+    if (this.state.ethicsComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeGovernanceColor = () => {
+    if (this.state.governanceComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeLocationColor = () => {
+    if (this.state.locationComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeSubjectNoColor = () => {
+    if (this.state.subjectNoComment == "") {
+      return "black";
+    } else {
+      return "red";
+    }
+  };
+
+  changeInclusionColor = () => {
+    if (this.state.inclusionComment == "") {
+      return "#00205B";
+    } else {
+      return "red";
+    }
+  };
+
+  changeExclusionColor = () => {
+    if (this.state.exclusionComment == "") {
+      return "#00205B";
+    } else {
+      return "red";
+    }
+  };
 
   componentDidMount() {
     this.getProjectInfo();
@@ -88,15 +236,15 @@ export default class ProjectApprovalScreen extends React.Component {
         state: "Authorized",
       }
     )
-    .then(
-      (response) => {
-        history.push("/worker");
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      .then(
+        (response) => {
+          history.push("/worker");
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   };
 
   leaveComment = () => {
@@ -119,8 +267,6 @@ export default class ProjectApprovalScreen extends React.Component {
         (response) => {
           this.updateState();
           history.push("/worker");
-          console.log(response);
-          console.log(this.stateprojectState);
         },
         (error) => {
           console.log(error);
@@ -129,6 +275,8 @@ export default class ProjectApprovalScreen extends React.Component {
   };
 
   getProjectInfo = () => {
+    let inclusionQuestions = [];
+    let exclusionQuestions = [];
     axios
       .get(
         `http://localhost:12345/api/project/${this.props.location.state.projectId}`
@@ -136,8 +284,14 @@ export default class ProjectApprovalScreen extends React.Component {
       .then(
         (response) => {
           this.setState({ project: response.data });
-          this.setState({ inclusionQuestion: response.data.InclusionCriteria });
-          this.setState({ exclusionCriteria: response.data.ExclusionCriteria });
+          for (let i = 0; i < Object.keys(response.data.InclusionCriteria).length; i++) {
+            inclusionQuestions.push(response.data.InclusionCriteria[i]);
+          }
+          for (let i = 0; i < Object.keys(response.data.ExclusionCriteria).length; i++) {
+            exclusionQuestions.push(response.data.ExclusionCriteria[i]);
+          }
+          this.setState({ inclusionQuestion: inclusionQuestions });
+          this.setState({ exclusionQuestion: exclusionQuestions });
           console.log(this.state.inclusionQuestion);
         },
         (error) => {
@@ -181,9 +335,9 @@ export default class ProjectApprovalScreen extends React.Component {
         {/* first row view */}
         <View style={{ margin: 20 }}>
           <View style={{ flexDirection: "row", paddingBottom: 20 }}>
-            <Text style={{ fontSize: 35, color: "grey", flex: 1 }}>
+            <Text style={{ fontSize: 35, color: "grey", flex: 1, fontWeight: "bold" }}>
               Project Information
-              <Text style={{ fontSize: 10, color: "red", paddingLeft: 20 }}>
+              <Text style={{ fontSize: 10, color: "red", paddingLeft: 20, fontWeight: "normal" }}>
                 *You can leave comments by clicking a text field
               </Text>
             </Text>
@@ -202,6 +356,7 @@ export default class ProjectApprovalScreen extends React.Component {
 
           {/*Project basic information upload area*/}
           <View>
+
             <View
               style={{
                 flex: 1,
@@ -211,12 +366,64 @@ export default class ProjectApprovalScreen extends React.Component {
               }}
             >
               <Text style={styles.subTitle}>Project titile: </Text>
-              <Card>
-                <Card.Content style={{ fontSize: 15, paddingVertical: 5 }}>
-                  {this.state.project.title}
-                </Card.Content>
-              </Card>
+              <View>
+                <Portal>
+                  <Dialog
+                    style={{ width: 500, alignSelf: "center" }}
+                    visible={this.state.isModalVisible}
+                    onDismiss={this.handleCancel}
+                  >
+                    <Dialog.Title>Please leave comment</Dialog.Title>
+                    <TextInput
+                      multiline={true}
+                      textAlignVertical="top"
+                      style={{
+                        height: 100,
+                        marginHorizontal: 10,
+                        borderWidth: 1,
+                        borderRadius: 5,
+                      }}
+                      render={(innerProps) => (
+                        <NativeTextInput
+                          {...innerProps}
+                          style={[
+                            innerProps.style,
+                            {
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                            },
+                          ]}
+                        />
+                      )}
+                      value={this.state.titleComment}
+                      onChangeText={(text) =>
+                        this.setState({ titleComment: text })
+                      }
+                    />
+                    <Dialog.Actions>
+                      <Button onPress={this.handleCancel}>Submit</Button>
+                    </Dialog.Actions>
+                  </Dialog>
+                </Portal>
+                <TouchableOpacity onPress={this.showModal}>
+
+                  <Text
+                    style={{
+                      width: 557,
+                      height: 30,
+                      marginHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: this.changeTitleColor(),
+                      borderRadius: 5,
+                    }}
+                  >
+                    {" "}
+                    {this.state.project.title}{" "}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
+
             <View style={{ flex: 6, flexDirection: "row" }}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.subTitle}>Project description: </Text>
@@ -225,8 +432,8 @@ export default class ProjectApprovalScreen extends React.Component {
                   <Portal>
                     <Dialog
                       style={{ width: 500, alignSelf: "center" }}
-                      visible={this.state.isModalVisible}
-                      onDismiss={this.handleCancel}
+                      visible={this.state.isModalVisible1}
+                      onDismiss={this.handleCancel1}
                     >
                       <Dialog.Title>Please leave comment</Dialog.Title>
                       <TextInput
@@ -236,7 +443,6 @@ export default class ProjectApprovalScreen extends React.Component {
                           height: 100,
                           marginHorizontal: 10,
                           borderWidth: 1,
-                          borderColor: this.state.pendingComment,
                           borderRadius: 5,
                         }}
                         render={(innerProps) => (
@@ -257,11 +463,11 @@ export default class ProjectApprovalScreen extends React.Component {
                         }
                       />
                       <Dialog.Actions>
-                        <Button onPress={this.handleCancel}>Submit</Button>
+                        <Button onPress={this.handleCancel1}>Submit</Button>
                       </Dialog.Actions>
                     </Dialog>
                   </Portal>
-                  <TouchableOpacity onPress={this.showModal}>
+                  <TouchableOpacity onPress={this.showModal1}>
 
                     <Text
                       multiline={true}
@@ -270,7 +476,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         height: 130,
                         marginHorizontal: 10,
                         borderWidth: 1,
-                        borderColor: this.changeTitleColor(),
+                        borderColor: this.changeDescriptionColor(),
                         borderRadius: 5,
                       }}
                     >
@@ -288,20 +494,65 @@ export default class ProjectApprovalScreen extends React.Component {
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
-                  <Text
-                    style={{
-                      flex: 1,
-                      height: 30,
-                      marginHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
-                    }}
-                  >
-                    {" "}
-                    {this.state.project.approvalNumber}{" "}
-                  </Text>
+                  <View>
+                    <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible2}
+                        onDismiss={this.handleCancel2}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.ethicsComment}
+                          onChangeText={(text) =>
+                            this.setState({ ethicsComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel2}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                    <TouchableOpacity onPress={this.showModal2}>
+
+                      <Text
+                        style={{
+                          height: 30,
+                          width: 468,
+                          marginHorizontal: 5,
+                          borderWidth: 1,
+                          borderColor: this.changeEthicsColor(),
+                          borderRadius: 5,
+                        }}
+                      >
+                        {" "}
+                        {this.state.project.approvalNumber}{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
                 </View>
+
                 <View
                   style={{
                     flexDirection: "row",
@@ -312,81 +563,271 @@ export default class ProjectApprovalScreen extends React.Component {
                   <Text style={styles.subTitle}>
                     Governance Approval Number:
                   </Text>
-                  <Text
-                    style={{
-                      flex: 1,
-                      height: 30,
-                      marginHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
-                    }}
-                  >
-                    {" "}
-                    {this.state.project.governance}
-                  </Text>
+                  <View>
+                    <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible3}
+                        onDismiss={this.handleCancel3}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.governanceComment}
+                          onChangeText={(text) =>
+                            this.setState({ governanceComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel3}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                    <TouchableOpacity onPress={this.showModal3}>
+
+                      <Text
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 30,
+                          width: 410,
+                          marginHorizontal: 5,
+                          borderWidth: 1,
+                          borderColor: this.changeGovernanceColor(),
+                          borderRadius: 5,
+                        }}
+                      >
+                        {" "}
+                        {this.state.project.governance}{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
+
               <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+
+                <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 20 }}>
                   <Text style={styles.subTitle}>Location: </Text>
-                  <Text
-                    style={{
-                      height: 30,
-                      margin: 10,
-                      flex: 1,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
-                    }}
-                  >
-                    {" "}
-                    {this.state.project.location}{" "}
-                  </Text>
+                  <View>
+                    <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible4}
+                        onDismiss={this.handleCancel4}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.locationComment}
+                          onChangeText={(text) =>
+                            this.setState({ locationComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel4}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                    <TouchableOpacity onPress={this.showModal4}>
+
+                      <Text
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 30,
+                          width: 500,
+                          marginHorizontal: 10,
+                          borderWidth: 1,
+                          borderColor: this.changeLocationColor(),
+                          borderRadius: 5,
+                        }}
+                      >
+                        {" "}
+                        {this.state.project.location}{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
+                    paddingBottom: 20
+
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
-                  <Text
-                    style={{
-                      height: 30,
-                      margin: 10,
-                      flex: 1,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
-                    }}
-                  >
-                    {" "}
-                    {this.state.project.subjectNo}{" "}
-                  </Text>
+                  <View>
+                    <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible5}
+                        onDismiss={this.handleCancel5}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.subjectNoComment}
+                          onChangeText={(text) =>
+                            this.setState({ subjectNoComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel5}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                    <TouchableOpacity onPress={this.showModal5}>
+
+                      <Text
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 30,
+                          width: 400,
+                          marginHorizontal: 10,
+                          borderWidth: 1,
+                          borderColor: this.changeSubjectNoColor(),
+                          borderRadius: 5,
+                        }}
+                      >
+                        {" "}
+                        {this.state.project.subjectNo}{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
                 </View>
 
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
+                    paddingBottom: 20
+
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
-                  <Text
-                    style={{
-                      height: 30,
-                      margin: 10,
-                      flex: 1,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
-                    }}
-                  >
-                    {" "}
-                    {this.state.project.duration}{" "}
-                  </Text>
+                  <View>
+                    <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible6}
+                        onDismiss={this.handleCancel6}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.durationComment}
+                          onChangeText={(text) =>
+                            this.setState({ durationComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel6}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                    <TouchableOpacity onPress={this.showModal6}>
+
+                      <Text
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 30,
+                          width: 445,
+
+                          marginHorizontal: 10,
+                          borderWidth: 1,
+                          borderColor: this.changeDurationColor(),
+                          borderRadius: 5,
+                        }}
+                      >
+                        {" "}
+                        {this.state.project.duration}{" "}
+                      </Text>
+                    </TouchableOpacity>
+
+                  </View>
+
                 </View>
 
                 <View
@@ -396,19 +837,66 @@ export default class ProjectApprovalScreen extends React.Component {
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
-                  <Text
-                    style={{
-                      height: 30,
-                      margin: 10,
-                      flex: 1,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
-                    }}
-                  >
-                    {" "}
-                    {this.state.project.date}{" "}
-                  </Text>
+                  <View>
+                    <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible7}
+                        onDismiss={this.handleCancel7}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderColor: this.state.pendingComment,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.dateComment}
+                          onChangeText={(text) =>
+                            this.setState({ dateComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel7}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                    <TouchableOpacity onPress={this.showModal7}>
+
+                      <Text
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 30,
+                          width: 486,
+                          marginHorizontal: 10,
+                          borderWidth: 1,
+                          borderColor: this.changeDateColor(),
+                          borderRadius: 5,
+                        }}
+                      >
+                        {" "}
+                        {this.state.project.data}{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
                 </View>
               </View>
             </View>
@@ -429,34 +917,129 @@ export default class ProjectApprovalScreen extends React.Component {
                     }}
                   >
                     Question Preview
+                    <Text style={{ fontSize: 5, paddingLeft: 10, color: "red", fontWeight: "normal" }}>*Click the type of questions to comment</Text>
                   </Text>
                 </View>
+
                 <View>
-                  <Text style={{ fontSize: 15, marginTop: 15, color: "#00205B" }}> Inclusion Quetsions: </Text>
-                  {this.state.inclusionQuestion.map((item, index) => {
-                    console.log(item)
+                <Portal>
+                      <Dialog
+                        style={{ width: 500, alignSelf: "center" }}
+                        visible={this.state.isModalVisible8}
+                        onDismiss={this.handleCancel8}
+                      >
+                        <Dialog.Title>Please leave comment</Dialog.Title>
+                        <TextInput
+                          multiline={true}
+                          textAlignVertical="top"
+                          style={{
+                            height: 100,
+                            marginHorizontal: 10,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                          }}
+                          render={(innerProps) => (
+                            <NativeTextInput
+                              {...innerProps}
+                              style={[
+                                innerProps.style,
+                                {
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                },
+                              ]}
+                            />
+                          )}
+                          value={this.state.inclusionComment}
+                          onChangeText={(text) =>
+                            this.setState({ inclusionComment: text })
+                          }
+                        />
+                        <Dialog.Actions>
+                          <Button onPress={this.handleCancel8}>Submit</Button>
+                        </Dialog.Actions>
+                      </Dialog>
+                    </Portal>
+                <TouchableOpacity onPress={this.showModal8}>
+                  <Text style={{ fontSize: 15, color: this.changeInclusionColor() }}> Inclusion Quetsions </Text>
+                </TouchableOpacity>
+                {this.state.inclusionQuestion.map((item, index) => {
+                  return (
+                    <View key={index}>
+                      <Card>
+                        <Card.Content style={styles.questionCardStyle}>
+                          <Text>{item}</Text>
+                        </Card.Content>
+                      </Card>
+                    </View>
+                  )
+                })}
+                </View>
+
+                <View>
+                  <Portal>
+                    <Dialog
+                      style={{ width: 500, alignSelf: "center" }}
+                      visible={this.state.isModalVisible9}
+                      onDismiss={this.handleCancel9}
+                    >
+                      <Dialog.Title>Please leave comment</Dialog.Title>
+                      <TextInput
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 100,
+                          marginHorizontal: 10,
+                          borderWidth: 1,
+                          borderRadius: 5,
+                        }}
+                        render={(innerProps) => (
+                          <NativeTextInput
+                            {...innerProps}
+                            style={[
+                              innerProps.style,
+                              {
+                                paddingTop: 8,
+                                paddingBottom: 8,
+                              },
+                            ]}
+                          />
+                        )}
+                        value={this.state.exclusionComment}
+                        onChangeText={(text) =>
+                          this.setState({ exclusionComment: text })
+                        }
+                      />
+                      <Dialog.Actions>
+                        <Button onPress={this.handleCancel9}>Submit</Button>
+                      </Dialog.Actions>
+                    </Dialog>
+                  </Portal>
+                  <TouchableOpacity onPress={this.showModal9}>
+                    <Text style={{ fontSize: 15, marginTop: 30, color: this.changeExclusionColor() }}> Exclusion Quetsions </Text>
+                  </TouchableOpacity>
+                  {this.state.exclusionQuestion.map((item, index) => {
                     return (
-                      <View style={{ padding: 5 }}>
-                        <TouchableOpacity>
-                          <Card key={index}>
-                            <Card.Content style={styles.questionCardStyle}>{item[index]}</Card.Content>
-                          </Card>
-                        </TouchableOpacity>
+                      <View key={index}>
+                        <Card>
+                          <Card.Content style={styles.questionCardStyle}>
+                            <Text>{item}</Text>
+                          </Card.Content>
+                        </Card>
                       </View>
                     )
                   })}
-                </View>
-                <View>
-                  <Text style={{ fontSize: 15, marginTop: 30, color: "#00205B" }}> Exclusion Quetsions: </Text>
-                  <View></View>
                 </View>
               </View>
             </View>
           </View>
         </View>
-        
+
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          {this.state.titleComment === "" ?
+          {(this.state.descriptionComment === "" && this.state.titleComment === "" && this.state.exclusionComment === "" &&
+            this.state.inclusionComment === "" && this.state.durationComment == "" && this.state.governanceComment === "" &&
+            this.state.subjectNoComment === "" && this.state.dateComment === "" && this.state.locationComment === "" &&
+            this.state.ethicsComment === "") ?
             (<View>
               <Button onPress={this.authorizeProject}>Authorize</Button>
             </View>) :
