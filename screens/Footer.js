@@ -18,7 +18,7 @@ export default class Footer extends React.Component {
           justifyContent: "center"
         }}
       >
-        <Text style={{ color: "white", fontSize: 17, marginLeft: 10 }}>
+        <Text style={{ color: "white", fontSize: 10, marginLeft: 10 }}>
           NSW Health website | Disclaimer | Privacy | Copyright | Accessibility
           | Site map
         </Text>

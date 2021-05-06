@@ -6,6 +6,10 @@ import { styles } from "../styles.js";
 import { DataTable, Button, Colors, IconButton } from "react-native-paper";
 import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
+import HeaderSecond from "../screens/HeaderSecond.js";
+import Footer from "../screens/Footer";
+
+
 export default class WorkerPage extends React.Component {
   constructor(props) {
     super(props);
@@ -91,35 +95,9 @@ export default class WorkerPage extends React.Component {
     const { history } = this.props;
     return (
       <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            height: 140,
-            backgroundColor: "#00205B",
-            flexDirection: "row"
-          }}
-        >
-          {/* <Text style={{color:"red", position: "absolute"}}>Project - Version α</Text> */}
-          <Image
-            style={{ width: 200, height: 100, left: 100, top: 20 }}
-            source={require("../assets/header.png")}
-          />
-
-          <Button
-            mode="text"
-            style={{
-              backgroundColor: "white",
-              width: 120,
-              height: 37,
-              position: "absolute",
-              bottom: 30,
-              right: 30
-            }}
-            onPress={() => history.push("/Homepage")}
-          >
-            log out
-          </Button>
-        </View>
+        <HeaderSecond/>
         {/* pending projects */}
+        <View>
         <View style={{ margin: 20 }}>
           <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
             Project list
@@ -159,6 +137,7 @@ export default class WorkerPage extends React.Component {
                   );
                 })}
               </View>
+              
             ) : (
               <View></View>
             )}
@@ -244,6 +223,8 @@ export default class WorkerPage extends React.Component {
             )}
           </DataTable>
         </View>
+        </View>
+        <Footer/>
       </SafeAreaView>
     );
   }

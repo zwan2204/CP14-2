@@ -4,7 +4,6 @@ import React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import LoginScreen from "../screens/LoginScreen";
 import ProjectUploading from "../screens/ProjectUploading";
-import ParticipantInfoScreen from "../screens/ParticipantInfoScreen";
 import SignupScreen from "../screens/SignupScreen";
 import WorkerScreen from "../screens/WorkerPage";
 import QuestionAnswerPage from "../screens/QuestionAnswerPage";
@@ -35,19 +34,8 @@ const Routes = () => (
       <Redirect exact from="/" to={LOGIN_URL} />
       <Route exact path={LOGIN_URL} component={LoginScreen} />
       <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
-      <Route
-        exact
-        path={PROJECT_MANAGEMENT_URL}
-        component={ProjectManagement}
-      />
-
+      <Route exact path={PROJECT_MANAGEMENT_URL} component={ProjectManagement} />
       <Route exact path={PENDING_EDIT} component={PendingEdit} />
-
-      <Route
-        exact
-        path={PARTICIPANT_INFO_URL}
-        component={ParticipantInfoScreen}
-      />
       <Route exact path={PROJECT_AVAILABLE} component={ProjectAvailable} />
       <Route exact path={PROJECT_PRIVIEW} component={ProjectPreview} />
       <Route exact path={REGISTER_URL} component={SignupScreen} />

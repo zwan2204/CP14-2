@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
   },
 
   picker: {
-    marginTop: 10,
     width: 190,
   },
 

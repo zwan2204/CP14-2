@@ -19,9 +19,6 @@ export default class LoginScreen extends React.Component {
       password: ""
     };
   }
-  pickRole = role => {
-    this.setState({ role: role });
-  };
 
   userLogin = () => {
     const { history } = this.props;
@@ -94,7 +91,7 @@ export default class LoginScreen extends React.Component {
               justifyContent: "center",
               textAlign: "center",
               alignItems: "center",
-              width: "20%"
+              width: "25%"
             }}
           >
             <View

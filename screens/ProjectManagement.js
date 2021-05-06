@@ -14,6 +14,8 @@ import {
 import { Button, Colors, DataTable, IconButton } from "react-native-paper";
 import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
+import HeaderSecond from "../screens/HeaderSecond";
+import Footer from "../screens/Footer";
 const ProjectManagement = props => {
   const [incompleteDrop, setIncompleteDrop] = useState("none");
   const [unreleasedDrop, setUnreleasedDrop] = useState("none");
@@ -273,33 +275,7 @@ const ProjectManagement = props => {
   return (
     <SafeAreaView style={styles.root}>
       {/*View of Header*/}
-      <View
-        style={{
-          height: 140,
-          backgroundColor: "#00205B",
-          flexDirection: "row"
-        }}
-      >
-        <Image
-          style={{ width: 200, height: 100, marginLeft: 100, marginTop: 20 }}
-          source={require("../assets/header.png")}
-        />
-
-        <Button
-          mode="text"
-          style={{
-            backgroundColor: "white",
-            width: 120,
-            height: 37,
-            position: "absolute",
-            bottom: 30,
-            right: 30
-          }}
-          onPress={() => props.history.push("/Homepage")}
-        >
-          log out
-        </Button>
-      </View>
+      <HeaderSecond />
 
       {/*View of Body*/}
       <ScrollView style={{ margin: 35 }}>
@@ -379,18 +355,7 @@ const ProjectManagement = props => {
         </DataTable>
       </ScrollView>
       {/*View of Footer*/}
-      <View
-        style={{
-          height: 70,
-          backgroundColor: "#00205B",
-          justifyContent: "center"
-        }}
-      >
-        <Text style={{ color: "white", fontSize: 17, marginLeft: 10 }}>
-          NSW Health website | Disclaimer | Privacy | Copyright | Accessibility
-          | Site map
-        </Text>
-      </View>
+      <Footer />
     </SafeAreaView>
   );
 };
