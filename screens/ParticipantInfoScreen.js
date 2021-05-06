@@ -6,7 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 import axios from "axios";
 import { Button } from "react-native-paper";
-
+import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 export default class ParticipantInfoScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -19,14 +19,14 @@ export default class ParticipantInfoScreen extends React.Component {
       isPregnant: false,
       isSmoking: false,
       isLactating: false,
-      isPlanning: false,
+      isPlanning: false
     };
   }
 
   userSignup = () => {
     const { navigate } = this.props.navigation;
     axios
-      .post("http://localhost:12345/api/users", {
+      .post(`${DEPLOYEDHOST}/api/users`, {
         fullName: this.state.fullName,
         password: this.state.password,
         role: this.state.role,
@@ -39,56 +39,56 @@ export default class ParticipantInfoScreen extends React.Component {
         isPregnant: this.state.isPregnant,
         isSmoking: this.state.isSmoking,
         isLactating: this.state.isLactating,
-        isPlanning: this.state.isPlanning,
+        isPlanning: this.state.isPlanning
       })
       .then(
-        (response) => {
+        response => {
           console.log(response);
           navigate("Login");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
   };
 
-  pickGender = (gender) => {
+  pickGender = gender => {
     if (gender !== 0) {
       this.setState({ gender: gender });
     }
   };
 
-  pickHealthy = (healthy) => {
+  pickHealthy = healthy => {
     if (healthy !== 0) {
       this.setState({ healthy: healthy });
     }
   };
 
-  pickLocation = (curLocation) => {
+  pickLocation = curLocation => {
     if (curLocation !== 0) {
       this.setState({ curLocation: curLocation });
     }
   };
 
-  pickEnglish = (english) => {
+  pickEnglish = english => {
     if (english !== 0) {
       this.setState({ english: english });
     }
   };
 
-  setPregnant = (isPregnant) => {
+  setPregnant = isPregnant => {
     this.setState({ isPregnant: !this.state.isPregnant });
   };
 
-  setSmoking = (isSmoking) => {
+  setSmoking = isSmoking => {
     this.setState({ isSmoking: !this.state.isSmoking });
   };
 
-  setLactating = (isLactating) => {
+  setLactating = isLactating => {
     this.setState({ isLactating: !this.state.isLactating });
   };
 
-  setPlanning = (isPlanning) => {
+  setPlanning = isPlanning => {
     this.setState({ isPlanning: !this.state.isPlanning });
   };
 
@@ -100,7 +100,7 @@ export default class ParticipantInfoScreen extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row",
+            flexDirection: "row"
           }}
         >
           <Image
@@ -114,7 +114,7 @@ export default class ParticipantInfoScreen extends React.Component {
           style={{
             alignItems: "center",
             flexDirection: "row",
-            paddingTop: "5%",
+            paddingTop: "5%"
           }}
         >
           <View
