@@ -251,9 +251,9 @@ export default class ProjectApprovalScreen extends React.Component {
                             ]}
                           />
                         )}
-                        value={this.state.titleComment}
+                        value={this.state.descriptionComment}
                         onChangeText={(text) =>
-                          this.setState({ titleComment: text })
+                          this.setState({ descriptionComment: text })
                         }
                       />
                       <Dialog.Actions>
