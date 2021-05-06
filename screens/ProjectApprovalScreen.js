@@ -7,13 +7,12 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  TextInput as NativeTextInput,
-  FlatList
+  TextInput as NativeTextInput
 } from "react-native";
 import { styles } from "../styles.js";
 import { Button, Dialog, Portal, TextInput, Card } from "react-native-paper";
 import axios from "axios";
-
+import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 export default class ProjectApprovalScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +42,7 @@ export default class ProjectApprovalScreen extends React.Component {
       inclusionQuestion: [],
       exclusionQuestion: [],
       projectInfo: [],
-      project: "",
+      project: ""
     };
   }
 
@@ -214,16 +213,16 @@ export default class ProjectApprovalScreen extends React.Component {
   updateState = () => {
     axios
       .put(
-        `http://localhost:12345/api/project/${this.props.location.state.projectId}`,
+        `${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`,
         {
-          state: "pending",
+          state: "pending"
         }
       )
       .then(
-        (response) => {
+        response => {
           console.log(response);
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -231,17 +230,19 @@ export default class ProjectApprovalScreen extends React.Component {
 
   authorizeProject = () => {
     const { history } = this.props;
-    axios.put(`http://localhost:12345/api/project/${this.props.location.state.projectId}`,
-      {
-        state: "Authorized",
-      }
-    )
+    axios
+      .put(
+        `${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`,
+        {
+          state: "Authorized"
+        }
+      )
       .then(
-        (response) => {
+        response => {
           history.push("/worker");
           console.log(response);
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -250,7 +251,7 @@ export default class ProjectApprovalScreen extends React.Component {
   leaveComment = () => {
     const { history } = this.props;
     axios
-      .post(`http://localhost:12345/api/comment/`, {
+      .post(`${DEPLOYEDHOST}/api/comment/`, {
         projectId: this.state.projectId,
         title: this.state.titleComment,
         description: this.state.descriptionComment,
@@ -261,14 +262,14 @@ export default class ProjectApprovalScreen extends React.Component {
         approvalNumber: this.state.ethicsComment,
         governance: this.state.governanceComment,
         InclusionCriteria: this.state.InclusionComment,
-        ExclusionCriteria: this.state.ExclusionComment,
+        ExclusionCriteria: this.state.ExclusionComment
       })
       .then(
-        (response) => {
+        response => {
           this.updateState();
           history.push("/worker");
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -278,11 +279,9 @@ export default class ProjectApprovalScreen extends React.Component {
     let inclusionQuestions = [];
     let exclusionQuestions = [];
     axios
-      .get(
-        `http://localhost:12345/api/project/${this.props.location.state.projectId}`
-      )
+      .get(`${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`)
       .then(
-        (response) => {
+        response => {
           this.setState({ project: response.data });
           for (let i = 0; i < Object.keys(response.data.InclusionCriteria).length; i++) {
             inclusionQuestions.push(response.data.InclusionCriteria[i]);
@@ -294,7 +293,7 @@ export default class ProjectApprovalScreen extends React.Component {
           this.setState({ exclusionQuestion: exclusionQuestions });
           console.log(this.state.inclusionQuestion);
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
@@ -309,7 +308,7 @@ export default class ProjectApprovalScreen extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row",
+            flexDirection: "row"
           }}
         >
           <Image
@@ -324,7 +323,7 @@ export default class ProjectApprovalScreen extends React.Component {
               height: 37,
               position: "absolute",
               bottom: 30,
-              right: 30,
+              right: 30
             }}
             onPress={() => history.push("/Homepage")}
           >
@@ -347,7 +346,7 @@ export default class ProjectApprovalScreen extends React.Component {
               style={{
                 backgroundColor: "white",
                 width: 120,
-                height: 37,
+                height: 37
               }}
             >
               Cancel
@@ -362,7 +361,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 flex: 1,
                 marginBottom: 10,
                 flexDirection: "row",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Text style={styles.subTitle}>Project titile: </Text>
@@ -445,20 +444,20 @@ export default class ProjectApprovalScreen extends React.Component {
                           borderWidth: 1,
                           borderRadius: 5,
                         }}
-                        render={(innerProps) => (
+                        render={innerProps => (
                           <NativeTextInput
                             {...innerProps}
                             style={[
                               innerProps.style,
                               {
                                 paddingTop: 8,
-                                paddingBottom: 8,
-                              },
+                                paddingBottom: 8
+                              }
                             ]}
                           />
                         )}
                         value={this.state.descriptionComment}
-                        onChangeText={(text) =>
+                        onChangeText={text =>
                           this.setState({ descriptionComment: text })
                         }
                       />
@@ -490,7 +489,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: 15,
+                    marginTop: 15
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
@@ -557,7 +556,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: 15,
+                    marginTop: 15
                   }}
                 >
                   <Text style={styles.subTitle}>
@@ -833,7 +832,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "center"
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
@@ -1027,7 +1026,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           </Card.Content>
                         </Card>
                       </View>
-                    )
+                    );
                   })}
                 </View>
               </View>
@@ -1042,10 +1041,12 @@ export default class ProjectApprovalScreen extends React.Component {
             this.state.ethicsComment === "") ?
             (<View>
               <Button onPress={this.authorizeProject}>Authorize</Button>
-            </View>) :
-            (<View>
+            </View>
+          ) : (
+            <View>
               <Button onPress={this.leaveComment}>Pending</Button>
-            </View>)}
+            </View>
+          )}
         </View>
       </SafeAreaView>
     );

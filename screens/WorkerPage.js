@@ -1,16 +1,11 @@
 /** @format */
 
 import React from "react";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  Image,
-} from "react-native";
+import { Text, View, SafeAreaView, Image } from "react-native";
 import { styles } from "../styles.js";
 import { DataTable, Button, Colors, IconButton } from "react-native-paper";
 import axios from "axios";
-
+import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 export default class WorkerPage extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +18,7 @@ export default class WorkerPage extends React.Component {
       infoIcon: "chevron-right",
       unauthorizedProject: [],
       authorizedProject: [],
-      pendinginfoProject: [],
+      pendinginfoProject: []
     };
   }
 
@@ -35,14 +30,14 @@ export default class WorkerPage extends React.Component {
     let unauthorizedProjects = [];
     let authorizedProjects = [];
     let pendinginfoProjects = [];
-    axios.get(`http://localhost:12345/api/project/`).then(
-      (response) => {
+    axios.get(`${DEPLOYEDHOST}/api/project/`).then(
+      response => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let project = {
             key: response.data[i]._id,
             title: response.data[i].title,
             createdDate: response.data[i].createdDate,
-            state: response.data[i].state,
+            state: response.data[i].state
           };
           if (response.data[i].state === "pending") {
             pendinginfoProjects.push(project);
@@ -50,7 +45,7 @@ export default class WorkerPage extends React.Component {
             unauthorizedProjects.push(project);
           } else if (response.data[i].state === "Authorized" || response.data[i].state === "Recruiting") {
             authorizedProjects.push(project);
-          } 
+          }
         }
         this.setState({ unauthorizedProject: unauthorizedProjects });
         this.setState({ authorizedProject: authorizedProjects });
@@ -59,7 +54,7 @@ export default class WorkerPage extends React.Component {
         console.log(this.state.authorizedProject);
         console.log(this.state.pendinginfoProject);
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -100,7 +95,7 @@ export default class WorkerPage extends React.Component {
           style={{
             height: 140,
             backgroundColor: "#00205B",
-            flexDirection: "row",
+            flexDirection: "row"
           }}
         >
           {/* <Text style={{color:"red", position: "absolute"}}>Project - Version α</Text> */}
@@ -117,7 +112,7 @@ export default class WorkerPage extends React.Component {
               height: 37,
               position: "absolute",
               bottom: 30,
-              right: 30,
+              right: 30
             }}
             onPress={() => history.push("/Homepage")}
           >
@@ -127,7 +122,7 @@ export default class WorkerPage extends React.Component {
         {/* pending projects */}
         <View style={{ margin: 20 }}>
           <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
-            Project list 
+            Project list
           </Text>
           <DataTable>
             <DataTable.Header>
@@ -146,7 +141,7 @@ export default class WorkerPage extends React.Component {
             {this.state.pendingIsShow ? (
               <View>
                 {this.state.unauthorizedProject.map((item, index) => {
-                  console.log(item)
+                  console.log(item);
                   return (
                     <DataTable.Row key={index}>
                       <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -188,7 +183,7 @@ export default class WorkerPage extends React.Component {
             {this.state.infoIsShow ? (
               <View>
                 {this.state.pendinginfoProject.map((item, index) => {
-                  console.log(item)
+                  console.log(item);
                   return (
                     <DataTable.Row key={index}>
                       <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -226,7 +221,7 @@ export default class WorkerPage extends React.Component {
             {this.state.reviewedIsShow ? (
               <View>
                 {this.state.authorizedProject.map((item, index) => {
-                  console.log(item)
+                  console.log(item);
                   return (
                     <DataTable.Row key={index}>
                       <DataTable.Cell>{item.title}</DataTable.Cell>
