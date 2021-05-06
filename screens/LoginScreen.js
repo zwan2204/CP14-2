@@ -1,11 +1,10 @@
 /** @format */
 
 import React from "react";
-import { Image, Text, View, SafeAreaView } from "react-native";
+import { Text, View, SafeAreaView, TextInput } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import { HelperText, TextInput, Button } from "react-native-paper";
-import { useHistory, Link } from "react-router-dom";
+import { HelperText, Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../screens/Header";
 import Footer from "../screens/Footer";
@@ -91,7 +90,7 @@ export default class LoginScreen extends React.Component {
               justifyContent: "center",
               textAlign: "center",
               alignItems: "center",
-              width: "25%"
+              width: "20%"
             }}
           >
             <View
@@ -107,8 +106,7 @@ export default class LoginScreen extends React.Component {
               </Text>
 
               <TextInput
-                mode="outlined"
-                style={{ height: 30 }}
+                style={{ height: 30, borderWidth: 1, borderColor: "black", borderRadius: 5 }}
                 onChangeText={text => this.setState({ email: text })}
               />
             </View>
@@ -132,8 +130,7 @@ export default class LoginScreen extends React.Component {
               </Text>
 
               <TextInput
-                mode="outlined"
-                style={{ height: 30 }}
+                style={{ height: 30, borderWidth: 1, borderColor: "black", borderRadius: 5 }}
                 secureTextEntry={true}
                 onChangeText={text => this.setState({ password: text })}
               />
