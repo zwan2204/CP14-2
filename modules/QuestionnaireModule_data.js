@@ -317,7 +317,7 @@ export const identifyWorker = (
     );
 };
 
-export const getUserInfo = ({ setGet }) => {
+export const getUserInfo = ({ setGet, setLoading}) => {
   let userInfo = {};
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
     response => {
@@ -330,6 +330,7 @@ export const getUserInfo = ({ setGet }) => {
       userInfo["isLactating"] = response.data.isLactating;
       userInfo["isPlanning"] = response.data.isPlanning;
       setGet(true);
+      setLoading(false);
     },
     error => {
       console.log(error);

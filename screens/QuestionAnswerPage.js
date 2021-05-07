@@ -42,10 +42,13 @@ const QuestionAnswerPage = (props) => {
     /* get user's age */
     let userAge = getUserAge();
 
+    /* when data is loading */
+    const [isLoading, setLoading] = useState(true);
+
     /* retrieve user general information data */
     const [getUserData, setGet] = useState(false);
     const reducer = (state, action) => ({ ...state, ...action });
-    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet}));
+    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet, setLoading}));
 
     /* check the need of workers */
     let requireHCWorker = (userInfo.location == "clinic" || 
@@ -74,10 +77,7 @@ const QuestionAnswerPage = (props) => {
     const showingSpecificAmptyMsg = (step == 2 && specificQuestions.length == 0) ? true : false;
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
 
-    /* when data is loading */
-    const [isLoading, setLoading] = useState(false);
     const { history } = props;
-
     
     const stepForward = (isForward) => {
         let currentStep = step;

@@ -31,7 +31,6 @@ export default class LoginScreen extends React.Component {
       })
       .then(
         response => {
-          console.log(response);
           const userId = response.data.userId;
           const role = response.data.userRole;
           AsyncStorage.setItem("role", role);

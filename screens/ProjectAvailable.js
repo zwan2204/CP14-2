@@ -93,11 +93,23 @@ const ProjectAvailable = props => {
           >
             {item.title}
           </Text>
-          <Text
-            style={{ color: color, margin: 3, flex: 1, textAlign: "right" }}
-          >
-            {item.date}
-          </Text>
+
+            <View style={{flexDirection:"row", width:"100%", justifyContent:"space-between"}}>
+                <Text
+                    style={{ color: color, margin: 3, flex: 1, textAlign: "left" }}
+                >
+                    {/* the current number / total number */}
+                    {item.subjectNo}/{item.subjectNo}
+                </Text>
+
+                <Text
+                    style={{ color: color, margin: 3, flex: 1, textAlign: "right" }}
+                >
+                    {item.date}
+                </Text>
+
+            </View>
+
         </View>
       </Card>
     );
@@ -231,7 +243,8 @@ const ProjectAvailable = props => {
                 </View>
             </View>
 
-            <View style={{width:"100%", height:"10%", alignItems:"center", justifyContent:"center", alignContent:"center"}}>
+            <View style={{width:"100%", height:"10%", alignItems:"center", 
+                    justifyContent:"center", alignContent:"center"}}>
                 <Button
                     mode="contained"
                     style={{ width: 100}}
