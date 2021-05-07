@@ -315,4 +315,22 @@ handDeviceButtonStyle:{
     alignItems:"center"
 },
 
+handDeviceContinaer:{
+    width:"100%",
+    height:"100%",
+    flexDirection:"row",
+    alignContent:"center", 
+    alignItems:"center", 
+    justifyContent:"center", 
+    position:"absolute", 
+    zIndex:1
+},
+
+opacityBackground:{
+    height:"100%", 
+    width:"100%", 
+    backgroundColor:"white", 
+    opacity:0.9
+},
+
 });
