@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
   },
 
   picker: {
-    marginTop: 10,
     width: 190,
   },
 
@@ -261,9 +260,9 @@ export const styles = StyleSheet.create({
   },
 
   subTitle: {
-    fontSize: "1.3em",
+    fontSize: 20,
     color: "#00205B",
-    
+    marginLeft: 10,
   },
 
   questionCardStyle: {
@@ -307,7 +306,7 @@ handDeviceButtonContianer:{
 
 handDeviceButtonStyle:{
     width:"15%", 
-    height:"28%", 
+    height:"28%",
     backgroundColor:"#00205B", 
     borderRadius:5, 
     justifyContent:"center", 

@@ -2,8 +2,9 @@
 
 import React from "react";
 import { Image, View, Text } from "react-native";
+import {Button} from "react-native-paper";
 
-export default class Header extends React.Component {
+export default class HeaderSecond extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,10 +13,11 @@ export default class Header extends React.Component {
   }
 
   render() {
+    const { history } = this.props;
     return (
       <View
         style={{
-          height: "15%",
+          height: "20%",
           width:"100%",
           backgroundColor: "#00205B",
           flexDirection: "row",
@@ -30,6 +32,20 @@ export default class Header extends React.Component {
           }}
           source={require("../assets/header.png")}
         />
+        <Button
+            mode="text"
+            style={{
+              backgroundColor: "white",
+              width: 120,
+              height: 37,
+              position: "absolute",
+              bottom: 30,
+              right: 30
+            }}
+            //onPress={() => history.push("/Homepage")}
+          >
+            log out
+          </Button>
         <Text style={{color:"red", position: "absolute", fontSize: "3em"}}> Project - Version Alpha</Text>
       </View>
     );
