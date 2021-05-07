@@ -332,4 +332,14 @@ opacityBackground:{
     opacity:0.9
 },
 
+workerLoginButtonStyle:{
+    width:"15%", 
+    height:"50%", 
+    backgroundColor:"#00205B", 
+    borderRadius:5, 
+    justifyContent:"center", 
+    alignContent:"center", 
+    alignItems:"center"
+}
+
 });
