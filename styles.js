@@ -279,4 +279,40 @@ export const styles = StyleSheet.create({
     justifyContent:"center"
   },
 
+  handDeviceInner:{
+    width:"40%", 
+    height:"40%", 
+    borderColor:"#00205B", 
+    borderRadius:15, 
+    borderWidth:3, 
+    backgroundColor:"white", 
+    position:"absolute"
+},
+
+handDeviceText:{
+    width:"100%", 
+    height:"50%", 
+    justifyContent:"center", 
+    padding:"8%"
+},
+
+handDeviceButtonContianer:{
+    width:"100%", 
+    height:"50%", 
+    flexDirection:"row", 
+    justifyContent:"space-evenly", 
+    alignContent:"center", 
+    alignItems:"center"
+},
+
+handDeviceButtonStyle:{
+    width:"15%", 
+    height:"28%", 
+    backgroundColor:"#00205B", 
+    borderRadius:5, 
+    justifyContent:"center", 
+    alignContent:"center", 
+    alignItems:"center"
+},
+
 });
