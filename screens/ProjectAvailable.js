@@ -15,9 +15,9 @@ import {
   TextInput
 } from "react-native-paper";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
+
 const ProjectAvailable = props => {
-  // const projectList = props.location.projectIDs;
-  const projectList = "607d64a9fecc5f0831cfd31f,607d4a6e5b45460c614eb0c4";
+  const projectList = props.location.projectIDs;
   const hcWorker = props.location.hcWorker;
   const [projectAvailable, setProjectAvailable] = useState([]);
   const [selectedId, setSelectedId] = useState(null);

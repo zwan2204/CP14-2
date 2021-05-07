@@ -313,7 +313,6 @@ const QuestionAnswerPage = (props) => {
         }
         num += 1;
         if (num == currentQuestions.length) {
-            console.log(num);
             // sleep(1000);
             setEProjects(getAvailableProjects());
             setQuestionLeft();
