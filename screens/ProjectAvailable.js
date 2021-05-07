@@ -101,8 +101,9 @@ const ProjectAvailable = (props) => {
                 </Text>
             </View>
 
-            <View style={[styles.questionPageContainer, {height:"75%", paddingLeft:"5%"}]}>
-                <View style={{width:"82%", flexDirection: "row", paddingTop:"2%", height:"100%"}}>
+            <View style={[styles.questionPageContainer, {height:"70%"}]}>
+                <View style={{width:"82%", flexDirection: "row", paddingTop:"2%", 
+                        height:"100%", paddingLeft:"5%"}}>
                     {/* This section contains the process bar */}
                     <ScrollView style={{ width: "30%" }}>
                         <FlatList

@@ -375,7 +375,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo.gender)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(handDevice, needLogin)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
