@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, SafeAreaView, FlatList, ScrollView } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import Header from "../screens/Header";
+import HeaderSecond from "../screens/HeaderSecond";
 import Footer from "../screens/Footer";
 import {
   Button,
@@ -105,7 +105,7 @@ const ProjectAvailable = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <Header/>
+        <HeaderSecond/>
 
         {/* title information */}
         <View style={{height: "80%"}}>

@@ -17,7 +17,7 @@ export default class HeaderSecond extends React.Component {
     return (
       <View
         style={{
-          height: "20%",
+          height: "15%",
           width:"100%",
           backgroundColor: "#00205B",
           flexDirection: "row",
@@ -42,7 +42,7 @@ export default class HeaderSecond extends React.Component {
               bottom: 30,
               right: 30
             }}
-            //onPress={() => history.push("/Homepage")}
+            // onPress={() => history.push("/Homepage")}
           >
             log out
           </Button>

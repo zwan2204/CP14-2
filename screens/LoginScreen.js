@@ -9,18 +9,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../screens/Header";
 import Footer from "../screens/Footer";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
+import { ActivityIndicator } from "react-native";
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "@",
-      password: ""
+      password: "",
+      isLoading: false
     };
   }
 
   userLogin = () => {
     const { history } = this.props;
+    this.setState({ isLoading: !this.state.isLoading });
     axios
       .post(`${DEPLOYEDHOST}/api/auth`, {
         email: this.state.email,
@@ -33,6 +36,7 @@ export default class LoginScreen extends React.Component {
           const role = response.data.userRole;
           AsyncStorage.setItem("role", role);
           AsyncStorage.setItem("userId", userId);
+          this.setState({ isLoading: !this.state.isLoading });
           if (role === "Project Manager") {
             history.push("/projectManagement");
           } else if (role === "Admin") {
@@ -59,6 +63,21 @@ export default class LoginScreen extends React.Component {
         {/* Header color */}
         <Header />
         {/* Body */}
+
+        {this.state.isLoading ? 
+            <View style={[
+                styles.loadingStyle, 
+                {position:"absolute", backgroundColor:"white", opacity:0.9, zIndex:1, top:"15%"}
+            ]}>
+                <View>
+                <ActivityIndicator size="large" color="#00205B"/>
+                    <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
+                        Identifying your information
+                    </Text>
+                </View>
+            </View> : null
+        }
+            
         <View
           style={{
             height: "80%",

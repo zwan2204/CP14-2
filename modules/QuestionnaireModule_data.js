@@ -5,6 +5,7 @@ import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 
 const userID = localStorage.getItem("userId");
+let render = true;
 
 export const getProjects = (
   {
@@ -18,107 +19,107 @@ export const getProjects = (
   },
   userAge
 ) => {
-  setLoading(true);
-  let eligibleProjects = [];
-  let removedProjects = {};
+    setLoading(true);
+    let eligibleProjects = [];
+    let removedProjects = {};
 
-  axios.get(`${DEPLOYEDHOST}/api/project`).then(
-    response => {
-      for (let i = 0; i < Object.keys(response.data).length; i++) {
-        let project = response.data[i];
+    axios.get(`${DEPLOYEDHOST}/api/project`).then(
+        response => {
+        for (let i = 0; i < Object.keys(response.data).length; i++) {
+            let project = response.data[i];
 
-        if (project.state == "Recruiting") {
-          if (userInfo.location == "home" || userInfo.location == "gp") {
-            //location match
-            if (!project.workerNeed) {
-              //age match
-              const ageRange = project.ageGroup.split(",");
+            if (project.state == "Recruiting") {
+            if (userInfo.location == "home" || userInfo.location == "gp") {
+                //location match
+                if (!project.workerNeed) {
+                //age match
+                const ageRange = project.ageGroup.split(",");
 
-              for (let i = 0; i < ageRange.length; i++) {
-                ageRange[i] = parseInt(ageRange[i]);
-              }
-
-              if (
-                (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
-                (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                userAge >= ageRange[0] ||
-                userAge <= ageRange[1]
-              ) {
-                //filter projects based on user's selections.
-                if (
-                  userInfo.gender == project.gender &&
-                  userInfo.healthy == project.needHealth &&
-                  userInfo.isSmoking == project.isSmoking &&
-                  userInfo.isPregnant == project.isPregnant &&
-                  userInfo.isLactating == project.isLactating &&
-                  userInfo.isPlanning == project.isPlanningPregnant &&
-                  userInfo.english == project.needEnglish
-                ) {
-                  eligibleProjects.push(project._id);
-                } else {
-                  removedProjects[project._id] = 1;
+                for (let i = 0; i < ageRange.length; i++) {
+                    ageRange[i] = parseInt(ageRange[i]);
                 }
-              } else {
-                removedProjects[project._id] = 1;
-              }
-            }
-          }
-          if (
-            userInfo.location == "clinic" ||
-            userInfo.location == "hospital"
-          ) {
-            //location match
-            if (project.workerNeed) {
-              //age match
-              const ageRange = project.ageGroup.split(",");
 
-              for (let i = 0; i < ageRange.length; i++) {
-                ageRange[i] = parseInt(ageRange[i]);
-              }
-
-              if (
-                (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
-                (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                userAge >= ageRange[0] ||
-                userAge <= ageRange[1]
-              ) {
-                //filter projects based on user's selections.
                 if (
-                  userInfo.gender == project.gender &&
-                  userInfo.healthy == project.needHealth &&
-                  userInfo.isSmoking == project.isSmoking &&
-                  userInfo.isPregnant == project.isPregnant &&
-                  userInfo.isLactating == project.isLactating &&
-                  userInfo.isPlanning == project.isPlanningPregnant &&
-                  userInfo.english == project.needEnglish
+                    (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                    userAge >= ageRange[0] ||
+                    userAge <= ageRange[1]
                 ) {
-                  eligibleProjects.push(project._id);
+                    //filter projects based on user's selections.
+                    if (
+                    userInfo.gender == project.gender &&
+                    userInfo.healthy == project.needHealth &&
+                    userInfo.isSmoking == project.isSmoking &&
+                    userInfo.isPregnant == project.isPregnant &&
+                    userInfo.isLactating == project.isLactating &&
+                    userInfo.isPlanning == project.isPlanningPregnant &&
+                    userInfo.english == project.needEnglish
+                    ) {
+                    eligibleProjects.push(project._id);
+                    } else {
+                    removedProjects[project._id] = 1;
+                    }
                 } else {
-                  removedProjects[project._id] = 1;
+                    removedProjects[project._id] = 1;
                 }
-              } else {
-                removedProjects[project._id] = 1;
-              }
+                }
             }
-          }
+            if (
+                userInfo.location == "clinic" ||
+                userInfo.location == "hospital"
+            ) {
+                //location match
+                if (project.workerNeed) {
+                //age match
+                const ageRange = project.ageGroup.split(",");
+
+                for (let i = 0; i < ageRange.length; i++) {
+                    ageRange[i] = parseInt(ageRange[i]);
+                }
+
+                if (
+                    (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                    userAge >= ageRange[0] ||
+                    userAge <= ageRange[1]
+                ) {
+                    //filter projects based on user's selections.
+                    if (
+                    userInfo.gender == project.gender &&
+                    userInfo.healthy == project.needHealth &&
+                    userInfo.isSmoking == project.isSmoking &&
+                    userInfo.isPregnant == project.isPregnant &&
+                    userInfo.isLactating == project.isLactating &&
+                    userInfo.isPlanning == project.isPlanningPregnant &&
+                    userInfo.english == project.needEnglish
+                    ) {
+                    eligibleProjects.push(project._id);
+                    } else {
+                    removedProjects[project._id] = 1;
+                    }
+                } else {
+                    removedProjects[project._id] = 1;
+                }
+                }
+            }
+            }
         }
-        setRemovedProjects(removedProjects);
-        setEProjects(eligibleProjects);
-        getQuestions({
-          setLoading,
-          setGeQuestions,
-          setSpQuestions,
-          setWrQuestions,
-          eligibleProjects
-        });
-      }
-    },
-    error => {
-      console.log(error);
-    }
-  );
+            setRemovedProjects(removedProjects);
+            setEProjects(eligibleProjects);
+            getQuestions({
+            setLoading,
+            setGeQuestions,
+            setSpQuestions,
+            setWrQuestions,
+            eligibleProjects
+            });
+        },
+            error => {
+            console.log(error);
+        }
+    );
 };
 
 export function washQuestions(questions, eligibleProjects) {

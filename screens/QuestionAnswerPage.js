@@ -16,7 +16,7 @@ import {QuestionDemo} from "../modules/QuestionnaireModule_demo.js";
 import {HealhcareWorkerLoginView} from "../modules/QuestionnaireModule_WorkerLogin";
 import getUserAge from "../modules/QuestionnaireModule_data";
 import {getUserInfo, updateUserInfo, getProjects} from "../modules/QuestionnaireModule_data";
-import Header from "../screens/Header";
+import HeaderSecond from "../screens/HeaderSecond";
 import Footer from "../screens/Footer";
 
 
@@ -327,7 +327,7 @@ const QuestionAnswerPage = (props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header/>
+            <HeaderSecond/>
             
             {isLoading ? 
             <View style={styles.loadingStyle}>
