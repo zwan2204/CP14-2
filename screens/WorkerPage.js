@@ -9,7 +9,6 @@ import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import HeaderSecond from "../screens/HeaderSecond.js";
 import Footer from "../screens/Footer";
 
-
 export default class WorkerPage extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +46,10 @@ export default class WorkerPage extends React.Component {
             pendinginfoProjects.push(project);
           } else if (response.data[i].state === "New Upload") {
             unauthorizedProjects.push(project);
-          } else if (response.data[i].state === "Authorized" || response.data[i].state === "Recruiting") {
+          } else if (
+            response.data[i].state === "Authorized" ||
+            response.data[i].state === "Recruiting"
+          ) {
             authorizedProjects.push(project);
           }
         }
@@ -95,136 +97,160 @@ export default class WorkerPage extends React.Component {
     const { history } = this.props;
     return (
       <SafeAreaView style={styles.container}>
-        <HeaderSecond/>
+        <HeaderSecond history={history} />
         {/* pending projects */}
         <View>
-        <View style={{ margin: 20 }}>
-          <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
-            Project list
-          </Text>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Pending Projects</DataTable.Title>
-              <DataTable.Title numeric>Date Created</DataTable.Title>
-              <DataTable.Title numeric>State</DataTable.Title>
-              <DataTable.Title numeric>
-                <IconButton
-                  style={{ margin: 0 }}
-                  icon={this.state.pendingIcon}
-                  color={Colors.red500}
-                  onPress={this.setPendingIsShow}
-                ></IconButton>
-              </DataTable.Title>
-            </DataTable.Header>
-            {this.state.pendingIsShow ? (
-              <View>
-                {this.state.unauthorizedProject.map((item, index) => {
-                  console.log(item);
-                  return (
-                    <DataTable.Row key={index}>
-                      <DataTable.Cell>{item.title}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {item.createdDate}
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        <Button mode="outlined" labelStyle={{ fontSize: 10 }} onPress={() => this.props.history.push({
-                          pathname: "/projectApproval",
-                          state: { projectId: item.key, projectState: item.state }
-                        })}>process</Button>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  );
-                })}
-              </View>
-              
-            ) : (
-              <View></View>
-            )}
-          </DataTable>
-        </View>
+          <View style={{ margin: 20 }}>
+            <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
+              Project list
+            </Text>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Pending Projects</DataTable.Title>
+                <DataTable.Title numeric>Date Created</DataTable.Title>
+                <DataTable.Title numeric>State</DataTable.Title>
+                <DataTable.Title numeric>
+                  <IconButton
+                    style={{ margin: 0 }}
+                    icon={this.state.pendingIcon}
+                    color={Colors.red500}
+                    onPress={this.setPendingIsShow}
+                  ></IconButton>
+                </DataTable.Title>
+              </DataTable.Header>
+              {this.state.pendingIsShow ? (
+                <View>
+                  {this.state.unauthorizedProject.map((item, index) => {
+                    console.log(item);
+                    return (
+                      <DataTable.Row key={index}>
+                        <DataTable.Cell>{item.title}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {item.createdDate}
+                        </DataTable.Cell>
+                        <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          <Button
+                            mode="outlined"
+                            labelStyle={{ fontSize: 10 }}
+                            onPress={() =>
+                              this.props.history.push({
+                                pathname: "/projectApproval",
+                                state: {
+                                  projectId: item.key,
+                                  projectState: item.state
+                                }
+                              })
+                            }
+                          >
+                            process
+                          </Button>
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </DataTable>
+          </View>
 
-        <View style={{ margin: 20 }}>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Pending information Projects</DataTable.Title>
-              <DataTable.Title numeric>Date Created</DataTable.Title>
-              <DataTable.Title numeric>State</DataTable.Title>
-              <DataTable.Title numeric>
-                <IconButton
-                  style={{ margin: 0 }}
-                  icon={this.state.infoIcon}
-                  color={Colors.red500}
-                  onPress={this.setInfoIsShow}
-                ></IconButton>
-              </DataTable.Title>
-            </DataTable.Header>
-            {this.state.infoIsShow ? (
-              <View>
-                {this.state.pendinginfoProject.map((item, index) => {
-                  console.log(item);
-                  return (
-                    <DataTable.Row key={index}>
-                      <DataTable.Cell>{item.title}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {item.createdDate}
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
-                      <DataTable.Cell numeric> Request for further information </DataTable.Cell>
-                    </DataTable.Row>
-                  );
-                })}
-              </View>
-            ) : (
-              <View></View>
-            )}
-          </DataTable>
-        </View>
+          <View style={{ margin: 20 }}>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Pending information Projects</DataTable.Title>
+                <DataTable.Title numeric>Date Created</DataTable.Title>
+                <DataTable.Title numeric>State</DataTable.Title>
+                <DataTable.Title numeric>
+                  <IconButton
+                    style={{ margin: 0 }}
+                    icon={this.state.infoIcon}
+                    color={Colors.red500}
+                    onPress={this.setInfoIsShow}
+                  ></IconButton>
+                </DataTable.Title>
+              </DataTable.Header>
+              {this.state.infoIsShow ? (
+                <View>
+                  {this.state.pendinginfoProject.map((item, index) => {
+                    console.log(item);
+                    return (
+                      <DataTable.Row key={index}>
+                        <DataTable.Cell>{item.title}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {item.createdDate}
+                        </DataTable.Cell>
+                        <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {" "}
+                          Request for further information{" "}
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </DataTable>
+          </View>
 
-        {/* pending projects */}
-        <View style={{ margin: 20 }}>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Athourized Projects</DataTable.Title>
-              <DataTable.Title numeric>Date Created</DataTable.Title>
-              <DataTable.Title numeric>State</DataTable.Title>
-              <DataTable.Title numeric>
-                <IconButton
-                  style={{ margin: 0 }}
-                  icon={this.state.reviewedIcon}
-                  color={Colors.red500}
-                  onPress={this.setReviewedIsShow}
-                ></IconButton>
-              </DataTable.Title>
-            </DataTable.Header>
-            {this.state.reviewedIsShow ? (
-              <View>
-                {this.state.authorizedProject.map((item, index) => {
-                  console.log(item);
-                  return (
-                    <DataTable.Row key={index}>
-                      <DataTable.Cell>{item.title}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {item.createdDate}
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{item.state}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        <Button mode="outlined" labelStyle={{ fontSize: 10 }} onPress={() => this.props.history.push({
-                          pathname: "/projectApproval",
-                          state: { projectId: item.key, projectState: item.state }
-                        })}>review</Button>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  );
-                })}
-              </View>
-            ) : (
-              <View></View>
-            )}
-          </DataTable>
+          {/* pending projects */}
+          <View style={{ margin: 20 }}>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Athourized Projects</DataTable.Title>
+                <DataTable.Title numeric>Date Created</DataTable.Title>
+                <DataTable.Title numeric>State</DataTable.Title>
+                <DataTable.Title numeric>
+                  <IconButton
+                    style={{ margin: 0 }}
+                    icon={this.state.reviewedIcon}
+                    color={Colors.red500}
+                    onPress={this.setReviewedIsShow}
+                  ></IconButton>
+                </DataTable.Title>
+              </DataTable.Header>
+              {this.state.reviewedIsShow ? (
+                <View>
+                  {this.state.authorizedProject.map((item, index) => {
+                    console.log(item);
+                    return (
+                      <DataTable.Row key={index}>
+                        <DataTable.Cell>{item.title}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {item.createdDate}
+                        </DataTable.Cell>
+                        <DataTable.Cell numeric>{item.state}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          <Button
+                            mode="outlined"
+                            labelStyle={{ fontSize: 10 }}
+                            onPress={() =>
+                              this.props.history.push({
+                                pathname: "/projectApproval",
+                                state: {
+                                  projectId: item.key,
+                                  projectState: item.state
+                                }
+                              })
+                            }
+                          >
+                            review
+                          </Button>
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </DataTable>
+          </View>
         </View>
-        </View>
-        <Footer/>
+        <Footer />
       </SafeAreaView>
     );
   }

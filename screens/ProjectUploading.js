@@ -22,7 +22,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 import uuid from "react-native-uuid";
 import Footer from "./Footer";
-import HeaderSecond from "../screens/HeaderSecond"
+import HeaderSecond from "../screens/HeaderSecond";
 const ProjectUploading = props => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
@@ -336,7 +336,7 @@ const ProjectUploading = props => {
   return (
     <SafeAreaView style={styles.root}>
       {/*View of Header*/}
-      <HeaderSecond />
+      <HeaderSecond history={props.history} />
 
       {/* View of Body*/}
       <ScrollView style={{ margin: 35 }}>

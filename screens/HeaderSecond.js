@@ -2,13 +2,12 @@
 
 import React from "react";
 import { Image, View, Text } from "react-native";
-import {Button} from "react-native-paper";
-
+import { Button } from "react-native-paper";
 export default class HeaderSecond extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        width: 0
+      width: 0
     };
   }
 
@@ -18,35 +17,38 @@ export default class HeaderSecond extends React.Component {
       <View
         style={{
           height: "15%",
-          width:"100%",
+          width: "100%",
           backgroundColor: "#00205B",
           flexDirection: "row",
-          alignContent:"center",
-          alignItems:"center"
+          alignContent: "center",
+          alignItems: "center"
         }}
       >
         <Image
-          style={{ width: this.state.width, height: "80%", left: "10%"}}
+          style={{ width: this.state.width, height: "80%", left: "10%" }}
           onLayout={e => {
-            this.setState({ width: e.nativeEvent.layout.height * 2});
+            this.setState({ width: e.nativeEvent.layout.height * 2 });
           }}
           source={require("../assets/header.png")}
         />
         <Button
-            mode="text"
-            style={{
-              backgroundColor: "white",
-              width: 120,
-              height: 37,
-              position: "absolute",
-              bottom: 30,
-              right: 30
-            }}
-            // onPress={() => history.push("/Homepage")}
-          >
-            log out
-          </Button>
-        <Text style={{color:"red", position: "absolute", fontSize: "3em"}}> Project - Version Alpha</Text>
+          mode="text"
+          style={{
+            backgroundColor: "white",
+            width: 120,
+            height: 37,
+            position: "absolute",
+            bottom: 30,
+            right: 30
+          }}
+          onPress={() => history.push("/Homepage")}
+        >
+          log out
+        </Button>
+        <Text style={{ color: "red", position: "absolute", fontSize: "3em" }}>
+          {" "}
+          Project - Version Alpha
+        </Text>
       </View>
     );
   }

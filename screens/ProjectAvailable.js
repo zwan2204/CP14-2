@@ -94,22 +94,26 @@ const ProjectAvailable = props => {
             {item.title}
           </Text>
 
-            <View style={{flexDirection:"row", width:"100%", justifyContent:"space-between"}}>
-                <Text
-                    style={{ color: color, margin: 3, flex: 1, textAlign: "left" }}
-                >
-                    {/* the current number / total number */}
-                    {item.subjectNo}/{item.subjectNo}
-                </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              justifyContent: "space-between"
+            }}
+          >
+            <Text
+              style={{ color: color, margin: 3, flex: 1, textAlign: "left" }}
+            >
+              {/* the current number / total number */}
+              {item.subjectNo}/{item.subjectNo}
+            </Text>
 
-                <Text
-                    style={{ color: color, margin: 3, flex: 1, textAlign: "right" }}
-                >
-                    {item.date}
-                </Text>
-
-            </View>
-
+            <Text
+              style={{ color: color, margin: 3, flex: 1, textAlign: "right" }}
+            >
+              {item.date}
+            </Text>
+          </View>
         </View>
       </Card>
     );
@@ -117,146 +121,166 @@ const ProjectAvailable = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <HeaderSecond/>
+      <HeaderSecond history={props.history} />
 
-        {/* title information */}
-        <View style={{height: "80%"}}>
-            <View style={{flexDirection: "row", height:"12%"}}>
-                <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo.gender)}>
-                    Available projects for you
-                </Text>
-            </View>
-
-            <View style={[styles.questionPageContainer, {height:"70%"}]}>
-                <View style={{width:"82%", flexDirection: "row", paddingTop:"2%", 
-                        height:"100%", paddingLeft:"5%"}}>
-                    {/* This section contains the process bar */}
-                    <ScrollView style={{ width: "30%" }}>
-                        <FlatList
-                            data={projectAvailable}
-                            renderItem={({ item }) => {return renderList(item);}}
-                            keyExtractor={(item) => item.id}
-                        />
-                    </ScrollView>
-
-                    <ScrollView style={{ width: "65%", paddingLeft:"2%" }}>
-                        <View style={{ flexDirection: "row", margin: 10 }}>
-                            <Text style={{ fontWeight: "bold", paddingRight:10}}>
-                                Title:
-                            </Text>
-                            <Text style={{ flex: 1 }}>{title}</Text>
-                        </View>
-
-                        <View style={{ flexDirection: "row", margin: 10 }}>
-                            <Text style={{ fontWeight: "bold", paddingRight:10}}>
-                                Study Duration: 
-                            </Text>
-                            <Text style={{ flex: 1 }}>{duration}</Text>
-                        </View>
-
-                        <View style={{ flexDirection: "row", margin: 10 }}>
-                            <Text style={{ fontWeight: "bold", paddingRight:10}}>
-                                Location: 
-                            </Text>
-                            <Text style={{ flex: 1 }}>{location}</Text>
-                        </View>
-
-                        <View style={{ flexDirection: "row", margin: 10 }}>
-                            <Text style={{ fontWeight: "bold", paddingRight:10}}>
-                                Start date: 
-                            </Text>
-                            <Text style={{ flex: 1 }}>{date}</Text>
-                        </View>
-
-                        <View style={{ flexDirection: "row", margin: 10 }}>
-                            <Text style={{ fontWeight: "bold", paddingRight:10}}>
-                                Description: 
-                            </Text>
-                            <Text style={{ flex: 1 }}>{description}</Text>
-                        </View>
-
-                    </ScrollView>
-                </View>
-
-                {/* This section contains the process bar */}
-                <View style={styles.processBarContainer}>
-                    <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>
-                        <Text style={{color:"white", paddingLeft:5}}>
-                            1
-                        </Text>
-                        <Text style={{position:"absolute", paddingLeft:30, color:"#00205B"}}>
-                            Demographic Information
-                        </Text>
-                    </View>
-                    <View 
-                        style={[styles.processBarPole, {backgroundColor: "#00205B"}]}>
-                    </View>
-                    <View 
-                        style={[styles.processBarCircle, {backgroundColor: "#00205B"}]}>
-                        <Text style={{color: "white", paddingLeft:5}}>
-                            2
-                        </Text>
-                        <Text style={styles.processBarText}>
-                            General Questions
-                        </Text>
-                    </View>
-                    <View style={[
-                        styles.processBarPole, {backgroundColor: "#00205B"}]}>
-                    </View>
-                    <View style={[
-                        styles.processBarCircle, {backgroundColor: "#00205B"}]}>                        
-                        <Text style={{color: "white", paddingLeft:5}}>
-                            3
-                        </Text>
-                        <Text style={styles.processBarText}>
-                            Specific Questions
-                        </Text>
-                    </View>
-
-                    {hcWorker &&
-                    <View style={[styles.processBarPole, {backgroundColor: "#00205B"}]}>
-                    </View>}
-                    {hcWorker &&
-                    <View style={[
-                        styles.processBarCircle, {backgroundColor: "#00205B"}]}>                        
-                        <Text style={{color:"white", paddingLeft:5}}>
-                            4
-                        </Text>
-                        <Text style={styles.processBarText}>
-                            Medical Condition
-                        </Text>
-                    </View>
-                    }
-
-                    <View style={[styles.processBarPole, {backgroundColor: "#00205B"}]}>
-                    </View>
-
-                    <View style={[
-                        styles.processBarCircle, {backgroundColor: "#00205B"}]}>                        
-                        <Text style={{color:"white", paddingLeft:5}}>
-                            {hcWorker ? "5" : "4"}
-                        </Text>
-                        <Text style={styles.processBarText}>
-                            Eligible Projects
-                        </Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={{width:"100%", height:"10%", alignItems:"center", 
-                    justifyContent:"center", alignContent:"center"}}>
-                <Button
-                    mode="contained"
-                    style={{ width: 100}}
-                    //remove the console.log(), and place your consent website here
-                    onPress={() => console.log("")}>
-                    Join
-                </Button>
-            </View>
-
+      {/* title information */}
+      <View style={{ height: "80%" }}>
+        <View style={{ flexDirection: "row", height: "12%" }}>
+          <Text
+            style={styles.titleInfoP1}
+            onPress={() => console.log(userInfo.gender)}
+          >
+            Available projects for you
+          </Text>
         </View>
-        
-        {/* <Portal>
+
+        <View style={[styles.questionPageContainer, { height: "70%" }]}>
+          <View
+            style={{
+              width: "82%",
+              flexDirection: "row",
+              paddingTop: "2%",
+              height: "100%",
+              paddingLeft: "5%"
+            }}
+          >
+            {/* This section contains the process bar */}
+            <ScrollView style={{ width: "30%" }}>
+              <FlatList
+                data={projectAvailable}
+                renderItem={({ item }) => {
+                  return renderList(item);
+                }}
+                keyExtractor={item => item.id}
+              />
+            </ScrollView>
+
+            <ScrollView style={{ width: "65%", paddingLeft: "2%" }}>
+              <View style={{ flexDirection: "row", margin: 10 }}>
+                <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
+                  Title:
+                </Text>
+                <Text style={{ flex: 1 }}>{title}</Text>
+              </View>
+
+              <View style={{ flexDirection: "row", margin: 10 }}>
+                <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
+                  Study Duration:
+                </Text>
+                <Text style={{ flex: 1 }}>{duration}</Text>
+              </View>
+
+              <View style={{ flexDirection: "row", margin: 10 }}>
+                <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
+                  Location:
+                </Text>
+                <Text style={{ flex: 1 }}>{location}</Text>
+              </View>
+
+              <View style={{ flexDirection: "row", margin: 10 }}>
+                <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
+                  Start date:
+                </Text>
+                <Text style={{ flex: 1 }}>{date}</Text>
+              </View>
+
+              <View style={{ flexDirection: "row", margin: 10 }}>
+                <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
+                  Description:
+                </Text>
+                <Text style={{ flex: 1 }}>{description}</Text>
+              </View>
+            </ScrollView>
+          </View>
+
+          {/* This section contains the process bar */}
+          <View style={styles.processBarContainer}>
+            <View
+              style={[styles.processBarCircle, { backgroundColor: "#00205B" }]}
+            >
+              <Text style={{ color: "white", paddingLeft: 5 }}>1</Text>
+              <Text
+                style={{
+                  position: "absolute",
+                  paddingLeft: 30,
+                  color: "#00205B"
+                }}
+              >
+                Demographic Information
+              </Text>
+            </View>
+            <View
+              style={[styles.processBarPole, { backgroundColor: "#00205B" }]}
+            ></View>
+            <View
+              style={[styles.processBarCircle, { backgroundColor: "#00205B" }]}
+            >
+              <Text style={{ color: "white", paddingLeft: 5 }}>2</Text>
+              <Text style={styles.processBarText}>General Questions</Text>
+            </View>
+            <View
+              style={[styles.processBarPole, { backgroundColor: "#00205B" }]}
+            ></View>
+            <View
+              style={[styles.processBarCircle, { backgroundColor: "#00205B" }]}
+            >
+              <Text style={{ color: "white", paddingLeft: 5 }}>3</Text>
+              <Text style={styles.processBarText}>Specific Questions</Text>
+            </View>
+
+            {hcWorker && (
+              <View
+                style={[styles.processBarPole, { backgroundColor: "#00205B" }]}
+              ></View>
+            )}
+            {hcWorker && (
+              <View
+                style={[
+                  styles.processBarCircle,
+                  { backgroundColor: "#00205B" }
+                ]}
+              >
+                <Text style={{ color: "white", paddingLeft: 5 }}>4</Text>
+                <Text style={styles.processBarText}>Medical Condition</Text>
+              </View>
+            )}
+
+            <View
+              style={[styles.processBarPole, { backgroundColor: "#00205B" }]}
+            ></View>
+
+            <View
+              style={[styles.processBarCircle, { backgroundColor: "#00205B" }]}
+            >
+              <Text style={{ color: "white", paddingLeft: 5 }}>
+                {hcWorker ? "5" : "4"}
+              </Text>
+              <Text style={styles.processBarText}>Eligible Projects</Text>
+            </View>
+          </View>
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            height: "10%",
+            alignItems: "center",
+            justifyContent: "center",
+            alignContent: "center"
+          }}
+        >
+          <Button
+            mode="contained"
+            style={{ width: 100 }}
+            //remove the console.log(), and place your consent website here
+            onPress={() => console.log("")}
+          >
+            Join
+          </Button>
+        </View>
+      </View>
+
+      {/* <Portal>
             <Dialog
                     style={{ width: 300, alignSelf: "center" }}
                     visible={projectList == ""}
@@ -275,9 +299,9 @@ const ProjectAvailable = props => {
                         style={{ height: 30 }}
                         placeholder="Phone number:"
                         /> */}
-                    {/* <Dialog.Input label="Phone number:"></Dialog.Input> */}
-                    {/* <Dialog.Input label="Email address:"></Dialog.Input> */}
-                {/* </Dialog.Content>
+      {/* <Dialog.Input label="Phone number:"></Dialog.Input> */}
+      {/* <Dialog.Input label="Email address:"></Dialog.Input> */}
+      {/* </Dialog.Content>
 
                 <Dialog.Actions>
                     <Button onPress={hideDialog}>Click</Button>
@@ -285,11 +309,10 @@ const ProjectAvailable = props => {
 
             </Dialog>
         </Portal> */}
-        
-        {/* View of Footer*/}
-        <Footer/>
 
-        </SafeAreaView>
+      {/* View of Footer*/}
+      <Footer />
+    </SafeAreaView>
   );
 };
 

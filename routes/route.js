@@ -33,8 +33,16 @@ const Routes = () => (
     <Switch>
       <Redirect exact from="/" to={LOGIN_URL} />
       <Route exact path={LOGIN_URL} component={LoginScreen} />
-      <Route exact path={PROJECT_UPLOAD_URL} component={ProjectUploading} />
-      <Route exact path={PROJECT_MANAGEMENT_URL} component={ProjectManagement} />
+      <ProtectedRoute
+        exact
+        path={PROJECT_UPLOAD_URL}
+        component={ProjectUploading}
+      />
+      <ProtectedRoute
+        exact
+        path={PROJECT_MANAGEMENT_URL}
+        component={ProjectManagement}
+      />
       <Route exact path={PENDING_EDIT} component={PendingEdit} />
       <Route exact path={PROJECT_AVAILABLE} component={ProjectAvailable} />
       <Route exact path={PROJECT_PRIVIEW} component={ProjectPreview} />

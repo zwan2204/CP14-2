@@ -275,7 +275,7 @@ const ProjectManagement = props => {
   return (
     <SafeAreaView style={styles.root}>
       {/*View of Header*/}
-      <HeaderSecond />
+      <HeaderSecond history={props.history} />
 
       {/*View of Body*/}
       <ScrollView style={{ margin: 35 }}>

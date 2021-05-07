@@ -327,7 +327,7 @@ const QuestionAnswerPage = (props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderSecond/>
+            <HeaderSecond history={props.history} />
             
             {isLoading ? 
             <View style={styles.loadingStyle}>

@@ -285,10 +285,18 @@ export default class ProjectApprovalScreen extends React.Component {
       .then(
         response => {
           this.setState({ project: response.data });
-          for (let i = 0; i < Object.keys(response.data.InclusionCriteria).length; i++) {
+          for (
+            let i = 0;
+            i < Object.keys(response.data.InclusionCriteria).length;
+            i++
+          ) {
             inclusionQuestions.push(response.data.InclusionCriteria[i]);
           }
-          for (let i = 0; i < Object.keys(response.data.ExclusionCriteria).length; i++) {
+          for (
+            let i = 0;
+            i < Object.keys(response.data.ExclusionCriteria).length;
+            i++
+          ) {
             exclusionQuestions.push(response.data.ExclusionCriteria[i]);
           }
           this.setState({ inclusionQuestion: inclusionQuestions });
@@ -306,14 +314,28 @@ export default class ProjectApprovalScreen extends React.Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <HeaderSecond />
+        <HeaderSecond history={history} />
 
         {/* first row view */}
         <View style={{ margin: 20 }}>
           <View style={{ flexDirection: "row", paddingBottom: 20 }}>
-            <Text style={{ fontSize: 35, color: "grey", flex: 1, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontSize: 35,
+                color: "grey",
+                flex: 1,
+                fontWeight: "bold"
+              }}
+            >
               Project Information
-              <Text style={{ fontSize: 10, color: "red", paddingLeft: 20, fontWeight: "normal" }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: "red",
+                  paddingLeft: 20,
+                  fontWeight: "normal"
+                }}
+              >
                 *You can leave comments by clicking a text field
               </Text>
             </Text>
@@ -332,7 +354,6 @@ export default class ProjectApprovalScreen extends React.Component {
 
           {/*Project basic information upload area*/}
           <View>
-
             <View
               style={{
                 flex: 1,
@@ -357,22 +378,22 @@ export default class ProjectApprovalScreen extends React.Component {
                         height: 100,
                         marginHorizontal: 10,
                         borderWidth: 1,
-                        borderRadius: 5,
+                        borderRadius: 5
                       }}
-                      render={(innerProps) => (
+                      render={innerProps => (
                         <NativeTextInput
                           {...innerProps}
                           style={[
                             innerProps.style,
                             {
                               paddingTop: 8,
-                              paddingBottom: 8,
-                            },
+                              paddingBottom: 8
+                            }
                           ]}
                         />
                       )}
                       value={this.state.titleComment}
-                      onChangeText={(text) =>
+                      onChangeText={text =>
                         this.setState({ titleComment: text })
                       }
                     />
@@ -382,7 +403,6 @@ export default class ProjectApprovalScreen extends React.Component {
                   </Dialog>
                 </Portal>
                 <TouchableOpacity onPress={this.showModal}>
-
                   <Text
                     style={{
                       width: 557,
@@ -390,7 +410,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: this.changeTitleColor(),
-                      borderRadius: 5,
+                      borderRadius: 5
                     }}
                   >
                     {" "}
@@ -419,7 +439,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           height: 100,
                           marginHorizontal: 10,
                           borderWidth: 1,
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                         render={innerProps => (
                           <NativeTextInput
@@ -444,7 +464,6 @@ export default class ProjectApprovalScreen extends React.Component {
                     </Dialog>
                   </Portal>
                   <TouchableOpacity onPress={this.showModal1}>
-
                     <Text
                       multiline={true}
                       textAlignVertical="top"
@@ -453,7 +472,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         marginHorizontal: 10,
                         borderWidth: 1,
                         borderColor: this.changeDescriptionColor(),
-                        borderRadius: 5,
+                        borderRadius: 5
                       }}
                     >
                       {" "}
@@ -485,22 +504,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 5
                           }}
-                          render={(innerProps) => (
+                          render={innerProps => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
+                                  paddingBottom: 8
+                                }
                               ]}
                             />
                           )}
                           value={this.state.ethicsComment}
-                          onChangeText={(text) =>
+                          onChangeText={text =>
                             this.setState({ ethicsComment: text })
                           }
                         />
@@ -510,7 +529,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Dialog>
                     </Portal>
                     <TouchableOpacity onPress={this.showModal2}>
-
                       <Text
                         style={{
                           height: 30,
@@ -518,7 +536,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 5,
                           borderWidth: 1,
                           borderColor: this.changeEthicsColor(),
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       >
                         {" "}
@@ -526,7 +544,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Text>
                     </TouchableOpacity>
                   </View>
-
                 </View>
 
                 <View
@@ -554,22 +571,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 5
                           }}
-                          render={(innerProps) => (
+                          render={innerProps => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
+                                  paddingBottom: 8
+                                }
                               ]}
                             />
                           )}
                           value={this.state.governanceComment}
-                          onChangeText={(text) =>
+                          onChangeText={text =>
                             this.setState({ governanceComment: text })
                           }
                         />
@@ -579,7 +596,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Dialog>
                     </Portal>
                     <TouchableOpacity onPress={this.showModal3}>
-
                       <Text
                         multiline={true}
                         textAlignVertical="top"
@@ -589,7 +605,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 5,
                           borderWidth: 1,
                           borderColor: this.changeGovernanceColor(),
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       >
                         {" "}
@@ -601,8 +617,13 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
 
               <View style={{ flex: 1 }}>
-
-                <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 20 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingBottom: 20
+                  }}
+                >
                   <Text style={styles.subTitle}>Location: </Text>
                   <View>
                     <Portal>
@@ -619,22 +640,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 5
                           }}
-                          render={(innerProps) => (
+                          render={innerProps => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
+                                  paddingBottom: 8
+                                }
                               ]}
                             />
                           )}
                           value={this.state.locationComment}
-                          onChangeText={(text) =>
+                          onChangeText={text =>
                             this.setState({ locationComment: text })
                           }
                         />
@@ -644,7 +665,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Dialog>
                     </Portal>
                     <TouchableOpacity onPress={this.showModal4}>
-
                       <Text
                         multiline={true}
                         textAlignVertical="top"
@@ -654,7 +674,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeLocationColor(),
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       >
                         {" "}
@@ -669,7 +689,6 @@ export default class ProjectApprovalScreen extends React.Component {
                     flexDirection: "row",
                     alignItems: "center",
                     paddingBottom: 20
-
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -688,22 +707,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 5
                           }}
-                          render={(innerProps) => (
+                          render={innerProps => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
+                                  paddingBottom: 8
+                                }
                               ]}
                             />
                           )}
                           value={this.state.subjectNoComment}
-                          onChangeText={(text) =>
+                          onChangeText={text =>
                             this.setState({ subjectNoComment: text })
                           }
                         />
@@ -713,7 +732,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Dialog>
                     </Portal>
                     <TouchableOpacity onPress={this.showModal5}>
-
                       <Text
                         multiline={true}
                         textAlignVertical="top"
@@ -723,7 +741,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeSubjectNoColor(),
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       >
                         {" "}
@@ -731,7 +749,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Text>
                     </TouchableOpacity>
                   </View>
-
                 </View>
 
                 <View
@@ -739,7 +756,6 @@ export default class ProjectApprovalScreen extends React.Component {
                     flexDirection: "row",
                     alignItems: "center",
                     paddingBottom: 20
-
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
@@ -758,22 +774,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 5
                           }}
-                          render={(innerProps) => (
+                          render={innerProps => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
+                                  paddingBottom: 8
+                                }
                               ]}
                             />
                           )}
                           value={this.state.durationComment}
-                          onChangeText={(text) =>
+                          onChangeText={text =>
                             this.setState({ durationComment: text })
                           }
                         />
@@ -783,7 +799,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Dialog>
                     </Portal>
                     <TouchableOpacity onPress={this.showModal6}>
-
                       <Text
                         multiline={true}
                         textAlignVertical="top"
@@ -794,16 +809,14 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeDurationColor(),
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       >
                         {" "}
                         {this.state.project.duration}{" "}
                       </Text>
                     </TouchableOpacity>
-
                   </View>
-
                 </View>
 
                 <View
@@ -829,22 +842,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             marginHorizontal: 10,
                             borderWidth: 1,
                             borderColor: this.state.pendingComment,
-                            borderRadius: 5,
+                            borderRadius: 5
                           }}
-                          render={(innerProps) => (
+                          render={innerProps => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
+                                  paddingBottom: 8
+                                }
                               ]}
                             />
                           )}
                           value={this.state.dateComment}
-                          onChangeText={(text) =>
+                          onChangeText={text =>
                             this.setState({ dateComment: text })
                           }
                         />
@@ -854,7 +867,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Dialog>
                     </Portal>
                     <TouchableOpacity onPress={this.showModal7}>
-
                       <Text
                         multiline={true}
                         textAlignVertical="top"
@@ -864,7 +876,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeDateColor(),
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
                       >
                         {" "}
@@ -872,7 +884,6 @@ export default class ProjectApprovalScreen extends React.Component {
                       </Text>
                     </TouchableOpacity>
                   </View>
-
                 </View>
               </View>
             </View>
@@ -893,63 +904,80 @@ export default class ProjectApprovalScreen extends React.Component {
                     }}
                   >
                     Question Preview
-                    <Text style={{ fontSize: 5, paddingLeft: 10, color: "red", fontWeight: "normal" }}>*Click the type of questions to comment</Text>
+                    <Text
+                      style={{
+                        fontSize: 5,
+                        paddingLeft: 10,
+                        color: "red",
+                        fontWeight: "normal"
+                      }}
+                    >
+                      *Click the type of questions to comment
+                    </Text>
                   </Text>
                 </View>
 
                 <View>
-                <Portal>
-                      <Dialog
-                        style={{ width: 500, alignSelf: "center" }}
-                        visible={this.state.isModalVisible8}
-                        onDismiss={this.handleCancel8}
-                      >
-                        <Dialog.Title>Please leave comment</Dialog.Title>
-                        <TextInput
-                          multiline={true}
-                          textAlignVertical="top"
-                          style={{
-                            height: 100,
-                            marginHorizontal: 10,
-                            borderWidth: 1,
-                            borderRadius: 5,
-                          }}
-                          render={(innerProps) => (
-                            <NativeTextInput
-                              {...innerProps}
-                              style={[
-                                innerProps.style,
-                                {
-                                  paddingTop: 8,
-                                  paddingBottom: 8,
-                                },
-                              ]}
-                            />
-                          )}
-                          value={this.state.inclusionComment}
-                          onChangeText={(text) =>
-                            this.setState({ inclusionComment: text })
-                          }
-                        />
-                        <Dialog.Actions>
-                          <Button onPress={this.handleCancel8}>Submit</Button>
-                        </Dialog.Actions>
-                      </Dialog>
-                    </Portal>
-                <TouchableOpacity onPress={this.showModal8}>
-                  <Text style={{ fontSize: 15, color: this.changeInclusionColor() }}> Inclusion Quetsions </Text>
-                </TouchableOpacity>
-                {this.state.inclusionQuestion.map((item, index) => {
-                  return (
-                    <View key={index}>
-                      <Card>
-                        <Card.Content style={styles.questionCardStyle}>
-                          <Text>{item}</Text>
-                        </Card.Content>
-                      </Card>
-                    </View>
-                  )
-                })}
+                  <Portal>
+                    <Dialog
+                      style={{ width: 500, alignSelf: "center" }}
+                      visible={this.state.isModalVisible8}
+                      onDismiss={this.handleCancel8}
+                    >
+                      <Dialog.Title>Please leave comment</Dialog.Title>
+                      <TextInput
+                        multiline={true}
+                        textAlignVertical="top"
+                        style={{
+                          height: 100,
+                          marginHorizontal: 10,
+                          borderWidth: 1,
+                          borderRadius: 5
+                        }}
+                        render={innerProps => (
+                          <NativeTextInput
+                            {...innerProps}
+                            style={[
+                              innerProps.style,
+                              {
+                                paddingTop: 8,
+                                paddingBottom: 8
+                              }
+                            ]}
+                          />
+                        )}
+                        value={this.state.inclusionComment}
+                        onChangeText={text =>
+                          this.setState({ inclusionComment: text })
+                        }
+                      />
+                      <Dialog.Actions>
+                        <Button onPress={this.handleCancel8}>Submit</Button>
+                      </Dialog.Actions>
+                    </Dialog>
+                  </Portal>
+                  <TouchableOpacity onPress={this.showModal8}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: this.changeInclusionColor()
+                      }}
+                    >
+                      {" "}
+                      Inclusion Quetsions{" "}
+                    </Text>
+                  </TouchableOpacity>
+                  {this.state.inclusionQuestion.map((item, index) => {
+                    return (
+                      <View key={index}>
+                        <Card>
+                          <Card.Content style={styles.questionCardStyle}>
+                            <Text>{item}</Text>
+                          </Card.Content>
+                        </Card>
+                      </View>
+                    );
+                  })}
                 </View>
 
                 <View>
@@ -967,22 +995,22 @@ export default class ProjectApprovalScreen extends React.Component {
                           height: 100,
                           marginHorizontal: 10,
                           borderWidth: 1,
-                          borderRadius: 5,
+                          borderRadius: 5
                         }}
-                        render={(innerProps) => (
+                        render={innerProps => (
                           <NativeTextInput
                             {...innerProps}
                             style={[
                               innerProps.style,
                               {
                                 paddingTop: 8,
-                                paddingBottom: 8,
-                              },
+                                paddingBottom: 8
+                              }
                             ]}
                           />
                         )}
                         value={this.state.exclusionComment}
-                        onChangeText={(text) =>
+                        onChangeText={text =>
                           this.setState({ exclusionComment: text })
                         }
                       />
@@ -992,7 +1020,16 @@ export default class ProjectApprovalScreen extends React.Component {
                     </Dialog>
                   </Portal>
                   <TouchableOpacity onPress={this.showModal9}>
-                    <Text style={{ fontSize: 15, marginTop: 30, color: this.changeExclusionColor() }}> Exclusion Quetsions </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        marginTop: 30,
+                        color: this.changeExclusionColor()
+                      }}
+                    >
+                      {" "}
+                      Exclusion Quetsions{" "}
+                    </Text>
                   </TouchableOpacity>
                   {this.state.exclusionQuestion.map((item, index) => {
                     return (
@@ -1012,11 +1049,17 @@ export default class ProjectApprovalScreen extends React.Component {
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          {(this.state.descriptionComment === "" && this.state.titleComment === "" && this.state.exclusionComment === "" &&
-            this.state.inclusionComment === "" && this.state.durationComment == "" && this.state.governanceComment === "" &&
-            this.state.subjectNoComment === "" && this.state.dateComment === "" && this.state.locationComment === "" &&
-            this.state.ethicsComment === "") ?
-            (<View>
+          {this.state.descriptionComment === "" &&
+          this.state.titleComment === "" &&
+          this.state.exclusionComment === "" &&
+          this.state.inclusionComment === "" &&
+          this.state.durationComment == "" &&
+          this.state.governanceComment === "" &&
+          this.state.subjectNoComment === "" &&
+          this.state.dateComment === "" &&
+          this.state.locationComment === "" &&
+          this.state.ethicsComment === "" ? (
+            <View>
               <Button onPress={this.authorizeProject}>Authorize</Button>
             </View>
           ) : (
