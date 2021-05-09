@@ -39,5 +39,6 @@
   "devDependencies": {
     "@babel/core": "~7.9.0"
   },
-  "private": true
+  "private": true,
+  "homepage": "https://peaceful-kilby-661732.netlify.app"
 }
