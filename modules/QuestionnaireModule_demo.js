@@ -5,7 +5,7 @@ import { Text, View, SafeAreaView, CheckBox } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 
-export function QuestionDemo({setDemoInfo, userInfo}) {
+export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     let gender_default = userInfo["gender"];
     let healthy_default = userInfo["healthy"];
     let english_default = userInfo["english"];
@@ -26,8 +26,16 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
 
     const pickGender = gender => {
         if (gender !== 0) {
-            setDemoInfo({gender: gender});
+            let tempUserlist = userInfo;
+            tempUserlist.gender = gender;
+            setDemoInfo(tempUserlist);
             setGender_thisPage(gender);
+            if (userInfo.location != "" && userInfo.gender != "" &&
+                userInfo.location != "0" && userInfo.gender != "0") {
+                setDemoMsg(false);
+            } else {
+                setDemoMsg(true);
+            }
         }
     };
 
@@ -38,7 +46,10 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
             } else if (healthy == "false") {
                 healthy = false;
             }
-            setDemoInfo({healthy: healthy});
+            let tempUserlist = userInfo;
+            tempUserlist.healthy = healthy;
+            setDemoInfo(tempUserlist);
+            // setDemoInfo({healthy: healthy});
             setHealthy_thisPage(healthy);
         }
     };
@@ -50,35 +61,59 @@ export function QuestionDemo({setDemoInfo, userInfo}) {
             } else if (english == "false") {
                 english = false;
             }
-            setDemoInfo({english: english});
+            let tempUserlist = userInfo;
+            tempUserlist.english = english;
+            setDemoInfo(tempUserlist);
+            // setDemoInfo({english: english});
             setEnglish_thisPage(english);
         }
     };
 
     const pickCurLocation = curLocation => {
         if (curLocation !== 0) {
-            setDemoInfo({location: curLocation});
+            let tempUserlist = userInfo;
+            tempUserlist.location = curLocation;
+            setDemoInfo(tempUserlist);
+            // setDemoInfo({location: curLocation});
             setcurLocatio_thisPage(curLocation);
+            if (userInfo.location != "" && userInfo.gender != "" &&
+                userInfo.location != "0" && userInfo.gender != "0") {
+                setDemoMsg(false);
+            } else {
+                setDemoMsg(true);
+            }
         }
     };
 
     const pickIsPregnant = () => {
-        setDemoInfo({isPregnant : isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant});
+        let tempUserlist = userInfo;
+        tempUserlist.isPregnant = isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant;
+        setDemoInfo(tempUserlist);
+        // setDemoInfo({isPregnant : isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant});
         setSmoking_thisPage(isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant);
     };
 
     const pickIsSmoking = () => {
-        setDemoInfo({isSmoking : isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking});
+        let tempUserlist = userInfo;
+        tempUserlist.isSmoking = isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking;
+        setDemoInfo(tempUserlist);
+        // setDemoInfo({isSmoking : isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking});
         setSmoking_thisPage(isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking);
     };
 
     const pickIsLactating = () => {
-        setDemoInfo({isLactating : isLactating != isLactating_default ? !isLactating_default : !isLactating});
+        let tempUserlist = userInfo;
+        tempUserlist.isLactating = isLactating != isLactating_default ? !isLactating_default : !isLactating;
+        setDemoInfo(tempUserlist);
+        // setDemoInfo({isLactating : isLactating != isLactating_default ? !isLactating_default : !isLactating});
         setSmoking_thisPage(isLactating != isLactating_default ? !isLactating_default : !isLactating);
     };
 
     const pickIsPlanning = () => {
-        setDemoInfo({isPlanning : isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning});
+        let tempUserlist = userInfo;
+        tempUserlist.isPlanning = isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning;
+        setDemoInfo(tempUserlist);
+        // setDemoInfo({isPlanning : isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning});
         setSmoking_thisPage(isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning);
     };
 

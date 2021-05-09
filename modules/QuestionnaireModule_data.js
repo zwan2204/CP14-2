@@ -341,7 +341,7 @@ export const identifyWorker = (
     );
 };
 
-export const getUserInfo = ({ setGet, setLoading}) => {
+export const getUserInfo = ({setDemoInfo, setGet, setLoading}) => {
   let userInfo = {};
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
     response => {
@@ -355,12 +355,13 @@ export const getUserInfo = ({ setGet, setLoading}) => {
       userInfo["isPlanning"] = response.data.isPlanning;
       setGet(true);
       setLoading(false);
+      setDemoInfo(userInfo);
     },
     error => {
       console.log(error);
     }
   );
-  return userInfo;
+//   return userInfo;
 };
 
 const getUserAge = () => {

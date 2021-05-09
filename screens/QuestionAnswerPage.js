@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { 
     Text, 
     View, 
@@ -47,8 +47,11 @@ const QuestionAnswerPage = (props) => {
 
     /* retrieve user general information data */
     const [getUserData, setGet] = useState(false);
-    const reducer = (state, action) => ({ ...state, ...action });
-    const [userInfo, setDemoInfo] = useReducer(reducer, getUserInfo({setGet, setLoading}));
+    const [userInfo, setDemoInfo] = useState({});
+
+    useEffect(() => {
+        getUserInfo({setDemoInfo, setGet, setLoading});
+    }, []);
 
     /* check the need of workers */
     let requireHCWorker = (userInfo.location == "clinic" || 
@@ -72,9 +75,7 @@ const QuestionAnswerPage = (props) => {
     var num = 0; //current question index
 
     /* messages: restrict moving to the next page */
-    const showingDemoMsg = (userInfo.gender == "" || userInfo.location == "") ? true : false;
-    const showingGeneralAmptyMsg = (step == 1 && generalQuestions.length == 0) ? true : false;
-    const showingSpecificAmptyMsg = (step == 2 && specificQuestions.length == 0) ? true : false;
+    const [showingDemoMsg, setDemoMsg] = useState(true);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
 
     const { history } = props;
@@ -251,20 +252,16 @@ const QuestionAnswerPage = (props) => {
             let removeList = removedProjects;
             for (let index2 = 0; index2 < incluArray.length; index2++) {
                 if (incluArray[index2] != "" && removeList[incluArray[index2]] == null) {
-                    console.log("1: " + incluArray[index2]);
                     projectList.push(incluArray[index2]);
                 }
             }
             for (let index2 = 0; index2 < excluArray.length; index2++) {
                 if (excluArray[index2] != "" && removeList[excluArray[index2]] == null) {
-                    console.log("2: " + excluArray[index2]);
                     projectList.push(excluArray[index2]);
                 }
             }
         }
-        console.log()
         let unique = new Set(projectList);
-        console.log("haha: " + projectList);
         projectList = [...unique];
         return projectList;
     }
@@ -380,7 +377,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -405,8 +402,7 @@ const QuestionAnswerPage = (props) => {
                             )}
                             <View style={[
                                     styles.partABTitleYesNo, 
-                                    {opacity: step == 0 || showingGeneralAmptyMsg || 
-                                            showingSpecificAmptyMsg ? 0 : 1}]}
+                                    {opacity: step == 0 ? 0 : 1}]}
                             >
                                 <Text style={{fontSize:"1.2em"}}>Yes</Text>
                                 <Text style={{fontSize:"1.2em"}}>No</Text>
@@ -434,7 +430,7 @@ const QuestionAnswerPage = (props) => {
                                 extraData={selectedId}
                             />}
                             {step == 0 && getUserData &&
-                            <QuestionDemo setDemoInfo={setDemoInfo} userInfo={userInfo}>
+                            <QuestionDemo setDemoInfo={setDemoInfo} userInfo={userInfo} setDemoMsg={setDemoMsg}>
                             </QuestionDemo>}
                         </ScrollView>
                     </View>
@@ -535,12 +531,7 @@ const QuestionAnswerPage = (props) => {
 
                 {/* Button to next page */}
                 <View style={styles.extraInformation}>
-                    {(showingGeneralAmptyMsg || showingSpecificAmptyMsg) ? 
-                    <Text style={styles.questionMsg}>
-                        *Sorry, no project matches your condition.
-                    </Text> :
-
-                    showingNotCompleteMsg ? 
+                    {showingNotCompleteMsg ? 
                     <Text style={styles.questionMsg}>
                         *Please complete all questions.
                     </Text> : null}
@@ -568,12 +559,10 @@ const QuestionAnswerPage = (props) => {
                         <TouchableOpacity
                             style={[
                                 styles.questionnaireButton, 
-                                {backgroundColor: showingDemoMsg || showingGeneralAmptyMsg || 
-                                    showingSpecificAmptyMsg ? "lightgrey" : "#00205B"}]}
+                                {backgroundColor: showingDemoMsg ? "lightgrey" : "#00205B"}]}
                             onPress={() => {
                                     //if no project matches the user's condition, do nothing:
-                                    showingDemoMsg || showingGeneralAmptyMsg || 
-                                            showingSpecificAmptyMsg ? null :
+                                    showingDemoMsg ? null :
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? getProjects({setGeQuestions, setSpQuestions, 
                                             setWrQuestions, setEProjects, setRemovedProjects, 

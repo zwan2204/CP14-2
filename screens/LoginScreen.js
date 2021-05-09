@@ -49,7 +49,7 @@ export default class LoginScreen extends React.Component {
             history.push("/projectManagement");
           } else if (role === "Admin") {
             history.push("/worker");
-          } else if (role == "participant") {
+          } else if (role == "Participant") {
             history.push("/questionnaire");
           } else {
             alert("*If you are a health care worker, please login after the participant finish all questions.")
