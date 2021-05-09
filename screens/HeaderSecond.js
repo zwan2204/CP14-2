@@ -16,7 +16,7 @@ export default class HeaderSecond extends React.Component {
     return (
       <View
         style={{
-          height: "15%",
+          height: "20%",
           width: "100%",
           backgroundColor: "#00205B",
           flexDirection: "row",
