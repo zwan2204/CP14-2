@@ -177,7 +177,7 @@ const ProjectUploading = (props) => {
         key++;
       };
     } else if (CriteriaType == "EXCLUSION") {
-      let type = "";
+      let type = "Specific";
       if (workerChecked) {
         type = "Worker Need";
       } else if (generalChecked) {
