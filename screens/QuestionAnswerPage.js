@@ -88,37 +88,45 @@ const QuestionAnswerPage = (props) => {
             currentStep -= 1;
         }
         setStep(currentStep);
-        switchContent(currentStep);
+        switchContent(currentStep, isForward);
     }
 
-    const switchContent = (step) => {
-        if (step == 0) {
-            setSubTitle("Demographic Information");
-            setButtonText("Confirm");
-        } else if (step == 1) {
-            setSubTitle("General Questions");
-            setButtonText("Next");
-        } else if (step == 2) {
-            setSubTitle("Specific Questions");
-            setButtonText(requireHCWorker ? "Next" : "Submit");
-        } else if (step == 3 && requireHCWorker) {
-            setSubTitle("Medical Condition");
-            setButtonText("Submit");
-            setHandDevice(true);
-        } else if ((step == 3 && !requireHCWorker) || (step == 4 && requireHCWorker)) {
-            let eligibleProjects_string = "";
-            if (eligibleProjects.length > 0) {
-                for (let i = 0; i < eligibleProjects.length; i++) {
-                    eligibleProjects_string = eligibleProjects_string + eligibleProjects[i] + ","
-                }
-                eligibleProjects_string = eligibleProjects_string.substring
-                    (0, eligibleProjects_string.length - 1);
-            }
+    const switchContent = (step, isForward) => {
+        if (eligibleProjects.length == 0 && isForward && step > 1) {
             history.push({
                 pathname: "/projectAvailable",
-                projectIDs: eligibleProjects_string,
+                projectIDs: "",
                 hcWorker: requireHCWorker
             });
+        } else {
+            if (step == 0) {
+                setSubTitle("Demographic Information");
+                setButtonText("Confirm");
+            } else if (step == 1) {
+                setSubTitle("General Questions");
+                setButtonText("Next");
+            } else if (step == 2) {
+                setSubTitle("Specific Questions");
+                setButtonText(requireHCWorker ? "Next" : "Submit");
+            } else if (step == 3 && requireHCWorker) {
+                setSubTitle("Medical Condition");
+                setButtonText("Submit");
+                setHandDevice(true);
+            } else if ((step == 3 && !requireHCWorker) || (step == 4 && requireHCWorker)) {
+                let eligibleProjects_string = "";
+                if (eligibleProjects.length > 0) {
+                    for (let i = 0; i < eligibleProjects.length; i++) {
+                        eligibleProjects_string = eligibleProjects_string + eligibleProjects[i] + ","
+                    }
+                    eligibleProjects_string = eligibleProjects_string.substring
+                        (0, eligibleProjects_string.length - 1);
+                }
+                history.push({
+                    pathname: "/projectAvailable",
+                    projectIDs: eligibleProjects_string,
+                    hcWorker: requireHCWorker
+                });
+            }
         }
     }
 
@@ -242,17 +250,21 @@ const QuestionAnswerPage = (props) => {
             let excluArray = questionItem.exclusionIDList;
             let removeList = removedProjects;
             for (let index2 = 0; index2 < incluArray.length; index2++) {
-                if (removeList[incluArray[index2]] == null) {
+                if (incluArray[index2] != "" && removeList[incluArray[index2]] == null) {
+                    console.log("1: " + incluArray[index2]);
                     projectList.push(incluArray[index2]);
                 }
             }
             for (let index2 = 0; index2 < excluArray.length; index2++) {
-                if (removeList[excluArray[index2]] == null) {
+                if (excluArray[index2] != "" && removeList[excluArray[index2]] == null) {
+                    console.log("2: " + excluArray[index2]);
                     projectList.push(excluArray[index2]);
                 }
             }
         }
+        console.log()
         let unique = new Set(projectList);
+        console.log("haha: " + projectList);
         projectList = [...unique];
         return projectList;
     }
@@ -265,14 +277,6 @@ const QuestionAnswerPage = (props) => {
             }
         }
         setNumQuestions(num);
-    }
-
-    const sleep = (milliseconds) => {
-        const date = Date.now();
-        let currentQuestions = null;
-        do {
-            currentQuestions = Date.now();
-        } while (currentQuestions - date < milliseconds);
     }
 
     const Item = ({item}) => {
@@ -315,7 +319,6 @@ const QuestionAnswerPage = (props) => {
         }
         num += 1;
         if (num == currentQuestions.length) {
-            // sleep(1000);
             setEProjects(getAvailableProjects());
             setQuestionLeft();
         }
@@ -377,7 +380,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(currentQuestions)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -574,7 +577,7 @@ const QuestionAnswerPage = (props) => {
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? getProjects({setGeQuestions, setSpQuestions, 
                                             setWrQuestions, setEProjects, setRemovedProjects, 
-                                            setLoading, userInfo}, userAge) : null,
+                                            setLoading, userInfo}, userAge, history) : null,
                                     //check questions are completed or not.
                                     (step == 0 || checkCompleteAllQuestions() ?
                                             (stepForward(true), updateUserInfo({userInfo})) : null))}}
