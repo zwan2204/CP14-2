@@ -339,7 +339,7 @@ const ProjectUploading = (props) => {
       <HeaderSecond history={props.history} />
 
       {/* View of Body*/}
-      <ScrollView style={{ margin: 35 }}>
+      <View style={{ margin: 35 }}>
         {/* View of "New Project and "Cancel Button*/}
         <View
           style={{
@@ -973,7 +973,7 @@ const ProjectUploading = (props) => {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Button
           mode="contained"
