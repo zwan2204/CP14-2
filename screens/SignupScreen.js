@@ -66,7 +66,7 @@ export default class SignupScreen extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <Header />
-          <View style={{ alignItems: "center", height:"80%" }}>
+          <View style={{ alignItems: "center", height: "80%" }}>
             <View style={{ alignItems: "center", margin: 30 }}>
               <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}> Create New Account </Text>
             </View>
@@ -112,6 +112,17 @@ export default class SignupScreen extends React.Component {
                 flexDirection: "row", width: "100%",
                 justifyContent: "space-between"
               }}>
+                <Text style={styles.subTitle}>Date of birth: </Text>
+                <TextInput
+                  style={styles.inputView}
+                  onChangeText={text => this.setState({ dob: text })}
+                />
+              </View>
+
+              <View style={{
+                flexDirection: "row", width: "100%",
+                justifyContent: "space-between"
+              }}>
                 <Text style={styles.subTitle}>Email Address: </Text>
                 <TextInput
                   style={styles.inputView}
@@ -143,24 +154,26 @@ export default class SignupScreen extends React.Component {
                 />
               </View>
 
-              <View style={{alignItems:"center", flexDirection:"row", 
-                        paddingTop:40, justifyContent:"space-between", width:"50%"}}>
-                    <Button
-                        mode="text"
-                        onPress={this.userSignup}
-                        style={{ marginTop: 41 }}
-                    >
-                        Signup
+              <View style={{
+                alignItems: "center", flexDirection: "row",
+                paddingTop: 40, justifyContent: "space-between", width: "50%"
+              }}>
+                <Button
+                  mode="text"
+                  onPress={this.userSignup}
+                  style={{ marginBottom: 0 }}
+                >
+                  Signup
                     </Button>
 
-                    <Button
-                        mode="text"
-                        onPress={()=>history.push("/")}
-                        style={{ marginTop: 41 }}
-                    >
-                        Cancel
+                <Button
+                  mode="text"
+                  onPress={() => history.push("/")}
+                  style={{ marginBottom: 0 }}
+                >
+                  Cancel
                     </Button>
-                </View>
+              </View>
 
             </View>
           </View>
@@ -170,9 +183,9 @@ export default class SignupScreen extends React.Component {
     } else {
       return (
         <SafeAreaView style={styles.container}>
-            <Header />
+          <Header />
 
-          <View style={{ alignItems: "center", height:"80%" }} >
+          <View style={{ alignItems: "center", height: "80%" }} >
 
             <View style={{ alignItems: "center", margin: 30 }}>
               <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }} > Create New Account </Text>
@@ -256,29 +269,31 @@ export default class SignupScreen extends React.Component {
                 />
               </View>
 
-                <View style={{alignItems:"center", flexDirection:"row", 
-                        paddingTop:40, justifyContent:"space-between", width:"50%"}}>
-                    <Button
-                        mode="text"
-                        onPress={this.userSignup}
-                        style={{ marginBottom: 0 }}
-                    >
-                        {" "}
+              <View style={{
+                alignItems: "center", flexDirection: "row",
+                paddingTop: 40, justifyContent: "space-between", width: "50%"
+              }}>
+                <Button
+                  mode="text"
+                  onPress={this.userSignup}
+                  style={{ marginBottom: 0 }}
+                >
+                  {" "}
                         Signup{" "}
-                    </Button>
+                </Button>
 
-                    <Button
-                        mode="text"
-                        onPress={()=>history.push("/")}
-                        style={{ marginBottom: 0 }}
-                    >
-                        {" "}
+                <Button
+                  mode="text"
+                  onPress={() => history.push("/")}
+                  style={{ marginBottom: 0 }}
+                >
+                  {" "}
                         Cancel{" "}
-                    </Button>
-                </View>
+                </Button>
+              </View>
             </View>
           </View>
-          
+
           <Footer />
         </SafeAreaView>
       );

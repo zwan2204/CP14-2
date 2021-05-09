@@ -149,7 +149,7 @@ const ProjectPreview = (props) => {
       </View>
 
       {/* View of Body*/}
-      <ScrollView style={{ margin: 35 }}>
+      <View style={{ margin: 35 }}>
         {/* View of "New Project and "Cancel Button*/}
         <View
           style={{
@@ -532,7 +532,7 @@ const ProjectPreview = (props) => {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
 
       {/* View of Footer*/}
       <Footer />

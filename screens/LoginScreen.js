@@ -4,7 +4,7 @@ import React from "react";
 import { Text, View, SafeAreaView, TextInput } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
-import { HelperText, Button } from "react-native-paper";
+import { HelperText, Button, Dialog, Portal } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../screens/Header";
 import Footer from "../screens/Footer";
@@ -17,8 +17,17 @@ export default class LoginScreen extends React.Component {
     this.state = {
       email: "@",
       password: "",
-      isLoading: false
+      isLoading: false,
+      visible: false
     };
+  }
+
+  show = () => {
+    this.setState({ visible: !this.state.visible });
+  }
+
+  hide = () => {
+    this.setState({ visible: !this.state.visible });
   }
 
   userLogin = () => {
@@ -40,8 +49,10 @@ export default class LoginScreen extends React.Component {
             history.push("/projectManagement");
           } else if (role === "Admin") {
             history.push("/worker");
-          } else {
+          } else if (role == "participant") {
             history.push("/questionnaire");
+          } else {
+            alert("*If you are a health care worker, please login after the participant finish all questions.")
           }
         },
         error => {
@@ -63,23 +74,23 @@ export default class LoginScreen extends React.Component {
         <Header />
         {/* Body */}
 
-        {this.state.isLoading ? 
-            <View style={[
-                styles.loadingStyle, 
-                {position:"absolute", backgroundColor:"white", opacity:0.9, zIndex:1, top:"15%"}
-            ]}>
-                <View style={{alignContent:"center", alignItems:"center", justifyContent:"center"}}>
-                    <ActivityIndicator size="large" color="#00205B"/>
-                    <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
-                        Identifying your information
+        {this.state.isLoading ?
+          <View style={[
+            styles.loadingStyle,
+            { position: "absolute", backgroundColor: "white", opacity: 0.9, zIndex: 1, top: "15%" }
+          ]}>
+            <View style={{ alignContent: "center", alignItems: "center", justifyContent: "center" }}>
+              <ActivityIndicator size="large" color="#00205B" />
+              <Text style={{ color: "#00205B", fontSize: "1.3em", paddingTop: "3%" }}>
+                Identifying your information
                     </Text>
-                    <Text style={{color:"red", fontSize:"1.3em", paddingTop:"3%"}}>
-                        *Alpha Version: The first time you log in, it might take a bit long time to activate the server.
+              <Text style={{ color: "red", fontSize: "1.3em", paddingTop: "3%" }}>
+                *Alpha Version: The first time you log in, it might take a bit long time to activate the server.
                     </Text>
-                </View>
-            </View> : null
+            </View>
+          </View> : null
         }
-            
+
         <View
           style={{
             height: "80%",
