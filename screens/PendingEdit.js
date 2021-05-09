@@ -190,7 +190,7 @@ const PendingEdit = (props) => {
         key = Question[Question.length - 1].key + 1;
       }
 
-      let type = "";
+      let type = "Specific";
       if (workerChecked) {
         type = "Worker Need";
       } else if (generalChecked) {
