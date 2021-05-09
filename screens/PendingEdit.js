@@ -113,10 +113,10 @@ const PendingEdit = (props) => {
           setSubjectNo(response.data.subjectNo);
           setDuration(response.data.duration);
           setDate(response.data.date);
-          setIsPregnant(!response.data.isPregnant);
-          setIsSmoking(!response.data.isSmoking);
-          setIsLactating(!response.data.isLactating);
-          setPlanningPregnant(!response.data.isPlanningPregnant);
+          setIsPregnant(response.data.isPregnant);
+          setIsSmoking(response.data.isSmoking);
+          setIsLactating(response.data.isLactating);
+          setPlanningPregnant(response.data.isPlanningPregnant);
           setHealthy(response.data.needHealth);
           setEnglishFluent(response.data.needEnglish);
           setGender(response.data.gender);
