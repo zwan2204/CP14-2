@@ -44,7 +44,9 @@ export default class SignupScreen extends React.Component {
         isPregnant: false,
         isSmoking: false,
         isLactating: false,
-        isPlanning: false
+        isPlanning: false,
+        contactMethod: "",
+        phoneNum: ""
       })
       .then(
         response => {
