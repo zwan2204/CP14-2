@@ -150,11 +150,13 @@ export default class SignupScreen extends React.Component {
               </Button>
             </View>
           </View>
+          <Footer />
         </SafeAreaView>
       );
     } else {
       return (
         <SafeAreaView style={styles.container}>
+            <Header />
           <View
             style={{
               height: 140,
