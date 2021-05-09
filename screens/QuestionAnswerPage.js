@@ -107,11 +107,13 @@ const QuestionAnswerPage = (props) => {
             setHandDevice(true);
         } else if ((step == 3 && !requireHCWorker) || (step == 4 && requireHCWorker)) {
             let eligibleProjects_string = "";
-            for (let i = 0; i < eligibleProjects.length; i++) {
-                eligibleProjects_string = eligibleProjects_string + eligibleProjects[i] + ","
+            if (eligibleProjects.length > 0) {
+                for (let i = 0; i < eligibleProjects.length; i++) {
+                    eligibleProjects_string = eligibleProjects_string + eligibleProjects[i] + ","
+                }
+                eligibleProjects_string = eligibleProjects_string.substring
+                    (0, eligibleProjects_string.length - 1);
             }
-            eligibleProjects_string = eligibleProjects_string.substring
-                (0, eligibleProjects_string.length - 1);
             history.push({
                 pathname: "/projectAvailable",
                 projectIDs: eligibleProjects_string,
@@ -375,7 +377,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(handDevice, needLogin)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(currentQuestions)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>

@@ -44,7 +44,9 @@ export default class SignupScreen extends React.Component {
         isPregnant: false,
         isSmoking: false,
         isLactating: false,
-        isPlanning: false
+        isPlanning: false,
+        contactMethod: "",
+        phoneNum: ""
       })
       .then(
         response => {
@@ -64,7 +66,7 @@ export default class SignupScreen extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <Header />
-          <View style={{ alignItems: "center" }}>
+          <View style={{ alignItems: "center", height:"80%" }}>
             <View style={{ alignItems: "center", margin: 30 }}>
               <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}> Create New Account </Text>
             </View>
@@ -124,6 +126,7 @@ export default class SignupScreen extends React.Component {
                 <Text style={styles.subTitle}>Passwrod: </Text>
                 <TextInput
                   style={styles.inputView}
+                  secureTextEntry={true}
                   onChangeText={text => this.setState({ password: text })}
                 />
               </View>
@@ -135,6 +138,7 @@ export default class SignupScreen extends React.Component {
                 <Text style={styles.subTitle}>Confirm you password: </Text>
                 <TextInput
                   style={styles.inputView}
+                  secureTextEntry={true}
                   onChangeText={text => this.setState({ password: text })}
                 />
               </View>
@@ -148,25 +152,15 @@ export default class SignupScreen extends React.Component {
               </Button>
             </View>
           </View>
+          <Footer />
         </SafeAreaView>
       );
     } else {
       return (
         <SafeAreaView style={styles.container}>
-          <View
-            style={{
-              height: 140,
-              backgroundColor: "#00205B",
-              flexDirection: "row"
-            }}
-          >
-            <Image
-              style={{ width: 200, height: 100, left: 100, top: 20 }}
-              source={require("../assets/header.png")}
-            />
-          </View>
+            <Header />
 
-          <View style={{ alignItems: "center" }} >
+          <View style={{ alignItems: "center", height:"80%" }} >
 
             <View style={{ alignItems: "center", margin: 30 }}>
               <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }} > Create New Account </Text>
@@ -234,6 +228,7 @@ export default class SignupScreen extends React.Component {
                 <Text style={styles.subTitle}>Password: </Text>
                 <TextInput
                   style={styles.inputView}
+                  secureTextEntry={true}
                   onChangeText={text => this.setState({ password: text })}
                 />
               </View>
@@ -244,6 +239,7 @@ export default class SignupScreen extends React.Component {
                 <Text style={styles.subTitle}>Confirm your Passwrod: </Text>
                 <TextInput
                   style={styles.inputView}
+                  secureTextEntry={true}
                   onChangeText={text => this.setState({ password: text })}
                 />
               </View>

@@ -288,6 +288,17 @@ export const updateUserInfo = ({ userInfo }) => {
     });
 };
 
+export const updateUserContact = (contactMethoda, phoneNumber) => {
+    axios
+      .put(`${DEPLOYEDHOST}/api/users/contact/${userID}`, {
+        contactMethod: contactMethoda,
+        phoneNum: phoneNumber
+      })
+      .then(error => {
+        console.log(error);
+      });
+  };
+
 export const identifyWorker = (
   { setIdentify, setMsg, setNeedLogin, setHandDevice },
   email,

@@ -68,10 +68,13 @@ export default class LoginScreen extends React.Component {
                 styles.loadingStyle, 
                 {position:"absolute", backgroundColor:"white", opacity:0.9, zIndex:1, top:"15%"}
             ]}>
-                <View>
-                <ActivityIndicator size="large" color="#00205B"/>
+                <View style={{alignContent:"center", alignItems:"center", justifyContent:"center"}}>
+                    <ActivityIndicator size="large" color="#00205B"/>
                     <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
                         Identifying your information
+                    </Text>
+                    <Text style={{color:"red", fontSize:"1.3em", paddingTop:"3%"}}>
+                        *Alpha Version: The first time you log in, it might take a bit long time to activate the server.
                     </Text>
                 </View>
             </View> : null
