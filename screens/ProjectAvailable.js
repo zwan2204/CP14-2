@@ -172,22 +172,6 @@ const ProjectAvailable = props => {
     <SafeAreaView style={styles.container}>
       <HeaderSecond history={props.history} />
 
-      {isEmpty ?
-      <View style={{ height: "80%", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-        <Text style={{fontSize:"1.2em"}}>
-            Sorry, there is no project for you. You can leave your contact information
-        </Text>
-        <Text 
-            style={{fontSize:"1.2em", color:"red", paddingLeft:10, paddingRight:10}}
-            onPress={showDialog}
-            >
-            here
-        </Text>
-        <Text style={{fontSize:"1.2em" }}>
-            again
-        </Text>
-      </View>
-      :
       <View style={{ height: "80%" }}>
         <View style={{ flexDirection: "row", height: "12%" }}>
           <Text
@@ -199,6 +183,23 @@ const ProjectAvailable = props => {
         </View>
 
         <View style={[styles.questionPageContainer, { height: "70%" }]}>
+        {isEmpty ?
+        <View style={{ width:"82%", flexDirection:"row", 
+                justifyContent:"center", paddingTop:"5%"}}>
+            <Text style={{fontSize:"1.2em"}}>
+                Sorry, there is no project for you. You can leave your contact information
+            </Text>
+            <Text 
+                style={{fontSize:"1.2em", color:"red", paddingLeft:10, paddingRight:10}}
+                onPress={showDialog}
+                >
+                here
+            </Text>
+            <Text style={{fontSize:"1.2em" }}>
+                again
+            </Text>
+        </View>
+        :
           <View
             style={{
               width: "82%",
@@ -256,6 +257,7 @@ const ProjectAvailable = props => {
               </View>
             </ScrollView>
           </View>
+        }
 
           {/* This section contains the process bar */}
           <View style={styles.processBarContainer}>
@@ -324,6 +326,7 @@ const ProjectAvailable = props => {
           </View>
         </View>
 
+        {isEmpty ? null :
         <View
           style={{
             width: "100%",
@@ -342,8 +345,8 @@ const ProjectAvailable = props => {
             Join
           </Button>
         </View>
+        }
       </View>
-      }
         
 
         <Portal>

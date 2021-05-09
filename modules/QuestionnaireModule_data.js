@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
+import { useHistory } from 'react-router-dom';
 
 const userID = localStorage.getItem("userId");
 let render = true;
@@ -17,7 +18,8 @@ export const getProjects = (
     setLoading,
     userInfo
   },
-  userAge
+  userAge,
+  history
 ) => {
     setLoading(true);
     let eligibleProjects = [];
@@ -28,7 +30,7 @@ export const getProjects = (
         for (let i = 0; i < Object.keys(response.data).length; i++) {
             let project = response.data[i];
 
-            if (project.state == "Recruiting") {
+            if (project.state == "Authorized") {
             if (userInfo.location == "home" || userInfo.location == "gp") {
                 //location match
                 if (!project.workerNeed) {
@@ -48,15 +50,16 @@ export const getProjects = (
                 ) {
                     //filter projects based on user's selections.
                     if (
-                    userInfo.gender == project.gender &&
-                    userInfo.healthy == project.needHealth &&
-                    userInfo.isSmoking == project.isSmoking &&
-                    userInfo.isPregnant == project.isPregnant &&
-                    userInfo.isLactating == project.isLactating &&
-                    userInfo.isPlanning == project.isPlanningPregnant &&
-                    userInfo.english == project.needEnglish
+                        (userInfo.gender == project.gender || 
+                            project.gender == "Not required") &&
+                        userInfo.healthy == project.needHealth &&
+                        userInfo.isSmoking == project.isSmoking &&
+                        userInfo.isPregnant == project.isPregnant &&
+                        userInfo.isLactating == project.isLactating &&
+                        userInfo.isPlanning == project.isPlanningPregnant &&
+                        userInfo.english == project.needEnglish
                     ) {
-                    eligibleProjects.push(project._id);
+                        eligibleProjects.push(project._id);
                     } else {
                     removedProjects[project._id] = 1;
                     }
@@ -87,17 +90,18 @@ export const getProjects = (
                 ) {
                     //filter projects based on user's selections.
                     if (
-                    userInfo.gender == project.gender &&
-                    userInfo.healthy == project.needHealth &&
-                    userInfo.isSmoking == project.isSmoking &&
-                    userInfo.isPregnant == project.isPregnant &&
-                    userInfo.isLactating == project.isLactating &&
-                    userInfo.isPlanning == project.isPlanningPregnant &&
-                    userInfo.english == project.needEnglish
+                        (userInfo.gender == project.gender || 
+                            project.gender == "Not required") &&
+                        userInfo.healthy == project.needHealth &&
+                        userInfo.isSmoking == project.isSmoking &&
+                        userInfo.isPregnant == project.isPregnant &&
+                        userInfo.isLactating == project.isLactating &&
+                        userInfo.isPlanning == project.isPlanningPregnant &&
+                        userInfo.english == project.needEnglish
                     ) {
-                    eligibleProjects.push(project._id);
+                        eligibleProjects.push(project._id);
                     } else {
-                    removedProjects[project._id] = 1;
+                        removedProjects[project._id] = 1;
                     }
                 } else {
                     removedProjects[project._id] = 1;
@@ -106,15 +110,24 @@ export const getProjects = (
             }
             }
         }
-            setRemovedProjects(removedProjects);
-            setEProjects(eligibleProjects);
-            getQuestions({
-            setLoading,
-            setGeQuestions,
-            setSpQuestions,
-            setWrQuestions,
-            eligibleProjects
-            });
+            if (eligibleProjects.length == 0) {
+                history.push({
+                    pathname: "/projectAvailable",
+                    projectIDs: "",
+                    hcWorker: (userInfo.location == "home" || userInfo.location == "gp" ) ?
+                        false : true
+                });
+            } else {
+                setRemovedProjects(removedProjects);
+                setEProjects(eligibleProjects);
+                getQuestions({
+                    setLoading,
+                    setGeQuestions,
+                    setSpQuestions,
+                    setWrQuestions,
+                    eligibleProjects
+                });
+            }
         },
             error => {
             console.log(error);
