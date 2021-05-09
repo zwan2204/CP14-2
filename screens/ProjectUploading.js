@@ -293,7 +293,7 @@ const ProjectUploading = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text style={{ width: "80%" }}>{item.description}</Text>
+          <Text style={{ width: "70%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeItem(item.key)}>Delete</Button>
           </Card.Actions>
@@ -306,7 +306,7 @@ const ProjectUploading = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text style={{ width: "80%" }}>{item.description}</Text>
+          <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
           </Card.Actions>

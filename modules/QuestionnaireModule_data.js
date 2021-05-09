@@ -30,7 +30,7 @@ export const getProjects = (
         for (let i = 0; i < Object.keys(response.data).length; i++) {
             let project = response.data[i];
 
-            if (project.state == "Authorized") {
+            if (project.state == "Recruiting") {
             if (userInfo.location == "home" || userInfo.location == "gp") {
                 //location match
                 if (!project.workerNeed) {
