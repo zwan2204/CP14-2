@@ -13,7 +13,7 @@ import {
   Platform,
   TextInput as NativeTextInput,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import moment, { max } from "moment";
 import {
@@ -22,7 +22,7 @@ import {
   TextInput,
   Paragraph,
   Dialog,
-  Portal
+  Portal,
 } from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -30,7 +30,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 import Footer from "./Footer";
 
-const PendingEdit = props => {
+const PendingEdit = (props) => {
   const [image, setImage] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
@@ -71,7 +71,7 @@ const PendingEdit = props => {
 
   const loadComment = () => {
     axios.get(`${DEPLOYEDHOST}/api/comment/?pId=${projectId}`).then(
-      response => {
+      (response) => {
         if (response.data.length > 0) {
           setComment({
             commentId: response.data[0]._id,
@@ -79,20 +79,20 @@ const PendingEdit = props => {
             subjectNo: response.data[0].subjectNo,
             location: response.data[0].location,
             duration: response.data[0].duration,
-            description: response.data[0].description
+            description: response.data[0].description,
           });
         }
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const deleteComment = commentId => {
+  const deleteComment = (commentId) => {
     axios.delete(`${DEPLOYEDHOST}/api/comment/${commentId}`).then(
-      response => {},
-      error => {
+      (response) => {},
+      (error) => {
         console.log(error);
       }
     );
@@ -103,7 +103,7 @@ const PendingEdit = props => {
     let exclution = [];
     if (projectId) {
       axios.get(`${DEPLOYEDHOST}/api/project/${projectId}`).then(
-        response => {
+        (response) => {
           setTitle(response.data.title);
           setDescription(response.data.description);
           setImage(response.data.fileUpload);
@@ -113,10 +113,10 @@ const PendingEdit = props => {
           setSubjectNo(response.data.subjectNo);
           setDuration(response.data.duration);
           setDate(response.data.date);
-          setIsPregnant(response.data.isPregnant);
-          setIsSmoking(response.data.isSmoking);
-          setIsLactating(response.data.isLactating);
-          setPlanningPregnant(response.data.isPlanningPregnant);
+          setIsPregnant(!response.data.isPregnant);
+          setIsSmoking(!response.data.isSmoking);
+          setIsLactating(!response.data.isLactating);
+          setPlanningPregnant(!response.data.isPlanningPregnant);
           setHealthy(response.data.needHealth);
           setEnglishFluent(response.data.needEnglish);
           setGender(response.data.gender);
@@ -126,7 +126,7 @@ const PendingEdit = props => {
           for (let i = 0; i < response.data.InclusionCriteria.length; i++) {
             let criteria = {
               key: i,
-              description: response.data.InclusionCriteria[i]
+              description: response.data.InclusionCriteria[i],
             };
             inclusion.push(criteria);
           }
@@ -134,7 +134,7 @@ const PendingEdit = props => {
           for (let i = 0; i < response.data.ExclusionCriteria.length; i++) {
             let criteria = {
               key: i,
-              description: response.data.ExclusionCriteria[i]
+              description: response.data.ExclusionCriteria[i],
             };
             exclution.push(criteria);
           }
@@ -142,7 +142,7 @@ const PendingEdit = props => {
           setQuestion(inclusion);
           setExclusionQuestion(exclution);
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -151,13 +151,13 @@ const PendingEdit = props => {
 
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
-      type: "application/pdf"
+      type: "application/pdf",
     });
     if (result.type == "success") {
       let newfile = {
         uri: result.uri,
         type: `application/${result.name.split(".")[1]}`,
-        name: `project.${result.name.split(".")[1]}`
+        name: `project.${result.name.split(".")[1]}`,
       };
 
       const data = new FormData();
@@ -167,13 +167,13 @@ const PendingEdit = props => {
         method: "POST",
 
         // send our base64 string as POST request
-        body: data
+        body: data,
       })
-        .then(async r => {
+        .then(async (r) => {
           let data = await r.json();
           setImage(data.url);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 
@@ -199,7 +199,7 @@ const PendingEdit = props => {
       return () => {
         Question.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
         });
 
         setQuestion(Question.slice(0));
@@ -219,7 +219,7 @@ const PendingEdit = props => {
       return () => {
         exclusionQuesion.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
         });
 
         setExclusionQuestion(exclusionQuesion.slice(0));
@@ -269,19 +269,19 @@ const PendingEdit = props => {
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
         fileUpload: image,
-        isPregnant: isPregnant,
-        isSmoking: isSmoking,
-        isLactating: isLactating,
-        isPlanningPregnant: isPlanningPregnant,
+        isPregnant: !isPregnant,
+        isSmoking: !isSmoking,
+        isLactating: !isLactating,
+        isPlanningPregnant: !isPlanningPregnant,
         gender: gender,
-        ageGroup: `${minAge},${maxAge}`
+        ageGroup: `${minAge},${maxAge}`,
       })
       .then(
-        response => {
+        (response) => {
           deleteComment(comment.commentId);
           props.history.push("/projectManagement");
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -290,38 +290,38 @@ const PendingEdit = props => {
   const getQuestion = () => {
     let questions = [];
     axios.get(`${DEPLOYEDHOST}/api/question`).then(
-      response => {
+      (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let question = {
             label: response.data[i].name,
-            value: response.data[i].name
+            value: response.data[i].name,
           };
           questions.push(question);
         }
 
         setQuestionBank(questions);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const removeItem = key => {
-    setQuestion(Question.slice().filter(item => item.key !== key));
+  const removeItem = (key) => {
+    setQuestion(Question.slice().filter((item) => item.key !== key));
   };
 
-  const removeExclusion = key => {
+  const removeExclusion = (key) => {
     setExclusionQuestion(
-      exclusionQuesion.slice().filter(item => item.key !== key)
+      exclusionQuesion.slice().filter((item) => item.key !== key)
     );
   };
 
-  const renderList = Question.map(item => {
+  const renderList = Question.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text>{item.description}</Text>
+          <Text style={{ width: "80%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeItem(item.key)}>Delete</Button>
           </Card.Actions>
@@ -330,11 +330,11 @@ const PendingEdit = props => {
     );
   });
 
-  const renderExclusonList = exclusionQuesion.map(item => {
+  const renderExclusonList = exclusionQuesion.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text>{item.description}</Text>
+          <Text style={{ width: "80%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
           </Card.Actions>
@@ -368,7 +368,7 @@ const PendingEdit = props => {
         style={{
           height: 140,
           backgroundColor: "#00205B",
-          flexDirection: "row"
+          flexDirection: "row",
         }}
       >
         <Image
@@ -384,7 +384,7 @@ const PendingEdit = props => {
             height: 37,
             position: "absolute",
             bottom: 30,
-            right: 30
+            right: 30,
           }}
           onPress={() => props.history.push("/Homepage")}
         >
@@ -400,8 +400,8 @@ const PendingEdit = props => {
             flex: 1,
             flexDirection: "row",
             ...(Platform.OS !== "android" && {
-              zIndex: 10
-            })
+              zIndex: 10,
+            }),
           }}
         >
           <Text
@@ -409,7 +409,7 @@ const PendingEdit = props => {
               fontWeight: "bold",
               fontSize: 35,
               color: "gray",
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             New Project
@@ -431,7 +431,7 @@ const PendingEdit = props => {
               flex: 1,
               marginBottom: 10,
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <TouchableOpacity
@@ -450,7 +450,7 @@ const PendingEdit = props => {
                   color:
                     comment.title == "" || comment.title == null
                       ? "#00205B"
-                      : "red"
+                      : "red",
                 }}
               >
                 Project titile:{" "}
@@ -460,7 +460,7 @@ const PendingEdit = props => {
               mode="outlined"
               value={Title}
               style={{ width: 800, height: 30, marginLeft: 10 }}
-              onChangeText={text => setTitle(text)}
+              onChangeText={(text) => setTitle(text)}
             />
           </View>
           <View style={{ flex: 6, flexDirection: "row" }}>
@@ -484,7 +484,7 @@ const PendingEdit = props => {
                     color:
                       comment.description == "" || comment.description == null
                         ? "#00205B"
-                        : "red"
+                        : "red",
                   }}
                 >
                   Project description:{" "}
@@ -497,28 +497,28 @@ const PendingEdit = props => {
                 value={Description}
                 style={{
                   height: 130,
-                  marginHorizontal: 10
+                  marginHorizontal: 10,
                 }}
-                render={innerProps => (
+                render={(innerProps) => (
                   <NativeTextInput
                     {...innerProps}
                     style={[
                       innerProps.style,
                       {
                         paddingTop: 8,
-                        paddingBottom: 8
-                      }
+                        paddingBottom: 8,
+                      },
                     ]}
                   />
                 )}
-                onChangeText={text => setDescription(text)}
+                onChangeText={(text) => setDescription(text)}
               />
 
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 15
+                  marginTop: 15,
                 }}
               >
                 <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
@@ -526,14 +526,14 @@ const PendingEdit = props => {
                   mode="outlined"
                   value={ApprovalNumber}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
-                  onChangeText={text => setApprovalNumber(text)}
+                  onChangeText={(text) => setApprovalNumber(text)}
                 />
               </View>
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 15
+                  marginTop: 15,
                 }}
               >
                 <Text style={styles.subTitle}>Governance Approval Number:</Text>
@@ -541,7 +541,7 @@ const PendingEdit = props => {
                   mode="outlined"
                   value={Governance}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
-                  onChangeText={text => setGovernanceNumber(text)}
+                  onChangeText={(text) => setGovernanceNumber(text)}
                 />
               </View>
             </View>
@@ -565,7 +565,7 @@ const PendingEdit = props => {
                       color:
                         comment.location == "" || comment.location == null
                           ? "#00205B"
-                          : "red"
+                          : "red",
                     }}
                   >
                     Location:{" "}
@@ -577,16 +577,16 @@ const PendingEdit = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setLocation(text)}
+                  onChangeText={(text) => setLocation(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <TouchableOpacity
@@ -607,7 +607,7 @@ const PendingEdit = props => {
                       color:
                         comment.subjectNo == "" || comment.subjectNo == null
                           ? "#00205B"
-                          : "red"
+                          : "red",
                     }}
                   >
                     Number of Subjects:{" "}
@@ -619,16 +619,16 @@ const PendingEdit = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setSubjectNo(text)}
+                  onChangeText={(text) => setSubjectNo(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <TouchableOpacity
@@ -649,7 +649,7 @@ const PendingEdit = props => {
                       color:
                         comment.duration == "" || comment.duration == null
                           ? "#00205B"
-                          : "red"
+                          : "red",
                     }}
                   >
                     Study Duration:{" "}
@@ -659,14 +659,14 @@ const PendingEdit = props => {
                   mode="outlined"
                   value={Duration}
                   style={{ height: 30, margin: 10, flex: 1 }}
-                  onChangeText={text => setDuration(text)}
+                  onChangeText={(text) => setDuration(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Start Date: </Text>
@@ -676,9 +676,9 @@ const PendingEdit = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setDate(text)}
+                  onChangeText={(text) => setDate(text)}
                 />
               </View>
               <Button
@@ -695,7 +695,7 @@ const PendingEdit = props => {
             style={{
               marginTop: 20,
               fontSize: 30,
-              color: "#00205B"
+              color: "#00205B",
             }}
           >
             Criteria
@@ -705,7 +705,7 @@ const PendingEdit = props => {
           style={{
             marginTop: 20,
             fontSize: 20,
-            color: "#00205B"
+            color: "#00205B",
           }}
         >
           Basic Demographic criteria
@@ -715,47 +715,47 @@ const PendingEdit = props => {
             flexDirection: "row",
             alignItems: "center",
             ...(Platform.OS !== "android" && {
-              zIndex: 10
-            })
+              zIndex: 10,
+            }),
           }}
         >
           <DropDownPicker
             items={[
               {
                 label: "Male",
-                value: "Male"
+                value: "Male",
               },
               {
                 label: "Female",
-                value: "Female"
+                value: "Female",
               },
               {
                 label: "Not required",
-                value: "Not required"
-              }
+                value: "Not required",
+              },
             ]}
             defaultValue={gender == "Not required" ? null : gender}
             containerStyle={{
               height: 40,
               width: 300,
               marginTop: 8,
-              marginRight: 10
+              marginRight: 10,
             }}
             selectedLabelStyle={{
-              color: "#00205B"
+              color: "#00205B",
             }}
             placeholder="Select allow gender"
             itemStyle={{
-              justifyContent: "flex-start"
+              justifyContent: "flex-start",
             }}
             dropDownStyle={{ backgroundColor: "#fafafa" }}
-            onChangeItem={item => setGender(item.value)}
+            onChangeItem={(item) => setGender(item.value)}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text
               style={{
                 fontSize: 15,
-                color: "#00205B"
+                color: "#00205B",
               }}
             >
               Minimum age:
@@ -763,7 +763,7 @@ const PendingEdit = props => {
             <TextInputMask
               type={"custom"}
               options={{
-                mask: "99"
+                mask: "99",
               }}
               style={{
                 borderWidth: 1,
@@ -772,11 +772,11 @@ const PendingEdit = props => {
                 borderColor: "gray",
                 marginLeft: 10,
                 padding: 5,
-                borderRadius: 3
+                borderRadius: 3,
               }}
               // dont forget to set the "value" and "onChangeText" props
               value={minAge == "null" ? "" : minAge}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 text == "" ? setMinAge("null") : setMinAge(text);
               }}
             />
@@ -787,7 +787,7 @@ const PendingEdit = props => {
               style={{
                 fontSize: 15,
                 color: "#00205B",
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               Maximum age:
@@ -795,7 +795,7 @@ const PendingEdit = props => {
             <TextInputMask
               type={"custom"}
               options={{
-                mask: "99"
+                mask: "99",
               }}
               style={{
                 borderWidth: 1,
@@ -804,11 +804,11 @@ const PendingEdit = props => {
                 borderColor: "gray",
                 marginLeft: 10,
                 padding: 5,
-                borderRadius: 3
+                borderRadius: 3,
               }}
               // dont forget to set the "value" and "onChangeText" props
               value={maxAge == "null" ? "" : maxAge}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 text == "" ? setMaxAge("null") : setMaxAge(text);
               }}
             />
@@ -838,10 +838,10 @@ const PendingEdit = props => {
           style={{
             marginTop: 20,
             fontSize: 20,
-            color: "#00205B"
+            color: "#00205B",
           }}
         >
-          Exclusion Demographic criteria
+          Inclusion Demographic criteria
         </Text>
         <View style={{ flexDirection: "row" }}>
           <CheckBox
@@ -888,7 +888,7 @@ const PendingEdit = props => {
           style={{
             marginTop: 20,
             fontSize: 20,
-            color: "#00205B"
+            color: "#00205B",
           }}
         >
           General and specific criteria
@@ -899,8 +899,8 @@ const PendingEdit = props => {
             style={{
               flexDirection: "row",
               ...(Platform.OS !== "android" && {
-                zIndex: 10
-              })
+                zIndex: 10,
+              }),
             }}
           >
             {/*First input bar*/}
@@ -909,29 +909,29 @@ const PendingEdit = props => {
               items={[
                 {
                   label: "INCLUSION",
-                  value: "INCLUSION"
+                  value: "INCLUSION",
                 },
                 {
                   label: "EXCLUSION",
-                  value: "EXCLUSION"
-                }
+                  value: "EXCLUSION",
+                },
               ]}
               placeholder="Select Type"
               containerStyle={{
                 height: 40,
                 width: 140,
                 marginRight: 10,
-                marginTop: 8
+                marginTop: 8,
               }}
               style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
-                color: "red"
+                color: "red",
               }}
               itemStyle={{
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={item => setCriteriaType(item.value)}
+              onChangeItem={(item) => setCriteriaType(item.value)}
             />
 
             {/*Second input bar*/}
@@ -939,36 +939,36 @@ const PendingEdit = props => {
               items={[
                 {
                   label: "Are you",
-                  value: "Are you"
+                  value: "Are you",
                 },
                 {
                   label: "Do you have",
-                  value: "Do you have"
+                  value: "Do you have",
                 },
                 {
                   label: "Are you a",
-                  value: "Are you a"
+                  value: "Are you a",
                 },
                 {
                   label: "Are you symptomatic with",
-                  value: "Are you symptomatic with"
-                }
+                  value: "Are you symptomatic with",
+                },
               ]}
               containerStyle={{
                 height: 40,
                 width: 300,
                 marginTop: 8,
-                marginRight: 10
+                marginRight: 10,
               }}
               selectedLabelStyle={{
-                color: "#00205B"
+                color: "#00205B",
               }}
               placeholder="Select Question prefix"
               itemStyle={{
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={item => setQuestionPrefix(item.value)}
+              onChangeItem={(item) => setQuestionPrefix(item.value)}
             />
 
             <DropDownPicker
@@ -981,32 +981,32 @@ const PendingEdit = props => {
               containerStyle={{
                 height: 40,
                 width: 40,
-                marginTop: 8
+                marginTop: 8,
               }}
               defaultValue=""
               itemStyle={{
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
               selectedLabelStyle={{
-                display: "none"
+                display: "none",
               }}
               dropDownStyle={{ width: 340 }}
               dropDownMaxHeight={300}
-              onChangeItem={item => setCriteriaDetail(item.value)}
+              onChangeItem={(item) => setCriteriaDetail(item.value)}
             />
             <TextInput
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
               style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
-              onChangeText={text => setCriteriaDetail(text)}
+              onChangeText={(text) => setCriteriaDetail(text)}
             />
           </View>
 
           <View
             style={{
               flexDirection: "row",
-              marginVertical: 20
+              marginVertical: 20,
             }}
           >
             <CheckBox
@@ -1040,7 +1040,7 @@ const PendingEdit = props => {
                       left: 0,
                       top: 30,
                       fontSize: 30,
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Question Preview:
@@ -1051,7 +1051,7 @@ const PendingEdit = props => {
                       width: 68,
                       top: 20,
                       position: "absolute",
-                      right: 0
+                      right: 0,
                     }}
                     onPress={() => addItem()}
                   >
@@ -1063,7 +1063,7 @@ const PendingEdit = props => {
                     style={{
                       fontSize: 20,
                       fontWeight: "bold",
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Inclusion Quetsions:
@@ -1077,7 +1077,7 @@ const PendingEdit = props => {
                       fontSize: 20,
                       fontWeight: "bold",
                       marginTop: 30,
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Exclusion Quetsions:
@@ -1099,7 +1099,7 @@ const PendingEdit = props => {
               style={{
                 flex: 1,
                 padding: 20,
-                marginTop: 100
+                marginTop: 100,
               }}
             >
               <View>
@@ -1155,26 +1155,26 @@ const PendingEdit = props => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1
+    flex: 1,
   },
   modalButtonView: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 10
+    padding: 10,
   },
   mycard: {
     margin: 5,
-    padding: 8
+    padding: 8,
   },
   cardView: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 6
+    padding: 6,
   },
   subTitle: {
     fontSize: 20,
     color: "#00205B",
-    marginLeft: 10
+    marginLeft: 10,
   },
   text: { fontSize: 20 },
 
@@ -1184,7 +1184,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     // backgroundColor: "#b8e6ff",
     flex: 1,
-    justifyContent: "flex-end"
-  }
+    justifyContent: "flex-end",
+  },
 });
 export default PendingEdit;

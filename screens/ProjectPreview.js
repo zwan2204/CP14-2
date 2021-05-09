@@ -10,7 +10,7 @@ import {
   ScrollView,
   Platform,
   TextInput as NativeTextInput,
-  Image
+  Image,
 } from "react-native";
 import axios from "axios";
 import { Button, Card, TextInput } from "react-native-paper";
@@ -18,7 +18,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { CheckBox } from "react-native-elements";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import Footer from "./Footer";
-const ProjectPreview = props => {
+const ProjectPreview = (props) => {
   const [image, setImage] = useState("");
   const [ApprovalNumber, setApprovalNumber] = useState("");
   const [Governance, setGovernanceNumber] = useState("");
@@ -53,7 +53,7 @@ const ProjectPreview = props => {
     let exclution = [];
 
     axios.get(`${DEPLOYEDHOST}/api/project/${projectId}`).then(
-      response => {
+      (response) => {
         setTitle(response.data.title);
         setDescription(response.data.description);
         setImage(response.data.fileUpload);
@@ -63,19 +63,19 @@ const ProjectPreview = props => {
         setSubjectNo(response.data.subjectNo);
         setDuration(response.data.duration);
         setDate(response.data.date);
-        setIsPregnant(response.data.isPregnant);
+        setIsPregnant(!response.data.isPregnant);
         setHealthy(response.data.needHealth);
         setEnglishFluent(response.data.needEnglish);
-        setIsSmoking(response.data.isSmoking);
-        setIsLactating(response.data.isLactating);
-        setPlanningPregnant(response.data.isPlanningPregnant);
+        setIsSmoking(!response.data.isSmoking);
+        setIsLactating(!response.data.isLactating);
+        setPlanningPregnant(!response.data.isPlanningPregnant);
         setGender(response.data.gender);
         setAge(response.data.ageGroup);
 
         for (let i = 0; i < response.data.InclusionCriteria.length; i++) {
           let criteria = {
             key: i,
-            description: response.data.InclusionCriteria[i]
+            description: response.data.InclusionCriteria[i],
           };
           inclusion.push(criteria);
         }
@@ -83,7 +83,7 @@ const ProjectPreview = props => {
         for (let i = 0; i < response.data.ExclusionCriteria.length; i++) {
           let criteria = {
             key: i,
-            description: response.data.ExclusionCriteria[i]
+            description: response.data.ExclusionCriteria[i],
           };
           exclution.push(criteria);
         }
@@ -91,27 +91,27 @@ const ProjectPreview = props => {
         setQuestion(inclusion);
         setExclusionQuestion(exclution);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const renderList = Question.map(item => {
+  const renderList = Question.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text styl={styles.text}>{item.description}</Text>
+          <Text style={{ width: "80%" }}>{item.description}</Text>
         </View>
       </Card>
     );
   });
 
-  const renderExclusonList = exclusionQuesion.map(item => {
+  const renderExclusonList = exclusionQuesion.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text styl={styles.text}>{item.description}</Text>
+          <Text style={{ width: "80%" }}>{item.description}</Text>
         </View>
       </Card>
     );
@@ -124,7 +124,7 @@ const ProjectPreview = props => {
         style={{
           height: 140,
           backgroundColor: "#00205B",
-          flexDirection: "row"
+          flexDirection: "row",
         }}
       >
         <Image
@@ -140,7 +140,7 @@ const ProjectPreview = props => {
             height: 37,
             position: "absolute",
             bottom: 30,
-            right: 30
+            right: 30,
           }}
           onPress={() => props.history.push("/Homepage")}
         >
@@ -156,8 +156,8 @@ const ProjectPreview = props => {
             flex: 1,
             flexDirection: "row",
             ...(Platform.OS !== "android" && {
-              zIndex: 10
-            })
+              zIndex: 10,
+            }),
           }}
         >
           <Text
@@ -165,7 +165,7 @@ const ProjectPreview = props => {
               fontWeight: "bold",
               fontSize: 35,
               color: "gray",
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             New Project
@@ -187,7 +187,7 @@ const ProjectPreview = props => {
               flex: 1,
               marginBottom: 10,
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Text style={styles.subTitle}>Project titile: </Text>
@@ -196,7 +196,7 @@ const ProjectPreview = props => {
               mode="outlined"
               value={Title}
               style={{ width: 800, height: 30, marginLeft: 10 }}
-              onChangeText={text => setTitle(text)}
+              onChangeText={(text) => setTitle(text)}
             />
           </View>
           <View style={{ flex: 6, flexDirection: "row" }}>
@@ -210,28 +210,28 @@ const ProjectPreview = props => {
                 value={Description}
                 style={{
                   height: 130,
-                  marginHorizontal: 10
+                  marginHorizontal: 10,
                 }}
-                render={innerProps => (
+                render={(innerProps) => (
                   <NativeTextInput
                     {...innerProps}
                     style={[
                       innerProps.style,
                       {
                         paddingTop: 8,
-                        paddingBottom: 8
-                      }
+                        paddingBottom: 8,
+                      },
                     ]}
                   />
                 )}
-                onChangeText={text => setDescription(text)}
+                onChangeText={(text) => setDescription(text)}
               />
 
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 15
+                  marginTop: 15,
                 }}
               >
                 <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
@@ -240,14 +240,14 @@ const ProjectPreview = props => {
                   mode="outlined"
                   value={ApprovalNumber}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
-                  onChangeText={text => setApprovalNumber(text)}
+                  onChangeText={(text) => setApprovalNumber(text)}
                 />
               </View>
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 15
+                  marginTop: 15,
                 }}
               >
                 <Text style={styles.subTitle}>Governance Approval Number:</Text>
@@ -256,7 +256,7 @@ const ProjectPreview = props => {
                   mode="outlined"
                   value={Governance}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
-                  onChangeText={text => setGovernanceNumber(text)}
+                  onChangeText={(text) => setGovernanceNumber(text)}
                 />
               </View>
             </View>
@@ -270,16 +270,16 @@ const ProjectPreview = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setLocation(text)}
+                  onChangeText={(text) => setLocation(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -290,16 +290,16 @@ const ProjectPreview = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
-                  onChangeText={text => setSubjectNo(text)}
+                  onChangeText={(text) => setSubjectNo(text)}
                 />
               </View>
 
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Study Duration: </Text>
@@ -314,7 +314,7 @@ const ProjectPreview = props => {
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Text style={styles.subTitle}>Start Date: </Text>
@@ -325,7 +325,7 @@ const ProjectPreview = props => {
                   style={{
                     height: 30,
                     margin: 10,
-                    flex: 1
+                    flex: 1,
                   }}
                 />
               </View>
@@ -343,7 +343,7 @@ const ProjectPreview = props => {
             style={{
               marginTop: 20,
               fontSize: 30,
-              color: "#00205B"
+              color: "#00205B",
             }}
           >
             Criteria
@@ -353,7 +353,7 @@ const ProjectPreview = props => {
           style={{
             marginTop: 20,
             fontSize: 20,
-            color: "#00205B"
+            color: "#00205B",
           }}
         >
           Basic Demographic criteria
@@ -361,13 +361,13 @@ const ProjectPreview = props => {
         <View
           style={{
             flexDirection: "row",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Text
             style={{
               fontSize: 15,
-              color: "#00205B"
+              color: "#00205B",
             }}
           >
             Allow Gender:
@@ -378,14 +378,14 @@ const ProjectPreview = props => {
             value={gender}
             style={{
               height: 30,
-              margin: 10
+              margin: 10,
             }}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text
               style={{
                 fontSize: 15,
-                color: "#00205B"
+                color: "#00205B",
               }}
             >
               Age group:
@@ -396,7 +396,7 @@ const ProjectPreview = props => {
               value={age}
               style={{
                 height: 30,
-                margin: 10
+                margin: 10,
               }}
             />
             <CheckBox
@@ -418,10 +418,10 @@ const ProjectPreview = props => {
           style={{
             marginTop: 20,
             fontSize: 20,
-            color: "#00205B"
+            color: "#00205B",
           }}
         >
-          Exclusion Demographic criteria
+          Inclusion Demographic criteria
         </Text>
         <View style={{ flexDirection: "row" }}>
           <CheckBox
@@ -463,7 +463,7 @@ const ProjectPreview = props => {
                       left: 0,
                       top: 30,
                       fontSize: 30,
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Question Preview:
@@ -474,7 +474,7 @@ const ProjectPreview = props => {
                     style={{
                       fontSize: 20,
                       fontWeight: "bold",
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Inclusion Quetsions:
@@ -488,7 +488,7 @@ const ProjectPreview = props => {
                       fontSize: 20,
                       fontWeight: "bold",
                       marginTop: 30,
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Exclusion Quetsions:
@@ -510,7 +510,7 @@ const ProjectPreview = props => {
               style={{
                 flex: 1,
                 padding: 20,
-                marginTop: 100
+                marginTop: 100,
               }}
             >
               <View>
@@ -542,26 +542,26 @@ const ProjectPreview = props => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1
+    flex: 1,
   },
   modalButtonView: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 10
+    padding: 10,
   },
   mycard: {
     margin: 5,
-    padding: 8
+    padding: 8,
   },
   cardView: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 6
+    padding: 6,
   },
   subTitle: {
     fontSize: 20,
     color: "#00205B",
-    marginLeft: 10
+    marginLeft: 10,
   },
   text: { fontSize: 20 },
 
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     // backgroundColor: "#b8e6ff",
     flex: 1,
-    justifyContent: "flex-end"
-  }
+    justifyContent: "flex-end",
+  },
 });
 export default ProjectPreview;

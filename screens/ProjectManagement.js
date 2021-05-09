@@ -8,7 +8,7 @@ import {
   Text,
   Image,
   View,
-  ScrollView
+  ScrollView,
 } from "react-native";
 
 import { Button, Colors, DataTable, IconButton } from "react-native-paper";
@@ -16,10 +16,10 @@ import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import HeaderSecond from "../screens/HeaderSecond";
 import Footer from "../screens/Footer";
-const ProjectManagement = props => {
-  const [incompleteDrop, setIncompleteDrop] = useState("none");
-  const [unreleasedDrop, setUnreleasedDrop] = useState("none");
-  const [releasedDrop, setReleasedDrop] = useState("none");
+const ProjectManagement = (props) => {
+  const [incompleteDrop, setIncompleteDrop] = useState("flex");
+  const [unreleasedDrop, setUnreleasedDrop] = useState("flex");
+  const [releasedDrop, setReleasedDrop] = useState("flex");
 
   const [unreleasedProject, setUnreleasedProject] = useState([]);
   const [releasedProject, setReleasedProject] = useState([]);
@@ -55,18 +55,18 @@ const ProjectManagement = props => {
     }
   };
 
-  const deleteProject = projectId => {
+  const deleteProject = (projectId) => {
     axios.delete(`${DEPLOYEDHOST}/api/project/${projectId}`).then(
-      response => {
+      (response) => {
         getProjects();
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const deleteIncomplete = async id => {
+  const deleteIncomplete = async (id) => {
     try {
       await AsyncStorage.removeItem(id);
       getLocalStorage();
@@ -77,13 +77,13 @@ const ProjectManagement = props => {
     let unreleasedProjects = [];
     let releasedProjects = [];
     axios.get(`${DEPLOYEDHOST}/api/project/?user=${userId}`).then(
-      response => {
+      (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let project = {
             key: response.data[i]._id,
             title: response.data[i].title,
             createdDate: response.data[i].createdDate,
-            state: response.data[i].state
+            state: response.data[i].state,
           };
           if (response.data[i].state != "Recruiting") {
             unreleasedProjects.push(project);
@@ -95,7 +95,7 @@ const ProjectManagement = props => {
         setReleasedProject(releasedProjects);
         setUnreleasedProject(unreleasedProjects);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
@@ -111,7 +111,7 @@ const ProjectManagement = props => {
       "isLactating",
       "isPlanningPregnant",
       "isHealthy",
-      "isEnglishFluent"
+      "isEnglishFluent",
     ];
     try {
       keys = await AsyncStorage.getAllKeys();
@@ -137,7 +137,7 @@ const ProjectManagement = props => {
             key: values[i][0],
             title: JSON.parse(values[i][1]).title,
             createdDate: JSON.parse(values[i][1]).createdDate,
-            state: remainTask
+            state: remainTask,
           };
 
           incompleteProjects.push(project);
@@ -149,22 +149,22 @@ const ProjectManagement = props => {
     }
   };
 
-  const updateState = id => {
+  const updateState = (id) => {
     axios
       .put(`${DEPLOYEDHOST}/api/project/${id}`, {
-        state: "Recruiting"
+        state: "Recruiting",
       })
       .then(
-        response => {
+        (response) => {
           getProjects();
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
   };
 
-  const incompleteRender = incompleteProject.map(item => {
+  const incompleteRender = incompleteProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -178,7 +178,7 @@ const ProjectManagement = props => {
             onPress={() =>
               props.history.push({
                 pathname: "/projectUpload",
-                projectKey: item.key // your data array of objects
+                projectKey: item.key, // your data array of objects
               })
             }
           >
@@ -198,7 +198,7 @@ const ProjectManagement = props => {
     );
   });
 
-  const unreleasedRender = unreleasedProject.map(item => {
+  const unreleasedRender = unreleasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${unreleasedDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -215,7 +215,7 @@ const ProjectManagement = props => {
               if (item.state == "pending") {
                 props.history.push({
                   pathname: "/pendingEdit",
-                  projectKey: item.key // your data array of objects
+                  projectKey: item.key, // your data array of objects
                 });
               } else if (item.state == "Authorized") {
                 updateState(item.key);
@@ -238,7 +238,7 @@ const ProjectManagement = props => {
     );
   });
 
-  const releasedRender = releasedProject.map(item => {
+  const releasedRender = releasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${releasedDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
@@ -252,7 +252,7 @@ const ProjectManagement = props => {
             onPress={() =>
               props.history.push({
                 pathname: "/projectPreview",
-                projectKey: item.key // your data array of objects
+                projectKey: item.key, // your data array of objects
               })
             }
           >
@@ -285,7 +285,7 @@ const ProjectManagement = props => {
               fontWeight: "bold",
               fontSize: 35,
               color: "gray",
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             My Projects
@@ -362,7 +362,7 @@ const ProjectManagement = props => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 export default ProjectManagement;
