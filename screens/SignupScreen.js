@@ -112,9 +112,10 @@ export default class SignupScreen extends React.Component {
                 flexDirection: "row", width: "100%",
                 justifyContent: "space-between"
               }}>
-                <Text style={styles.subTitle}>Date of birth: </Text>
+                <Text style={styles.subTitle}>Date of birth:</Text>
                 <TextInput
                   style={styles.inputView}
+                  placeholder="MM/DD/YY"
                   onChangeText={text => this.setState({ dob: text })}
                 />
               </View>

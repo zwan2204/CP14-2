@@ -213,6 +213,8 @@ export default class ProjectApprovalScreen extends React.Component {
   }
 
   updateState = () => {
+    const { history } = this.props;
+
     axios
       .put(
         `${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`,
@@ -222,6 +224,7 @@ export default class ProjectApprovalScreen extends React.Component {
       )
       .then(
         response => {
+          history.push("/worker");
           console.log(response);
         },
         error => {
@@ -251,7 +254,6 @@ export default class ProjectApprovalScreen extends React.Component {
   };
 
   leaveComment = () => {
-    const { history } = this.props;
     axios
       .post(`${DEPLOYEDHOST}/api/comment/`, {
         projectId: this.state.projectId,
@@ -269,7 +271,6 @@ export default class ProjectApprovalScreen extends React.Component {
       .then(
         response => {
           this.updateState();
-          history.push("/worker");
         },
         error => {
           console.log(error);
