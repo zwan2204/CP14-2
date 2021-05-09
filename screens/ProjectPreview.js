@@ -63,12 +63,12 @@ const ProjectPreview = (props) => {
         setSubjectNo(response.data.subjectNo);
         setDuration(response.data.duration);
         setDate(response.data.date);
-        setIsPregnant(!response.data.isPregnant);
+        setIsPregnant(response.data.isPregnant);
         setHealthy(response.data.needHealth);
         setEnglishFluent(response.data.needEnglish);
-        setIsSmoking(!response.data.isSmoking);
-        setIsLactating(!response.data.isLactating);
-        setPlanningPregnant(!response.data.isPlanningPregnant);
+        setIsSmoking(response.data.isSmoking);
+        setIsLactating(response.data.isLactating);
+        setPlanningPregnant(response.data.isPlanningPregnant);
         setGender(response.data.gender);
         setAge(response.data.ageGroup);
 
