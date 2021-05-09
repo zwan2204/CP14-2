@@ -321,7 +321,7 @@ const PendingEdit = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text style={{ width: "80%" }}>{item.description}</Text>
+          <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeItem(item.key)}>Delete</Button>
           </Card.Actions>
@@ -334,7 +334,7 @@ const PendingEdit = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text style={{ width: "80%" }}>{item.description}</Text>
+          <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
             <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
           </Card.Actions>
@@ -938,20 +938,41 @@ const PendingEdit = (props) => {
             <DropDownPicker
               items={[
                 {
-                  label: "Are you",
-                  value: "Are you",
+                  label: "",
+                  value: "",
                 },
                 {
-                  label: "Do you have",
-                  value: "Do you have",
+                  label: "Are",
+                  value: "Are",
+                },
+
+                {
+                  label: "Did",
+                  value: "Did",
                 },
                 {
-                  label: "Are you a",
-                  value: "Are you a",
+                  label: "Have",
+                  value: "Have",
                 },
                 {
-                  label: "Are you symptomatic with",
-                  value: "Are you symptomatic with",
+                  label: "Had",
+                  value: "Had",
+                },
+                {
+                  label: "Do",
+                  value: "Do",
+                },
+                {
+                  label: "Will",
+                  value: "Will",
+                },
+                {
+                  label: "Can",
+                  value: "Can",
+                },
+                {
+                  label: "Is",
+                  value: "Is",
                 },
               ]}
               containerStyle={{

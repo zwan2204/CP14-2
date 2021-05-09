@@ -101,7 +101,7 @@ const ProjectPreview = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text style={{ width: "80%" }}>{item.description}</Text>
+          <Text style={{ width: "75%" }}>{item.description}</Text>
         </View>
       </Card>
     );
@@ -111,7 +111,7 @@ const ProjectPreview = (props) => {
     return (
       <Card style={styles.mycard} key={item.key}>
         <View style={styles.cardView}>
-          <Text style={{ width: "80%" }}>{item.description}</Text>
+          <Text style={{ width: "75%" }}>{item.description}</Text>
         </View>
       </Card>
     );
