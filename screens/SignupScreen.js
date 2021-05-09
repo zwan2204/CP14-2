@@ -143,13 +143,25 @@ export default class SignupScreen extends React.Component {
                 />
               </View>
 
-              <Button
-                mode="text"
-                onPress={this.userSignup}
-                style={{ marginTop: 41 }}
-              >
-                Signup
-              </Button>
+              <View style={{alignItems:"center", flexDirection:"row", 
+                        paddingTop:40, justifyContent:"space-between", width:"50%"}}>
+                    <Button
+                        mode="text"
+                        onPress={this.userSignup}
+                        style={{ marginTop: 41 }}
+                    >
+                        Signup
+                    </Button>
+
+                    <Button
+                        mode="text"
+                        onPress={()=>history.push("/")}
+                        style={{ marginTop: 41 }}
+                    >
+                        Cancel
+                    </Button>
+                </View>
+
             </View>
           </View>
           <Footer />
@@ -244,14 +256,26 @@ export default class SignupScreen extends React.Component {
                 />
               </View>
 
-              <Button
-                mode="text"
-                onPress={this.userSignup}
-                style={{ marginBottom: 0 }}
-              >
-                {" "}
-                Signup{" "}
-              </Button>
+                <View style={{alignItems:"center", flexDirection:"row", 
+                        paddingTop:40, justifyContent:"space-between", width:"50%"}}>
+                    <Button
+                        mode="text"
+                        onPress={this.userSignup}
+                        style={{ marginBottom: 0 }}
+                    >
+                        {" "}
+                        Signup{" "}
+                    </Button>
+
+                    <Button
+                        mode="text"
+                        onPress={()=>history.push("/")}
+                        style={{ marginBottom: 0 }}
+                    >
+                        {" "}
+                        Cancel{" "}
+                    </Button>
+                </View>
             </View>
           </View>
           
