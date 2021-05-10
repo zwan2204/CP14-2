@@ -1,0 +1,39 @@
+{
+  "files": {
+    "app.js": "/CP14-2/static/js/app.b9795276.chunk.js",
+    "app.js.map": "/CP14-2/static/js/app.b9795276.chunk.js.map",
+    "runtime~app.js": "/CP14-2/static/js/runtime~app.913e8834.js",
+    "runtime~app.js.map": "/CP14-2/static/js/runtime~app.913e8834.js.map",
+    "static/js/2.c940ae36.chunk.js": "/CP14-2/static/js/2.c940ae36.chunk.js",
+    "static/js/2.c940ae36.chunk.js.map": "/CP14-2/static/js/2.c940ae36.chunk.js.map",
+    "fonts/AntDesign.ttf": "/CP14-2/./fonts/AntDesign.ttf",
+    "fonts/Entypo.ttf": "/CP14-2/./fonts/Entypo.ttf",
+    "fonts/Feather.ttf": "/CP14-2/./fonts/Feather.ttf",
+    "fonts/FontAwesome.ttf": "/CP14-2/./fonts/FontAwesome.ttf",
+    "fonts/FontAwesome5_Brands.ttf": "/CP14-2/./fonts/FontAwesome5_Brands.ttf",
+    "fonts/FontAwesome5_Solid.ttf": "/CP14-2/./fonts/FontAwesome5_Solid.ttf",
+    "fonts/Fontisto.ttf": "/CP14-2/./fonts/Fontisto.ttf",
+    "fonts/Foundation.ttf": "/CP14-2/./fonts/Foundation.ttf",
+    "fonts/Ionicons.ttf": "/CP14-2/./fonts/Ionicons.ttf",
+    "fonts/MaterialCommunityIcons.ttf": "/CP14-2/./fonts/MaterialCommunityIcons.ttf",
+    "fonts/MaterialIcons.ttf": "/CP14-2/./fonts/MaterialIcons.ttf",
+    "fonts/SimpleLineIcons.ttf": "/CP14-2/./fonts/SimpleLineIcons.ttf",
+    "favicon-16.png": "/CP14-2/favicon-16.png",
+    "favicon-32.png": "/CP14-2/favicon-32.png",
+    "favicon.ico": "/CP14-2/favicon.ico",
+    "index.html": "/CP14-2/index.html",
+    "manifest.json": "/CP14-2/manifest.json",
+    "serve.json": "/CP14-2/serve.json",
+    "static/js/2.c940ae36.chunk.js.LICENSE.txt": "/CP14-2/static/js/2.c940ae36.chunk.js.LICENSE.txt",
+    "static/media/bell.png": "/CP14-2/static/media/bell.cf04af27.png",
+    "static/media/header.png": "/CP14-2/static/media/header.5d2d379f.png",
+    "static/media/heart.png": "/CP14-2/static/media/heart.23b5c2c0.png",
+    "static/media/rocket.png": "/CP14-2/static/media/rocket.d2f3bf41.png",
+    "static/media/star.png": "/CP14-2/static/media/star.69c71386.png"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.913e8834.js",
+    "static/js/2.c940ae36.chunk.js",
+    "static/js/app.b9795276.chunk.js"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "background_color": "#ffffff",
+  "description": "A native component that will render on iOS, Android, and web.",
+  "display": "standalone",
+  "lang": "en",
+  "name": "hello-expo",
+  "short_name": "hello-expo",
+  "start_url": "/?utm_source=web_app_manifest",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/CP14-2/pwa/chrome-icon/chrome-icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/CP14-2/pwa/chrome-icon/chrome-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/CP14-2/pwa/chrome-icon/chrome-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
