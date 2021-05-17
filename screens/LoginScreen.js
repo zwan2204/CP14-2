@@ -15,7 +15,7 @@ export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: "@",
       password: "",
       isLoading: false,
       visible: false
@@ -32,7 +32,7 @@ export default class LoginScreen extends React.Component {
 
   userLogin = () => {
     const { history } = this.props;
-    if (this.state.email === "" || this.state.password === "") {
+    if (this.state.email === "@" || this.state.password === "") {
       alert("Please input email and password");
     } else {
       this.setState({ isLoading: !this.state.isLoading });
