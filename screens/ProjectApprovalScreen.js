@@ -421,7 +421,7 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
             </View>
 
-            <View style={{ flex: 6, flexDirection: "row" }}>
+            <View style={styles.projectContainer}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.subTitle}>Project description: </Text>
 
