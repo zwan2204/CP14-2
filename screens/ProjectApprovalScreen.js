@@ -318,7 +318,7 @@ export default class ProjectApprovalScreen extends React.Component {
         <HeaderSecond history={history} />
 
         {/* first row view */}
-        <View style={{ margin: 20, height: "75%", }}>
+        <View style={{ margin: 20 }}>
           <View style={{ flexDirection: "row", paddingBottom: 20 }}>
             <Text
               style={{
@@ -1046,30 +1046,32 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
             </View>
           </View>
-
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           {this.state.descriptionComment === "" &&
-            this.state.titleComment === "" &&
-            this.state.exclusionComment === "" &&
-            this.state.inclusionComment === "" &&
-            this.state.durationComment == "" &&
-            this.state.governanceComment === "" &&
-            this.state.subjectNoComment === "" &&
-            this.state.dateComment === "" &&
-            this.state.locationComment === "" &&
-            this.state.ethicsComment === "" ? (
+          this.state.titleComment === "" &&
+          this.state.exclusionComment === "" &&
+          this.state.inclusionComment === "" &&
+          this.state.durationComment == "" &&
+          this.state.governanceComment === "" &&
+          this.state.subjectNoComment === "" &&
+          this.state.dateComment === "" &&
+          this.state.locationComment === "" &&
+          this.state.ethicsComment === "" ? (
             <View>
-              <Button style={{ marginTop: 30 }} onPress={this.authorizeProject}>Authorize</Button>
+              <Button style={{ marginTop: 30 }} onPress={this.authorizeProject}>
+                Authorize
+              </Button>
             </View>
           ) : (
             <View>
-              <Button style={{ marginTop: 30 }} onPress={this.leaveComment}>Pending</Button>
+              <Button style={{ marginTop: 30 }} onPress={this.leaveComment}>
+                Pending
+              </Button>
             </View>
           )}
         </View>
-
 
         <Footer />
       </SafeAreaView>
