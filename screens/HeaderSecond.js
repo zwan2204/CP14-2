@@ -47,7 +47,7 @@ export default class HeaderSecond extends React.Component {
         </Button>
         <Text style={{ color: "red", position: "absolute", fontSize: "3em" }}>
           {" "}
-          Project - Version Alpha
+          Project - Version Beta
         </Text>
       </View>
     );

@@ -22,6 +22,11 @@ export default class LoginScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({ email: "@" });
+    this.setState({ password: "" });
+  }
+
   show = () => {
     this.setState({ visible: !this.state.visible });
   };

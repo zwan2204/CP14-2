@@ -13,12 +13,12 @@ export default class WorkerPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pendingIsShow: false,
-      reviewedIsShow: false,
-      infoIsShow: false,
-      pendingIcon: "chevron-right",
-      reviewedIcon: "chevron-right",
-      infoIcon: "chevron-right",
+      pendingIsShow: true,
+      reviewedIsShow: true,
+      infoIsShow: true,
+      pendingIcon: "chevron-down",
+      reviewedIcon: "chevron-down",
+      infoIcon: "chevron-down",
       unauthorizedProject: [],
       authorizedProject: [],
       pendinginfoProject: []
@@ -99,7 +99,7 @@ export default class WorkerPage extends React.Component {
       <SafeAreaView style={styles.container}>
         <HeaderSecond history={history} />
         {/* pending projects */}
-        <View style={{height:"80%"}}>
+        <View style={{ height: "80%" }}>
           <View style={{ margin: 20 }}>
             <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
               Project list
