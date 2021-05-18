@@ -169,7 +169,9 @@ const ProjectManagement = (props) => {
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
         <DataTable.Cell>{item.title}</DataTable.Cell>
         <DataTable.Cell numeric>{item.createdDate}</DataTable.Cell>
-        <DataTable.Cell numeric>{`${item.state} tasks left`}</DataTable.Cell>
+        <DataTable.Cell numeric>
+          {item.state == 0 ? "Complete" : `${item.state} tasks left`}
+        </DataTable.Cell>
         <DataTable.Cell numeric>
           <Button
             mode="outlined"
@@ -307,7 +309,9 @@ const ProjectManagement = (props) => {
             <DataTable.Title numeric>State</DataTable.Title>
             <DataTable.Title numeric>
               <IconButton
-                icon="chevron-down"
+                icon={
+                  incompleteDrop == "flex" ? "chevron-down" : "chevron-right"
+                }
                 color={Colors.red500}
                 size={20}
                 style={{ margin: 0 }}
@@ -325,7 +329,9 @@ const ProjectManagement = (props) => {
             <DataTable.Title numeric>State</DataTable.Title>
             <DataTable.Title numeric>
               <IconButton
-                icon="chevron-down"
+                icon={
+                  unreleasedDrop == "flex" ? "chevron-down" : "chevron-right"
+                }
                 color={Colors.red500}
                 size={20}
                 style={{ margin: 0 }}
@@ -343,7 +349,7 @@ const ProjectManagement = (props) => {
             <DataTable.Title numeric>State</DataTable.Title>
             <DataTable.Title numeric>
               <IconButton
-                icon="chevron-down"
+                icon={releasedDrop == "flex" ? "chevron-down" : "chevron-right"}
                 color={Colors.red500}
                 size={20}
                 style={{ margin: 0 }}

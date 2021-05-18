@@ -89,18 +89,13 @@ const ProjectUploading = (props) => {
     if (result.type == "success") {
       let newfile = {
         uri: result.uri,
-        type: `application/${result.name.split(".")[1]}`,
-        name: `project.${result.name.split(".")[1]}`,
       };
-
-      const data = new FormData();
-      data.append("file", JSON.stringify(newfile));
 
       fetch(`${DEPLOYEDHOST}/upload`, {
         method: "POST",
-
+        headers: { "Content-Type": "application/json" },
         // send our base64 string as POST request
-        body: data,
+        body: JSON.stringify(newfile),
       })
         .then(async (r) => {
           let data = await r.json();
@@ -161,7 +156,7 @@ const ProjectUploading = (props) => {
         key = Question[Question.length - 1].key + 1;
       }
 
-      let type = "Specific";
+      let type = "";
       if (workerChecked) {
         type = "Worker Need";
       } else if (generalChecked) {
