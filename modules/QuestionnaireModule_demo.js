@@ -89,15 +89,13 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
         let tempUserlist = userInfo;
         tempUserlist.isPregnant = isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant;
         setDemoInfo(tempUserlist);
-        // setDemoInfo({isPregnant : isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant});
-        setSmoking_thisPage(isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant);
+        setPregnant_thisPage(isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant);
     };
 
     const pickIsSmoking = () => {
         let tempUserlist = userInfo;
         tempUserlist.isSmoking = isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking;
         setDemoInfo(tempUserlist);
-        // setDemoInfo({isSmoking : isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking});
         setSmoking_thisPage(isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking);
     };
 
@@ -105,16 +103,14 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
         let tempUserlist = userInfo;
         tempUserlist.isLactating = isLactating != isLactating_default ? !isLactating_default : !isLactating;
         setDemoInfo(tempUserlist);
-        // setDemoInfo({isLactating : isLactating != isLactating_default ? !isLactating_default : !isLactating});
-        setSmoking_thisPage(isLactating != isLactating_default ? !isLactating_default : !isLactating);
+        setLactating_thisPage(isLactating != isLactating_default ? !isLactating_default : !isLactating);
     };
 
     const pickIsPlanning = () => {
         let tempUserlist = userInfo;
         tempUserlist.isPlanning = isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning;
         setDemoInfo(tempUserlist);
-        // setDemoInfo({isPlanning : isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning});
-        setSmoking_thisPage(isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning);
+        setPlanning_thisPage(isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning);
     };
 
     const capitalize = (str) => {

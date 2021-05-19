@@ -353,15 +353,14 @@ export const getUserInfo = ({setDemoInfo, setGet, setLoading}) => {
       userInfo["isSmoking"] = response.data.isSmoking;
       userInfo["isLactating"] = response.data.isLactating;
       userInfo["isPlanning"] = response.data.isPlanning;
-      setGet(true);
       setLoading(false);
+      setGet(true);
       setDemoInfo(userInfo);
     },
     error => {
       console.log(error);
     }
   );
-//   return userInfo;
 };
 
 const getUserAge = () => {
