@@ -1,8 +1,8 @@
 /** @format */
 
 import { StyleSheet } from "react-native";
-import { MediaQueryStyleSheet } from "react-native-responsive";
-export const styles = MediaQueryStyleSheet.create(
+// import { MediaQueryStyleSheet } from "react-native-responsive";
+export const styles = StyleSheet.create(
   {
     container: {
       flex: 1
