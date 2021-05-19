@@ -343,11 +343,12 @@ export const styles = StyleSheet.create(
       alignContent: "center",
       alignItems: "center"
     },
-    projectContainer: { flex: 6, flexDirection: "row" }
+    projectContainer: { width: "50%", flexDirection: "row" }
   },
   {
     "@media (min-device-width: 320) and (max-device-height: 720)": {
       projectContainer: {
+        width: "50%",
         flexDirection: "column"
       }
     }

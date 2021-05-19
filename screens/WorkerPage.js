@@ -42,7 +42,7 @@ export default class WorkerPage extends React.Component {
             createdDate: response.data[i].createdDate,
             state: response.data[i].state
           };
-          if (response.data[i].state === "pending") {
+          if (response.data[i].state === "Pending") {
             pendinginfoProjects.push(project);
           } else if (response.data[i].state === "New Upload") {
             unauthorizedProjects.push(project);
@@ -106,7 +106,7 @@ export default class WorkerPage extends React.Component {
             </Text>
             <DataTable>
               <DataTable.Header>
-                <DataTable.Title>Pending Projects</DataTable.Title>
+                <DataTable.Title>New Uploaded Projects</DataTable.Title>
                 <DataTable.Title numeric>Date Created</DataTable.Title>
                 <DataTable.Title numeric>State</DataTable.Title>
                 <DataTable.Title numeric>
