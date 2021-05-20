@@ -234,7 +234,7 @@ const ProjectPreview = (props) => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
+                <Text style={styles.subTitle}>Ethics Approval Number:</Text>
                 <TextInput
                   editable={false}
                   mode="outlined"
@@ -477,7 +477,7 @@ const ProjectPreview = (props) => {
                       color: "#00205B",
                     }}
                   >
-                    Inclusion Quetsions:
+                    Inclusion Questions:
                   </Text>
                   <View>{renderList}</View>
                 </View>
@@ -491,7 +491,7 @@ const ProjectPreview = (props) => {
                       color: "#00205B",
                     }}
                   >
-                    Exclusion Quetsions:
+                    Exclusion Questions:
                   </Text>
                   <View>{renderExclusonList}</View>
                 </View>

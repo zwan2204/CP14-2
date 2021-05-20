@@ -11,6 +11,7 @@ import {
   View,
   ScrollView,
   Platform,
+  Animated,
   TextInput as NativeTextInput,
   Image,
   TouchableOpacity,
@@ -48,6 +49,7 @@ const PendingEdit = (props) => {
   const [Question, setQuestion] = useState([]);
   const [exclusionQuesion, setExclusionQuestion] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
+  const [questionPreview, setQuestionPreview] = useState("");
 
   const [isPregnant, setIsPregnant] = React.useState(false);
   const [isSmoking, setIsSmoking] = React.useState(false);
@@ -80,6 +82,8 @@ const PendingEdit = (props) => {
             location: response.data[0].location,
             duration: response.data[0].duration,
             description: response.data[0].description,
+            approvalNumber: response.data[0].approvalNumber,
+            governance: response.data[0].governance,
           });
         }
       },
@@ -156,18 +160,18 @@ const PendingEdit = (props) => {
     if (result.type == "success") {
       let newfile = {
         uri: result.uri,
-        type: `application/${result.name.split(".")[1]}`,
-        name: `project.${result.name.split(".")[1]}`,
       };
-
-      const data = new FormData();
-      data.append("file", JSON.stringify(newfile));
 
       fetch(`${DEPLOYEDHOST}/upload`, {
         method: "POST",
 
         // send our base64 string as POST request
-        body: data,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        // send our base64 string as POST request
+        body: JSON.stringify(newfile),
       })
         .then(async (r) => {
           let data = await r.json();
@@ -199,7 +203,7 @@ const PendingEdit = (props) => {
       return () => {
         Question.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail}`,
         });
 
         setQuestion(Question.slice(0));
@@ -219,7 +223,7 @@ const PendingEdit = (props) => {
       return () => {
         exclusionQuesion.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail}`,
         });
 
         setExclusionQuestion(exclusionQuesion.slice(0));
@@ -360,9 +364,20 @@ const PendingEdit = (props) => {
       setGeneralChecked(!generalChecked);
     }
   };
-
+  const handleScroll = (event) => {
+    const positionX = event.nativeEvent.contentOffset.x;
+    const positionY = event.nativeEvent.contentOffset.y;
+    console.log(positionX);
+  };
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView
+      style={styles.root}
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+        { listener: (event) => handleScroll(event) }
+      )}
+      scrollEventThrottle={16}
+    >
       {/*View of Header*/}
       <View
         style={{
@@ -521,7 +536,33 @@ const PendingEdit = (props) => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.approvalNumber == "" ||
+                    comment.approvalNumber == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.approvalNumber);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.approvalNumber == "" ||
+                        comment.approvalNumber == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Ethics Approval Number:
+                  </Text>
+                </TouchableOpacity>
+
                 <TextInput
                   mode="outlined"
                   value={ApprovalNumber}
@@ -536,7 +577,31 @@ const PendingEdit = (props) => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>Governance Approval Number:</Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.governance == "" || comment.governance == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    showDialog();
+                    setCommentDisplay(comment.governance);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.governance == "" || comment.governance == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Governance Approval Number:
+                  </Text>
+                </TouchableOpacity>
+
                 <TextInput
                   mode="outlined"
                   value={Governance}
@@ -977,7 +1042,7 @@ const PendingEdit = (props) => {
               ]}
               containerStyle={{
                 height: 40,
-                width: 300,
+                width: 180,
                 marginTop: 8,
                 marginRight: 10,
               }}
@@ -989,7 +1054,10 @@ const PendingEdit = (props) => {
                 justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => setQuestionPrefix(item.value)}
+              onChangeItem={(item) => {
+                setQuestionPrefix(item.value),
+                  setQuestionPreview(`${item.value} ${CriteriaDetail}`);
+              }}
             />
 
             <DropDownPicker
@@ -1011,19 +1079,29 @@ const PendingEdit = (props) => {
               selectedLabelStyle={{
                 display: "none",
               }}
-              dropDownStyle={{ width: 340 }}
+              dropDownStyle={{ width: 540 }}
               dropDownMaxHeight={300}
-              onChangeItem={(item) => setCriteriaDetail(item.value)}
+              onChangeItem={(item) => {
+                setCriteriaDetail(item.value),
+                  setQuestionPreview(`${QuestionPrefix} ${item.value}`);
+              }}
             />
             <TextInput
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
-              style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
-              onChangeText={(text) => setCriteriaDetail(text)}
+              style={{ height: 37, width: 500, marginRight: 10, paddingTop: 3 }}
+              onChangeText={(text) => {
+                setCriteriaDetail(text),
+                  setQuestionPreview(`${QuestionPrefix} ${text}`);
+              }}
             />
           </View>
-
+          <Card style={{ margin: 5, padding: 8, width: 880 }}>
+            <View style={styles.cardView}>
+              <Text>{questionPreview}</Text>
+            </View>
+          </Card>
           <View
             style={{
               flexDirection: "row",
@@ -1087,7 +1165,7 @@ const PendingEdit = (props) => {
                       color: "#00205B",
                     }}
                   >
-                    Inclusion Quetsions:
+                    Inclusion Questions:
                   </Text>
                   <View>{renderList}</View>
                 </View>
@@ -1101,7 +1179,7 @@ const PendingEdit = (props) => {
                       color: "#00205B",
                     }}
                   >
-                    Exclusion Quetsions:
+                    Exclusion Questions:
                   </Text>
                   <View>{renderExclusonList}</View>
                 </View>
@@ -1144,7 +1222,12 @@ const PendingEdit = (props) => {
         </View>
         <Portal>
           <Dialog
-            style={{ width: 600, alignSelf: "center" }}
+            style={{
+              width: 600,
+              position: "absolute",
+              alignSelf: "center",
+              top: "20%",
+            }}
             visible={visible}
             onDismiss={hideDialog}
           >

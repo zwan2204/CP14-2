@@ -214,7 +214,7 @@ const ProjectManagement = (props) => {
             style={{ marginHorizontal: 5 }}
             labelStyle={{ fontSize: 10 }}
             onPress={() => {
-              if (item.state == "pending") {
+              if (item.state == "Pending") {
                 props.history.push({
                   pathname: "/pendingEdit",
                   projectKey: item.key, // your data array of objects
@@ -258,7 +258,7 @@ const ProjectManagement = (props) => {
               })
             }
           >
-            Check
+            Preview
           </Button>
           <Button
             mode="outlined"

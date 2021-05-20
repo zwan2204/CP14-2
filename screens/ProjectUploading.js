@@ -49,6 +49,7 @@ const ProjectUploading = (props) => {
   const [isHealthy, setHealthy] = React.useState(false);
   const [isEnglishFluent, setEnglishFluent] = React.useState(false);
 
+  const [questionPreview, setQuestionPreview] = useState("");
   const [gender, setGender] = useState("Not required");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
@@ -93,7 +94,10 @@ const ProjectUploading = (props) => {
 
       fetch(`${DEPLOYEDHOST}/upload`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
         // send our base64 string as POST request
         body: JSON.stringify(newfile),
       })
@@ -156,7 +160,7 @@ const ProjectUploading = (props) => {
         key = Question[Question.length - 1].key + 1;
       }
 
-      let type = "";
+      let type = "Specific";
       if (workerChecked) {
         type = "Worker Need";
       } else if (generalChecked) {
@@ -165,7 +169,7 @@ const ProjectUploading = (props) => {
       return () => {
         Question.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail}`,
         });
 
         setQuestion(Question.slice(0));
@@ -185,7 +189,7 @@ const ProjectUploading = (props) => {
       return () => {
         exclusionQuesion.push({
           key,
-          description: `${type} - ${QuestionPrefix} ${CriteriaDetail} ?`,
+          description: `${type} - ${QuestionPrefix} ${CriteriaDetail}`,
         });
 
         setExclusionQuestion(exclusionQuesion.slice(0));
@@ -417,7 +421,7 @@ const ProjectUploading = (props) => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>Ethics Approval Numbe:</Text>
+                <Text style={styles.subTitle}>Ethics Approval Number:</Text>
                 <TextInput
                   mode="outlined"
                   value={ApprovalNumber}
@@ -723,6 +727,7 @@ const ProjectUploading = (props) => {
         <View>
           <View
             style={{
+              marginLeft: 4,
               flexDirection: "row",
               ...(Platform.OS !== "android" && {
                 zIndex: 10,
@@ -803,7 +808,7 @@ const ProjectUploading = (props) => {
               ]}
               containerStyle={{
                 height: 40,
-                width: 300,
+                width: 180,
                 marginTop: 8,
                 marginRight: 10,
               }}
@@ -815,7 +820,10 @@ const ProjectUploading = (props) => {
                 justifyContent: "flex-start",
               }}
               dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => setQuestionPrefix(item.value)}
+              onChangeItem={(item) => {
+                setQuestionPrefix(item.value),
+                  setQuestionPreview(`${item.value} ${CriteriaDetail}`);
+              }}
             />
 
             <DropDownPicker
@@ -837,19 +845,29 @@ const ProjectUploading = (props) => {
               selectedLabelStyle={{
                 display: "none",
               }}
-              dropDownStyle={{ width: 340 }}
+              dropDownStyle={{ width: 540 }}
               dropDownMaxHeight={300}
-              onChangeItem={(item) => setCriteriaDetail(item.value)}
+              onChangeItem={(item) => {
+                setCriteriaDetail(item.value),
+                  setQuestionPreview(`${QuestionPrefix} ${item.value}`);
+              }}
             />
             <TextInput
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
-              style={{ height: 37, width: 300, marginRight: 10, paddingTop: 3 }}
-              onChangeText={(text) => setCriteriaDetail(text)}
+              style={{ height: 37, width: 500, marginRight: 10, paddingTop: 3 }}
+              onChangeText={(text) => {
+                setCriteriaDetail(text),
+                  setQuestionPreview(`${QuestionPrefix} ${text}`);
+              }}
             />
           </View>
-
+          <Card style={{ margin: 5, padding: 8, width: 880 }}>
+            <View style={styles.cardView}>
+              <Text>{questionPreview}</Text>
+            </View>
+          </Card>
           <View
             style={{
               flexDirection: "row",
@@ -913,7 +931,7 @@ const ProjectUploading = (props) => {
                       color: "#00205B",
                     }}
                   >
-                    Inclusion Quetsions:
+                    Inclusion Questions:
                   </Text>
                   <View>{renderList}</View>
                 </View>
@@ -927,7 +945,7 @@ const ProjectUploading = (props) => {
                       color: "#00205B",
                     }}
                   >
-                    Exclusion Quetsions:
+                    Exclusion Questions:
                   </Text>
                   <View>{renderExclusonList}</View>
                 </View>
@@ -984,7 +1002,7 @@ const ProjectUploading = (props) => {
             projectUpload();
           }}
         >
-          Create
+          Submit
         </Button>
       </View>
 
