@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, SafeAreaView, CheckBox } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
@@ -19,10 +19,26 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     const[healthy, setHealthy_thisPage] = useState(healthy_default);
     const[english, setEnglish_thisPage] = useState(english_default);
     const[curLocation, setcurLocatio_thisPage] = useState("");
-    const[isPregnant, setPregnant_thisPage] = useState(false);
-    const[isSmoking, setSmoking_thisPage] = useState(false);
-    const[isLactating, setLactating_thisPage] = useState(false);
-    const[isPlanning, setPlanning_thisPage] = useState(false);
+    const[isPregnant, setPregnant_thisPage] = useState(isPregnant_default);
+    const[isSmoking, setSmoking_thisPage] = useState(isSmoking_default);
+    const[isLactating, setLactating_thisPage] = useState(isLactating_default);
+    const[isPlanning, setPlanning_thisPage] = useState(isPlanning_default);
+
+    // useEffect(() => {
+        // setGender_thisPage(userInfo["gender"]);
+        // setHealthy_thisPage(userInfo["healthy"]);
+        // setEnglish_thisPage(userInfo["english"]);
+        // setcurLocatio_thisPage(userInfo["location"]);
+        // setPregnant_thisPage(userInfo["isPregnant"]);
+        // setSmoking_thisPage(userInfo["isSmoking"]);
+        // updateProperties();
+        // setPlanning_thisPage(userInfo["isPlanningder"]);
+    // }, []);
+
+    // const updateProperties = () => {
+    //     console.log(userInfo["isLactating"]);
+    //     setLactating_thisPage(userInfo["isLactating"]); 
+    // }
 
     const pickGender = gender => {
         if (gender !== 0) {
@@ -86,31 +102,44 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     };
 
     const pickIsPregnant = () => {
+        // let tempUserlist = userInfo;
+        // tempUserlist.isPregnant = isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant;
+        // setDemoInfo(tempUserlist);
+        // setPregnant_thisPage(isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant);
+
         let tempUserlist = userInfo;
-        tempUserlist.isPregnant = isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant;
+        let pick = isPregnant === undefined ? !isPregnant_default : !isPregnant;
+        tempUserlist.isPregnant = pick;
+        
         setDemoInfo(tempUserlist);
-        setPregnant_thisPage(isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant);
+        setPregnant_thisPage(pick);
     };
 
     const pickIsSmoking = () => {
         let tempUserlist = userInfo;
-        tempUserlist.isSmoking = isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking;
+        let pick = isSmoking === undefined ? !isSmoking_default : !isSmoking;
+        tempUserlist.isSmoking = pick;
+        
         setDemoInfo(tempUserlist);
-        setSmoking_thisPage(isSmoking != isSmoking_default ? !isSmoking_default : !isSmoking);
+        setSmoking_thisPage(pick);
     };
 
     const pickIsLactating = () => {
         let tempUserlist = userInfo;
-        tempUserlist.isLactating = isLactating != isLactating_default ? !isLactating_default : !isLactating;
+        let pick = isLactating === undefined ? !isLactating_default : !isLactating;
+        tempUserlist.isLactating = pick;
+        
         setDemoInfo(tempUserlist);
-        setLactating_thisPage(isLactating != isLactating_default ? !isLactating_default : !isLactating);
+        setLactating_thisPage(pick);
     };
 
     const pickIsPlanning = () => {
         let tempUserlist = userInfo;
-        tempUserlist.isPlanning = isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning;
+        let pick = isPlanning === undefined ? !isPlanning_default : !isPlanning;
+        tempUserlist.isPlanning = pick;
+        
         setDemoInfo(tempUserlist);
-        setPlanning_thisPage(isPlanning != isPlanning_default ? !isPlanning_default : !isPlanning);
+        setPlanning_thisPage(pick);
     };
 
     const capitalize = (str) => {
@@ -126,7 +155,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
             <View style={{flexDirection: "row"}}>
   
                 <View style={{flexDirection: "column", flex: 1, justifyContent:"space-around"}}>
-                    <Text style={{paddingBottom:"4%", paddingLeft:"4%", fontSize:"1.5em"}}>
+                    <Text style={{paddingBottom:"4%", paddingLeft:"4%", fontSize:"1.5em"}}
+                    onPress={()=>console.log(isLactating, isLactating_default)}>
                         What's your gender?
                     </Text>
                     <Text style={{paddingBottom:"4%", paddingLeft:"4%", fontSize:"1.5em"}}>
@@ -220,7 +250,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isPregnant_default == isPregnant ? isPregnant : !isPregnant}
+                            value={isPregnant === undefined ? isPregnant_default : isPregnant}
                             onValueChange={pickIsPregnant}
                         />
                     </View>
@@ -230,7 +260,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isSmoking_default === isSmoking ? isSmoking : !isSmoking}
+                            value={isSmoking === undefined ? isSmoking_default : isSmoking}
                             onValueChange={pickIsSmoking}
                         />
                     </View>
@@ -240,7 +270,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isLactating_default === isLactating ? isLactating : !isLactating}
+                            value={isLactating === undefined ? isLactating_default : isLactating}
                             onValueChange={pickIsLactating}
                         />
                     </View>
@@ -250,7 +280,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
-                            value={isPlanning_default === isPlanning ? isPlanning : !isPlanning}
+                            value={isPlanning === undefined ? isPlanning_default : isPlanning}
+                            // value={isPlanning_default === isPlanning ? isPlanning : !isPlanning}
                             onValueChange={pickIsPlanning}
                         />
                     </View>
