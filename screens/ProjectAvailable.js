@@ -21,6 +21,7 @@ import {
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 
 const ProjectAvailable = props => {
+    const userID = localStorage.getItem("userId");
   const projectList = props.location.projectIDs;
   const hcWorker = props.location.hcWorker;
   const [projectAvailable, setProjectAvailable] = useState([]);
@@ -135,7 +136,7 @@ const ProjectAvailable = props => {
 
         } else if (byEmail) {
             hideDialog();
-            updateUserContact("email", "");
+            updateUserContact(userID, "email", "");
             history.push({
                 pathname: "/"
             });
@@ -150,7 +151,7 @@ const ProjectAvailable = props => {
 
             } else {
                 hideDialog();
-                updateUserContact("phone", phoneNum);
+                updateUserContact(userID, "phone", phoneNum);
                 history.push({
                     pathname: "/"
                 });

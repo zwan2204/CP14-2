@@ -21,6 +21,7 @@ import Footer from "../screens/Footer";
 
 
 const QuestionAnswerPage = (props) => {
+    const userID = localStorage.getItem("userId");
 
     /* adjust the scroll bar */
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
@@ -40,9 +41,6 @@ const QuestionAnswerPage = (props) => {
     /* this is used to set sub-title of the page */
     const [buttonText, setButtonText] = useState("Confirm");
 
-    /* get user's age */
-    let userAge = getUserAge();
-
     /* when data is loading */
     const [isLoading, setLoading] = useState(true);
 
@@ -51,7 +49,7 @@ const QuestionAnswerPage = (props) => {
     const [userInfo, setDemoInfo] = useState({});
 
     useEffect(() => {
-        getUserInfo({setDemoInfo, setGet, setLoading, setDataErrorMsg});
+        getUserInfo({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID);
     }, []);
 
     /* check the need of workers */
@@ -574,10 +572,10 @@ const QuestionAnswerPage = (props) => {
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? getProjects({setGeQuestions, setSpQuestions, 
                                             setWrQuestions, setEProjects, setRemovedProjects, 
-                                            setLoading, userInfo}, userAge, history) : null,
+                                            setLoading, userInfo}, history) : null,
                                     //check questions are completed or not.
                                     (step == 0 || checkCompleteAllQuestions() ?
-                                            (stepForward(true), updateUserInfo({userInfo})) : null))}}
+                                            (stepForward(true), updateUserInfo({userInfo}, userID)) : null))}}
                         >
                             <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>

@@ -15,7 +15,6 @@ export const getProjects = (
     setLoading,
     userInfo
   },
-  userAge,
   history
 ) => {
     setLoading(true);
@@ -24,6 +23,7 @@ export const getProjects = (
 
     axios.get(`${DEPLOYEDHOST}/api/project`).then(
         response => {
+        let userAge = getAge(userInfo.age)
         for (let i = 0; i < Object.keys(response.data).length; i++) {
             let project = response.data[i];
 
@@ -282,8 +282,7 @@ export const getQuestions = ({
   );
 };
 
-export const updateUserInfo = ({ userInfo }) => {
-  const userID = localStorage.getItem("userId");
+export const updateUserInfo = ({ userInfo }, userID) => {
   axios
     .put(`${DEPLOYEDHOST}/api/users/${userID}`, {
       gender: userInfo["gender"],
@@ -299,8 +298,7 @@ export const updateUserInfo = ({ userInfo }) => {
     });
 };
 
-export const updateUserContact = (contactMethoda, phoneNumber) => {
-    const userID = localStorage.getItem("userId");
+export const updateUserContact = (userID, contactMethoda, phoneNumber) => {
     axios
       .put(`${DEPLOYEDHOST}/api/users/contact/${userID}`, {
         contactMethod: contactMethoda,
@@ -340,8 +338,7 @@ export const identifyWorker = (
     );
 };
 
-export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}) => {
-    const userID = localStorage.getItem("userId");
+export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID) => {
   let userInfo = {};
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
     response => {
@@ -353,6 +350,7 @@ export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}) 
       userInfo["isSmoking"] = response.data.isSmoking;
       userInfo["isLactating"] = response.data.isLactating;
       userInfo["isPlanning"] = response.data.isPlanning;
+      userInfo["age"] = response.data.dob;
       setLoading(false);
       setGet(true);
       setDataErrorMsg(false);
@@ -364,23 +362,6 @@ export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}) 
     }
   );
 };
-
-const getUserAge = () => {
-  const userID = localStorage.getItem("userId");
-  const [age, setAge] = useState(0);
-  axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
-    response => {
-      let dob = response.data.dob;
-      let tempAge = getAge(dob);
-      setAge(tempAge);
-    },
-    error => {
-      console.log(error);
-    }
-  );
-  return age;
-};
-export default getUserAge;
 
 const getAge = dateString => {
   var regroupData = dateString.split("/");
