@@ -21,6 +21,8 @@ import Footer from "../screens/Footer";
 
 
 const QuestionAnswerPage = (props) => {
+    const userID = localStorage.getItem("userId");
+    
     /* adjust the scroll bar */
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
     const [contentSize, setContentSize] = React.useState(0);
@@ -50,7 +52,7 @@ const QuestionAnswerPage = (props) => {
     const [userInfo, setDemoInfo] = useState({});
 
     useEffect(() => {
-        getUserInfo({setDemoInfo, setGet, setLoading});
+        getUserInfo({setDemoInfo, setGet, setLoading, setDataErrorMsg});
     }, []);
 
     /* check the need of workers */
@@ -77,6 +79,7 @@ const QuestionAnswerPage = (props) => {
     /* messages: restrict moving to the next page */
     const [showingDemoMsg, setDemoMsg] = useState(true);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
+    const [showingDataErrorMsg, setDataErrorMsg] = useState(false);
 
     const { history } = props;
     
@@ -331,12 +334,18 @@ const QuestionAnswerPage = (props) => {
         <SafeAreaView style={styles.container}>
             <HeaderSecond history={props.history} />
             
-            {isLoading ? 
+            {isLoading ?
             <View style={styles.loadingStyle}>
                 <ActivityIndicator size="large" color="#00205B"/>
-                <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
-                    Loading Questions
-                </Text>
+                {showingDataErrorMsg ?
+                    <Text style={{color:"red", fontSize:"1.3em", paddingTop:"3%"}}>
+                        The system does not response, please refresh the page
+                    </Text>
+                    :
+                    <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
+                        Loading Questions
+                    </Text>
+                }
             </View> 
             :
             <View style={{height: "80%"}}>

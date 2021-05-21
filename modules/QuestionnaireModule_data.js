@@ -5,9 +5,6 @@ import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import { useHistory } from 'react-router-dom';
 
-const userID = localStorage.getItem("userId");
-let render = true;
-
 export const getProjects = (
   {
     setGeQuestions,
@@ -286,6 +283,7 @@ export const getQuestions = ({
 };
 
 export const updateUserInfo = ({ userInfo }) => {
+  const userID = localStorage.getItem("userId");
   axios
     .put(`${DEPLOYEDHOST}/api/users/${userID}`, {
       gender: userInfo["gender"],
@@ -302,6 +300,7 @@ export const updateUserInfo = ({ userInfo }) => {
 };
 
 export const updateUserContact = (contactMethoda, phoneNumber) => {
+    const userID = localStorage.getItem("userId");
     axios
       .put(`${DEPLOYEDHOST}/api/users/contact/${userID}`, {
         contactMethod: contactMethoda,
@@ -341,7 +340,8 @@ export const identifyWorker = (
     );
 };
 
-export const getUserInfo = ({setDemoInfo, setGet, setLoading}) => {
+export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}) => {
+    const userID = localStorage.getItem("userId");
   let userInfo = {};
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
     response => {
@@ -355,15 +355,18 @@ export const getUserInfo = ({setDemoInfo, setGet, setLoading}) => {
       userInfo["isPlanning"] = response.data.isPlanning;
       setLoading(false);
       setGet(true);
+      setDataErrorMsg(false);
       setDemoInfo(userInfo);
     },
     error => {
+        setDataErrorMsg(true);
       console.log(error);
     }
   );
 };
 
 const getUserAge = () => {
+  const userID = localStorage.getItem("userId");
   const [age, setAge] = useState(0);
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
     response => {
