@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, SafeAreaView, CheckBox } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
+import { getUserInfo, getUserInfo2 } from "./QuestionnaireModule_data.js";
 
 export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     let gender_default = userInfo["gender"];
@@ -24,17 +25,23 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     const[isLactating, setLactating_thisPage] = useState(isLactating_default);
     const[isPlanning, setPlanning_thisPage] = useState(isPlanning_default);
 
-    // useEffect(() => {
-        // setGender_thisPage(userInfo["gender"]);
-        // setHealthy_thisPage(userInfo["healthy"]);
-        // setEnglish_thisPage(userInfo["english"]);
-        // setcurLocatio_thisPage(userInfo["location"]);
-        // setPregnant_thisPage(userInfo["isPregnant"]);
-        // setSmoking_thisPage(userInfo["isSmoking"]);
-        // updateProperties();
-        // setPlanning_thisPage(userInfo["isPlanningder"]);
-    // }, []);
+    // console.log("aaa");
+    // if (getUserData) {
+    //     console.log(getUserData);
+    // }
 
+    // useEffect(() => {
+    //     console.log("limin" + userInfo["isPlanning"]);
+    //     // setGender_thisPage(userInfo["gender"]);
+    //     // setHealthy_thisPage(userInfo["healthy"]);
+    //     // setEnglish_thisPage(userInfo["english"]);
+    //     // setcurLocatio_thisPage(userInfo["location"]);
+    //     // setPregnant_thisPage(userInfo["isPregnant"]);
+    //     // setSmoking_thisPage(userInfo["isSmoking"]);
+    //     // updateProperties();
+    //     // setPlanning_thisPage(userInfo["isPlanningder"]);
+    // }, []);
+    // console.log(userInfo["isPlanning"]);
     // const updateProperties = () => {
     //     console.log(userInfo["isLactating"]);
     //     setLactating_thisPage(userInfo["isLactating"]); 
@@ -151,7 +158,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     
     return (
         <SafeAreaView style={styles.container}>
-            {/* body view */}
+
+            {userInfo["isPlanning"] === undefined ? null :
             <View style={{flexDirection: "row"}}>
   
                 <View style={{flexDirection: "column", flex: 1, justifyContent:"space-around"}}>
@@ -237,7 +245,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                     </Picker>
                 </View>
             </View>
-  
+            }
+            {userInfo["isPlanning"] === undefined ? null :
             <View style={{height:"30%"}}>
                 <Text style={{paddingBottom:"2%", paddingLeft:"2%", fontSize:"1.5em", fontWeight:"bold"}}>
                     Please tick the medical condition/habits you have:
@@ -287,6 +296,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                     </View>
                 </View>
             </View>
+            }
         </SafeAreaView>
     );
 }

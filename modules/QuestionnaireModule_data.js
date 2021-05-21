@@ -338,6 +338,27 @@ export const identifyWorker = (
     );
 };
 
+// export const getUserInfo2 = (userID) => {
+//     let userInfo = {};
+//     axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
+//       response => {
+//         userInfo["gender"] = response.data.gender;
+//         userInfo["healthy"] = response.data.healthy;
+//         userInfo["english"] = response.data.english;
+//         userInfo["location"] = "";
+//         userInfo["isPregnant"] = response.data.isPregnant;
+//         userInfo["isSmoking"] = response.data.isSmoking;
+//         userInfo["isLactating"] = response.data.isLactating;
+//         userInfo["isPlanning"] = response.data.isPlanning;
+//         userInfo["age"] = response.data.dob;
+//         return userInfo;
+//       },
+//       error => {
+//         console.log(error);
+//       }
+//     );
+//   };
+
 export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID) => {
   let userInfo = {};
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
