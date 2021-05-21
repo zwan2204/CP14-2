@@ -21,8 +21,7 @@ import Footer from "../screens/Footer";
 
 
 const QuestionAnswerPage = (props) => {
-    const userID = localStorage.getItem("userId");
-    
+
     /* adjust the scroll bar */
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
     const [contentSize, setContentSize] = React.useState(0);
