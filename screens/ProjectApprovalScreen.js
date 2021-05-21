@@ -393,7 +393,7 @@ export default class ProjectApprovalScreen extends React.Component {
               </View>
 
               {/* Other info view*/}
-              <View style={{ marginTop: 10, flexDirection: "column", flex: 1 }}>
+              <View style={{ marginTop: 30, flexDirection: "column", flex: 1 }}>
                 <View
                   style={{
                     flexDirection: "row",
@@ -774,7 +774,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 </View>
               </View>
 
-              <View style={{ flex: 1, marginTop: 10, flexDirection: "column" }}>
+              <View style={{ flex: 1, marginTop: 30, flexDirection: "column" }}>
                 <View
                   style={{
                     flexDirection: "row",
