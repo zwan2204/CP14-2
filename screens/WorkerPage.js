@@ -99,7 +99,7 @@ export default class WorkerPage extends React.Component {
       <SafeAreaView style={styles.container}>
         <HeaderSecond history={history} />
         {/* pending projects */}
-        <View style={{ height: "80%" }}>
+        <View style={{ height: "100%" }}>
           <View style={{ margin: 20 }}>
             <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
               Project list
