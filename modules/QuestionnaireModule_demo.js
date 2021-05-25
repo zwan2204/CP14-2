@@ -24,28 +24,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     const[isSmoking, setSmoking_thisPage] = useState(isSmoking_default);
     const[isLactating, setLactating_thisPage] = useState(isLactating_default);
     const[isPlanning, setPlanning_thisPage] = useState(isPlanning_default);
-
-    // console.log("aaa");
-    // if (getUserData) {
-    //     console.log(getUserData);
-    // }
-
-    // useEffect(() => {
-    //     console.log("limin" + userInfo["isPlanning"]);
-    //     // setGender_thisPage(userInfo["gender"]);
-    //     // setHealthy_thisPage(userInfo["healthy"]);
-    //     // setEnglish_thisPage(userInfo["english"]);
-    //     // setcurLocatio_thisPage(userInfo["location"]);
-    //     // setPregnant_thisPage(userInfo["isPregnant"]);
-    //     // setSmoking_thisPage(userInfo["isSmoking"]);
-    //     // updateProperties();
-    //     // setPlanning_thisPage(userInfo["isPlanningder"]);
-    // }, []);
-    // console.log(userInfo["isPlanning"]);
-    // const updateProperties = () => {
-    //     console.log(userInfo["isLactating"]);
-    //     setLactating_thisPage(userInfo["isLactating"]); 
-    // }
+    
 
     const pickGender = gender => {
         if (gender !== 0) {
@@ -72,7 +51,6 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
             let tempUserlist = userInfo;
             tempUserlist.healthy = healthy;
             setDemoInfo(tempUserlist);
-            // setDemoInfo({healthy: healthy});
             setHealthy_thisPage(healthy);
         }
     };
@@ -87,7 +65,6 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
             let tempUserlist = userInfo;
             tempUserlist.english = english;
             setDemoInfo(tempUserlist);
-            // setDemoInfo({english: english});
             setEnglish_thisPage(english);
         }
     };
@@ -97,7 +74,6 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
             let tempUserlist = userInfo;
             tempUserlist.location = curLocation;
             setDemoInfo(tempUserlist);
-            // setDemoInfo({location: curLocation});
             setcurLocatio_thisPage(curLocation);
             if (userInfo.location != "" && userInfo.gender != "" &&
                 userInfo.location != "0" && userInfo.gender != "0") {
@@ -109,11 +85,6 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
     };
 
     const pickIsPregnant = () => {
-        // let tempUserlist = userInfo;
-        // tempUserlist.isPregnant = isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant;
-        // setDemoInfo(tempUserlist);
-        // setPregnant_thisPage(isPregnant != isPregnant_default ? !isPregnant_default : !isPregnant);
-
         let tempUserlist = userInfo;
         let pick = isPregnant === undefined ? !isPregnant_default : !isPregnant;
         tempUserlist.isPregnant = pick;
@@ -252,8 +223,9 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                     Please tick the medical condition/habits you have:
                 </Text>
     
-                <View style={{flexDirection: "row", height:"60%",paddingLeft:"4%", width:"100%"}}>
-                    <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
+                <View style={{flexDirection: "row", height:"60%",paddingLeft:"4%", width:"100%", flexWrap:"wrap"}}>
+                    <View style={{flexDirection: "row", alignItems:"center", 
+                            alignContent:"center", paddingRight:"5%", paddingBottom:"1%"}}>
                         <Text style={{fontSize:"1.5em", paddingRight:20}}>
                             Pregnant
                         </Text>
@@ -263,7 +235,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                             onValueChange={pickIsPregnant}
                         />
                     </View>
-                    <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
+                    <View style={{flexDirection: "row", alignItems:"center", 
+                            alignContent:"center", paddingRight:"5%", paddingBottom:"1%"}}>
                         <Text style={{fontSize:"1.5em", paddingRight:20}}>
                             Smoking
                         </Text>
@@ -273,7 +246,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                             onValueChange={pickIsSmoking}
                         />
                     </View>
-                    <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
+                    <View style={{flexDirection: "row", alignItems:"center", 
+                            alignContent:"center", paddingRight:"5%", paddingBottom:"1%"}}>
                         <Text style={{fontSize:"1.5em", paddingRight:20}}>
                             Lactating
                         </Text>
@@ -283,14 +257,14 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
                             onValueChange={pickIsLactating}
                         />
                     </View>
-                    <View style={{flexDirection: "row", alignItems:"center", alignContent:"center", paddingRight:"5%"}}>
+                    <View style={{flexDirection: "row", alignItems:"center", 
+                            alignContent:"center", paddingRight:"5%", paddingBottom:"1%"}}>                        
                         <Text style={{fontSize:"1.5em" , paddingRight:20}}>
                             Planning on becoming pregnant
                         </Text>
                         <CheckBox
                             style={{height:"1.5em", width:"1.5em"}}
                             value={isPlanning === undefined ? isPlanning_default : isPlanning}
-                            // value={isPlanning_default === isPlanning ? isPlanning : !isPlanning}
                             onValueChange={pickIsPlanning}
                         />
                     </View>

@@ -11,7 +11,6 @@ export const getProjects = (
     setSpQuestions,
     setWrQuestions,
     setEProjects,
-    setRemovedProjects,
     setLoading,
     userInfo
   },
@@ -19,7 +18,6 @@ export const getProjects = (
 ) => {
     setLoading(true);
     let eligibleProjects = [];
-    let removedProjects = {};
 
     axios.get(`${DEPLOYEDHOST}/api/project`).then(
         response => {
@@ -31,38 +29,36 @@ export const getProjects = (
             if (userInfo.location == "home" || userInfo.location == "gp") {
                 //location match
                 if (!project.workerNeed) {
-                //age match
-                const ageRange = project.ageGroup.split(",");
+                    //age match
+                    const ageRange = project.ageGroup.split(",");
 
-                for (let i = 0; i < ageRange.length; i++) {
-                    ageRange[i] = parseInt(ageRange[i]);
-                }
-
-                if (
-                    (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
-                    (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
-                    (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                    userAge >= ageRange[0] ||
-                    userAge <= ageRange[1]
-                ) {
-                    //filter projects based on user's selections.
-                    if (
-                        (userInfo.gender == project.gender || 
-                            project.gender == "Not required") &&
-                        userInfo.healthy == project.needHealth &&
-                        userInfo.isSmoking == project.isSmoking &&
-                        userInfo.isPregnant == project.isPregnant &&
-                        userInfo.isLactating == project.isLactating &&
-                        userInfo.isPlanning == project.isPlanningPregnant &&
-                        userInfo.english == project.needEnglish
-                    ) {
-                        eligibleProjects.push(project._id);
-                    } else {
-                    removedProjects[project._id] = 1;
+                    for (let i = 0; i < ageRange.length; i++) {
+                        ageRange[i] = parseInt(ageRange[i]);
                     }
-                } else {
-                    removedProjects[project._id] = 1;
-                }
+
+                    if (
+                        (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
+                        (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
+                        (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
+                        userAge >= ageRange[0] ||
+                        userAge <= ageRange[1]
+                    ) {
+                        //filter projects based on user's selections.
+                        if (
+                            (userInfo.gender == project.gender || 
+                                project.gender == "Not required") &&
+                            userInfo.healthy == project.needHealth &&
+                            userInfo.isSmoking == project.isSmoking &&
+                            userInfo.isPregnant == project.isPregnant &&
+                            userInfo.isLactating == project.isLactating &&
+                            userInfo.isPlanning == project.isPlanningPregnant &&
+                            userInfo.english == project.needEnglish
+                        ) {
+                            eligibleProjects.push(project._id);
+                        } else {
+                        }
+                    } else {
+                    }
                 }
             }
             if (
@@ -98,10 +94,8 @@ export const getProjects = (
                     ) {
                         eligibleProjects.push(project._id);
                     } else {
-                        removedProjects[project._id] = 1;
                     }
                 } else {
-                    removedProjects[project._id] = 1;
                 }
                 }
             }
@@ -115,7 +109,6 @@ export const getProjects = (
                         false : true
                 });
             } else {
-                setRemovedProjects(removedProjects);
                 setEProjects(eligibleProjects);
                 getQuestions({
                     setLoading,
@@ -337,27 +330,6 @@ export const identifyWorker = (
       }
     );
 };
-
-// export const getUserInfo2 = (userID) => {
-//     let userInfo = {};
-//     axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
-//       response => {
-//         userInfo["gender"] = response.data.gender;
-//         userInfo["healthy"] = response.data.healthy;
-//         userInfo["english"] = response.data.english;
-//         userInfo["location"] = "";
-//         userInfo["isPregnant"] = response.data.isPregnant;
-//         userInfo["isSmoking"] = response.data.isSmoking;
-//         userInfo["isLactating"] = response.data.isLactating;
-//         userInfo["isPlanning"] = response.data.isPlanning;
-//         userInfo["age"] = response.data.dob;
-//         return userInfo;
-//       },
-//       error => {
-//         console.log(error);
-//       }
-//     );
-//   };
 
 export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID) => {
   let userInfo = {};

@@ -77,6 +77,8 @@ const QuestionAnswerPage = (props) => {
     const [showingDemoMsg, setDemoMsg] = useState(true);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
     const [showingDataErrorMsg, setDataErrorMsg] = useState(false);
+    const showingNoQuestionMsg = step == 1 && generalQuestions.length == 0 ? true :
+        (step == 2 && specificQuestions.length == 0 ? true : false);
 
     const { history } = props;
     
@@ -199,6 +201,7 @@ const QuestionAnswerPage = (props) => {
                 }
             });
         }
+
         setSize(num > 0 ? "true" : "false");
         setRemovedProjects(tempList);
     }
@@ -219,7 +222,6 @@ const QuestionAnswerPage = (props) => {
             /* check whether the IDs in the exclusionIDList are all included in the 
             removedProjects list */
             for (let index = 0; index < item.exclusionIDList.length; index++) {
-                // if (!removedProjects.includes(item.exclusionIDList[index])) {
                 if (item.exclusionIDList[index] != "" && 
                         removedProjects[item.exclusionIDList[index]] == null) {
                     return false;
@@ -245,22 +247,22 @@ const QuestionAnswerPage = (props) => {
 
     const getAvailableProjects = () => {
         let projectList = [];
-        for (let index = 0; index < currentQuestions.length; index++) {
-            let questionItem = currentQuestions[index];
-            let incluArray = questionItem.inclusionIDList;
-            let excluArray = questionItem.exclusionIDList;
-            let removeList = removedProjects;
-            for (let index2 = 0; index2 < incluArray.length; index2++) {
-                if (incluArray[index2] != "" && removeList[incluArray[index2]] == null) {
-                    projectList.push(incluArray[index2]);
-                }
-            }
-            for (let index2 = 0; index2 < excluArray.length; index2++) {
-                if (excluArray[index2] != "" && removeList[excluArray[index2]] == null) {
-                    projectList.push(excluArray[index2]);
-                }
+        let removeList = removedProjects;
+        let availabelList = eligibleProjects;
+
+        for (let index = 0; index < availabelList.length; index++) {
+            if (removeList[availabelList[index]] == null && availabelList[index] != "") {
+                projectList.push(availabelList[index]);
             }
         }
+        
+        let keyList = Object.keys(removeList)
+        for (let index = 0; index < keyList.length; index++) {
+            if (removeList[keyList[index]] == null && keyList[index] != "") {
+                projectList.push(keyList[index]);
+            }
+        }
+
         let unique = new Set(projectList);
         projectList = [...unique];
         return projectList;
@@ -383,7 +385,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(userInfo)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects, currentQuestions, removedProjects)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -408,7 +410,7 @@ const QuestionAnswerPage = (props) => {
                             )}
                             <View style={[
                                     styles.partABTitleYesNo, 
-                                    {opacity: step == 0 ? 0 : 1}]}
+                                    {opacity: step == 0 || showingNoQuestionMsg? 0 : 1}]}
                             >
                                 <Text style={{fontSize:"1.2em"}}>Yes</Text>
                                 <Text style={{fontSize:"1.2em"}}>No</Text>
@@ -416,6 +418,13 @@ const QuestionAnswerPage = (props) => {
                         </View>
 
                         {/* Question contianer */}
+                        {showingNoQuestionMsg && step != 0 ?
+                        <View style={{maxHeight:"85%", width:"100%", paddingLeft:"5%"}}>
+                            <Text style={{fontSize:"1.5em", color:"red", paddingLeft:"5%"}}>
+                                No questions for you in this section, please move to the next page.
+                            </Text>
+                        </View> 
+                        :
                         <ScrollView 
                             style={{maxHeight:"85%", width:"100%", paddingLeft:"5%"}}
                             showsVerticalScrollIndicator = {false}
@@ -439,6 +448,7 @@ const QuestionAnswerPage = (props) => {
                             <QuestionDemo setDemoInfo={setDemoInfo} userInfo={userInfo} setDemoMsg={setDemoMsg}>
                             </QuestionDemo>}
                         </ScrollView>
+                        }
                     </View>
 
                     {/* scroll bar */}
@@ -571,7 +581,7 @@ const QuestionAnswerPage = (props) => {
                                     showingDemoMsg ? null :
                                     //if the current page is Demo, wash projects based on results.
                                     (step == 0 ? getProjects({setGeQuestions, setSpQuestions, 
-                                            setWrQuestions, setEProjects, setRemovedProjects, 
+                                            setWrQuestions, setEProjects, 
                                             setLoading, userInfo}, history) : null,
                                     //check questions are completed or not.
                                     (step == 0 || checkCompleteAllQuestions() ?
