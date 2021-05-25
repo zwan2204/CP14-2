@@ -174,6 +174,8 @@ const ProjectUploading = (props) => {
 
         setQuestion(Question.slice(0));
         key++;
+        setCriteriaDetail("");
+        setQuestionPreview("");
       };
     } else if (CriteriaType == "EXCLUSION") {
       let type = "Specific";
@@ -194,6 +196,8 @@ const ProjectUploading = (props) => {
 
         setExclusionQuestion(exclusionQuesion.slice(0));
         key++;
+        setCriteriaDetail("");
+        setQuestionPreview("");
       };
     } else {
       return () => {};
@@ -918,7 +922,9 @@ const ProjectUploading = (props) => {
                       position: "absolute",
                       right: 0,
                     }}
-                    onPress={() => addItem()}
+                    onPress={() => {
+                      addItem();
+                    }}
                   >
                     Add
                   </Button>
