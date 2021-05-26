@@ -77,8 +77,9 @@ const QuestionAnswerPage = (props) => {
     const [showingDemoMsg, setDemoMsg] = useState(true);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
     const [showingDataErrorMsg, setDataErrorMsg] = useState(false);
+    const [allDiscard, setAllDiscardMsg] = useState(false);
     const showingNoQuestionMsg = step == 1 && generalQuestions.length == 0 ? true :
-        (step == 2 && specificQuestions.length == 0 ? true : false);
+        (step == 2 && specificQuestions.length == 0 ? true : allDiscard);
 
     const { history } = props;
     
@@ -91,6 +92,7 @@ const QuestionAnswerPage = (props) => {
             currentStep -= 1;
         }
         setStep(currentStep);
+        setAllDiscardMsg(false);
         switchContent(currentStep, isForward);
     }
 
@@ -234,17 +236,6 @@ const QuestionAnswerPage = (props) => {
         }
     }
 
-    const checkCompleteAllQuestions = () => {
-        for (let i = 0; i < currentQuestions.length; i++) {
-            if (currentQuestions[i].state == "notCompleted") {
-                setNotCompleteMsg(true);
-                return false;
-            }
-        }
-        setNotCompleteMsg(false);
-        return true;
-    }
-
     const getAvailableProjects = () => {
         let projectList = [];
         let removeList = removedProjects;
@@ -276,6 +267,28 @@ const QuestionAnswerPage = (props) => {
             }
         }
         setNumQuestions(num);
+    }
+
+    const checkCompleteAllQuestions = () => {
+        for (let i = 0; i < currentQuestions.length; i++) {
+            if (currentQuestions[i].state == "notCompleted") {
+                setNotCompleteMsg(true);
+                return false;
+            }
+        }
+        setNotCompleteMsg(false);
+        return true;
+    }
+
+    const checkDiscardAllQuestions = () => {
+        for (let i = 0; i < currentQuestions.length; i++) {
+            if (currentQuestions[i].state != "discard") {
+                setAllDiscardMsg(false);
+                return;
+            }
+        }
+        setAllDiscardMsg(true);
+        return;
     }
 
     const Item = ({item}) => {
@@ -316,9 +329,12 @@ const QuestionAnswerPage = (props) => {
                     </View>
                 </View>;
         }
+        console.log("aaaaa");
         num += 1;
         if (num == currentQuestions.length) {
+            // console.log("aaaaa");
             setEProjects(getAvailableProjects());
+            checkDiscardAllQuestions();
             setQuestionLeft();
         }
 
@@ -385,7 +401,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects, currentQuestions, removedProjects)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects, allDiscard)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
