@@ -92,20 +92,18 @@ const ProjectUploading = (props) => {
         uri: result.uri,
       };
 
-      fetch(`${DEPLOYEDHOST}/upload`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        // send our base64 string as POST request
-        body: JSON.stringify(newfile),
-      })
-        .then(async (r) => {
-          let data = await r.json();
-          setImage(data.url);
+      axios
+        .post(`${DEPLOYEDHOST}/upload`, {
+          uri: JSON.parse(JSON.stringify(newfile)),
         })
-        .catch((err) => console.log(err));
+        .then(
+          (response) => {
+            setImage(response.data.url);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   };
 
