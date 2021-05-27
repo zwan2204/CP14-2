@@ -162,22 +162,18 @@ const PendingEdit = (props) => {
         uri: result.uri,
       };
 
-      fetch(`${DEPLOYEDHOST}/upload`, {
-        method: "POST",
-
-        // send our base64 string as POST request
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        // send our base64 string as POST request
-        body: JSON.stringify(newfile),
-      })
-        .then(async (r) => {
-          let data = await r.json();
-          setImage(data.url);
+      axios
+        .post(`${DEPLOYEDHOST}/upload`, {
+          uri: JSON.parse(JSON.stringify(newfile)),
         })
-        .catch((err) => console.log(err));
+        .then(
+          (response) => {
+            setImage(response.data.Location);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   };
 
@@ -892,7 +888,7 @@ const PendingEdit = (props) => {
               }}
             />
             <CheckBox
-              title="Should be health"
+              title="Should be healthy"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={isHealthy}
@@ -1213,7 +1209,7 @@ const PendingEdit = (props) => {
                 </Text>
                 <Text style={{ color: "gray" }}>
                   If a participant provides a negative answer("NO"), then he/she
-                  will be rejected from the project
+                  will be rejected from the project.
                 </Text>
                 <Text style={{ color: "gray" }}>
                   *Exlusion Criteria Question:

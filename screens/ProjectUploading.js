@@ -83,6 +83,16 @@ const ProjectUploading = (props) => {
       setMaxAge(ediInfo.ageGroup.split(",")[1]);
     }
   };
+
+  const deleteIncomplete = async (id) => {
+    if (projectId) {
+      try {
+        await AsyncStorage.removeItem(id);
+        getLocalStorage();
+      } catch (e) {}
+    }
+  };
+
   const pickImage = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
@@ -98,7 +108,7 @@ const ProjectUploading = (props) => {
         })
         .then(
           (response) => {
-            setImage(response.data.url);
+            setImage(response.data.Location);
           },
           (error) => {
             console.log(error);
@@ -252,7 +262,6 @@ const ProjectUploading = (props) => {
       .then(
         (response) => {
           props.history.push("/projectManagement");
-          console.log(response);
         },
         (error) => {
           console.log(error);
@@ -655,7 +664,7 @@ const ProjectUploading = (props) => {
               }}
             />
             <CheckBox
-              title="Should be health"
+              title="Should be healthy"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={isHealthy}
@@ -977,7 +986,7 @@ const ProjectUploading = (props) => {
                 </Text>
                 <Text style={{ color: "gray" }}>
                   If a participant provides a negative answer("NO"), then he/she
-                  will be rejected from the project
+                  will be rejected from the project.
                 </Text>
                 <Text style={{ color: "gray" }}>
                   *Exlusion Criteria Question:
@@ -1003,7 +1012,7 @@ const ProjectUploading = (props) => {
           mode="contained"
           style={{ width: 100, alignSelf: "center", margin: 20 }}
           onPress={() => {
-            projectUpload();
+            projectUpload(), deleteIncomplete(projectId);
           }}
         >
           Submit
