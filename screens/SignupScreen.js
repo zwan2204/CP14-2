@@ -16,6 +16,7 @@ export default class SignupScreen extends React.Component {
     this.state = {
       fullName: "",
       password: "",
+      confirmPassword: "",
       role: "Participant",
       email: "",
       gender: "",
@@ -30,34 +31,39 @@ export default class SignupScreen extends React.Component {
 
   userSignup = () => {
     const { history } = this.props;
-    axios
-      .post(`${DEPLOYEDHOST}/api/users`, {
-        fullName: this.state.fullName,
-        password: this.state.password,
-        role: this.state.role,
-        email: this.state.email,
-        gender: this.state.gender,
-        staffId: this.staffId,
-        dob: this.state.dob,
-        healthy: false,
-        english: false,
-        isPregnant: false,
-        isSmoking: false,
-        isLactating: false,
-        isPlanning: false,
-        contactMethod: "",
-        phoneNum: ""
-      })
-      .then(
-        response => {
-          console.log(response);
-          history.push("/homepage");
-        },
-        error => {
-          console.log(error);
-          alert("Email has already been registered");
-        }
-      );
+    if (this.state.password !== this.state.confirmPassword) {
+      alert("Password doesn't match");
+    } else {
+      axios
+        .post(`${DEPLOYEDHOST}/api/users`, {
+          fullName: this.state.fullName,
+          password: this.state.password,
+          role: this.state.role,
+          email: this.state.email,
+          gender: this.state.gender,
+          staffId: this.staffId,
+          dob: this.state.dob,
+          healthy: false,
+          english: false,
+          isPregnant: false,
+          isSmoking: false,
+          isLactating: false,
+          isPlanning: false,
+          contactMethod: "",
+          phoneNum: ""
+        })
+        .then(
+          response => {
+            console.log(response);
+            history.push("/homepage");
+          },
+          error => {
+            console.log(error);
+            alert("Email has already been registered");
+          }
+        );
+    }
+
   };
 
   render() {
@@ -151,7 +157,7 @@ export default class SignupScreen extends React.Component {
                 <TextInput
                   style={styles.inputView}
                   secureTextEntry={true}
-                  onChangeText={text => this.setState({ password: text })}
+                  onChangeText={text => this.setState({ confirmPassword: text })}
                 />
               </View>
 
