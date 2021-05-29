@@ -40,7 +40,6 @@ const ProjectAvailable = props => {
 
   const [visible, setVisible] = React.useState(projectList == "" || projectList == undefined);
   const showDialog = () => setVisible(true);
-
   const hideDialog = () => setVisible(false);
 
   useEffect(() => {
@@ -58,7 +57,9 @@ const ProjectAvailable = props => {
             description: response.data[i].description,
             location: response.data[i].location,
             duration: response.data[i].duration,
-            date: response.data[i].date
+            date: response.data[i].date,
+            numLeft: parseInt(response.data[i].subjectNo) - 
+                parseInt(response.data[i].currentNumParticipant)
           };
           p.push(project);
         }
@@ -115,8 +116,8 @@ const ProjectAvailable = props => {
             <Text
               style={{ color: color, margin: 3, flex: 1, textAlign: "left" }}
             >
-              {/* the current number / total number */}
-              {item.subjectNo}/{item.subjectNo}
+                {/* the current number / total number */}
+                Remaining slots: {item.numLeft}
             </Text>
 
             <Text

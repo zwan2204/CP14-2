@@ -53,8 +53,7 @@ const QuestionAnswerPage = (props) => {
     }, []);
 
     /* check the need of workers */
-    let requireHCWorker = (userInfo.location == "clinic" || 
-        userInfo.location == "hospital") ? true : false;
+    const [requireHCWorker, setRequireHCWorker] = useState(false);
     const [handDevice, setHandDevice] = useState(false);
     const [needLogin, setNeedLogin] = useState(false);
 
@@ -329,10 +328,8 @@ const QuestionAnswerPage = (props) => {
                     </View>
                 </View>;
         }
-        console.log("aaaaa");
         num += 1;
         if (num == currentQuestions.length) {
-            // console.log("aaaaa");
             setEProjects(getAvailableProjects());
             checkDiscardAllQuestions();
             setQuestionLeft();
@@ -401,7 +398,7 @@ const QuestionAnswerPage = (props) => {
                 
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(eligibleProjects, allDiscard)}>
+                    <Text style={styles.titleInfoP1} onPress={() => console.log(requireHCWorker, userInfo.location)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -461,7 +458,11 @@ const QuestionAnswerPage = (props) => {
                                 extraData={selectedId}
                             />}
                             {step == 0 && getUserData &&
-                            <QuestionDemo setDemoInfo={setDemoInfo} userInfo={userInfo} setDemoMsg={setDemoMsg}>
+                            <QuestionDemo 
+                                setDemoInfo={setDemoInfo} 
+                                userInfo={userInfo} 
+                                setDemoMsg={setDemoMsg}
+                                setRequireHCWorker={setRequireHCWorker}>
                             </QuestionDemo>}
                         </ScrollView>
                         }

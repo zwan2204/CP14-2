@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import { Image, Text, View, SafeAreaView, TextInput } from "react-native";
+import { Image, Text, View, SafeAreaView, TextInput, ActivityIndicator } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 import axios from "axios";
@@ -21,7 +21,8 @@ export default class SignupScreen extends React.Component {
       email: "",
       gender: "",
       dob: "",
-      staffId: ""
+      staffId: "",
+      isLoading: false
     };
   }
 
@@ -31,40 +32,60 @@ export default class SignupScreen extends React.Component {
 
   userSignup = () => {
     const { history } = this.props;
-    if (this.state.password !== this.state.confirmPassword) {
-      alert("Password doesn't match");
-    } else {
-      axios
-        .post(`${DEPLOYEDHOST}/api/users`, {
-          fullName: this.state.fullName,
-          password: this.state.password,
-          role: this.state.role,
-          email: this.state.email,
-          gender: this.state.gender,
-          staffId: this.staffId,
-          dob: this.state.dob,
-          healthy: false,
-          english: false,
-          isPregnant: false,
-          isSmoking: false,
-          isLactating: false,
-          isPlanning: false,
-          contactMethod: "",
-          phoneNum: ""
-        })
-        .then(
-          response => {
-            console.log(response);
-            history.push("/homepage");
-          },
-          error => {
-            console.log(error);
-            alert("Email has already been registered");
-          }
-        );
-    }
+    let day = parseInt(this.state.dob.substring(0,2));
+    let month = parseInt(this.state.dob.substring(3,5));
+    let year = parseInt(this.state.dob.substring(6));
 
-  };
+    if (this.state.password !== this.state.confirmPassword) {
+        alert("Password doesn't match");
+    } else if (this.state.password.length < 8) {
+        alert("Password must be 8 characters at a minimum");
+    } else if (this.state.password === "") {
+        alert("Password cannot be empty");
+    } else if (!this.state.email.includes("@") || !this.state.email.includes("com")) {
+        alert("Email format is wrong");
+    } else if (this.state.dob[2] !== "/" || this.state.dob[5] !== "/") {
+        alert("Date of birth format is wrong");
+    } else if (isNaN(day) || isNaN(month) || isNaN(year)) {
+        alert("Date of birth only contains numbers and /");
+    } else if (month > 12 || month < 1 || day > 31 || day < 1) {
+        alert("Date of birth contains invalid numbers");
+    } else if (this.state.fullName === "") {
+        alert("Name cannot be empty");
+    } else {
+        this.setState({ isLoading: true });
+        axios
+            .post(`${DEPLOYEDHOST}/api/users`, {
+            fullName: this.state.fullName,
+            password: this.state.password,
+            role: this.state.role,
+            email: this.state.email,
+            gender: this.state.gender,
+            staffId: this.staffId,
+            dob: this.state.dob,
+            healthy: false,
+            english: false,
+            isPregnant: false,
+            isSmoking: false,
+            isLactating: false,
+            isPlanning: false,
+            contactMethod: "",
+            phoneNum: ""
+            })
+            .then(
+            response => {
+                console.log(response);
+                this.setState({ isLoading: false });
+                history.push("/homepage");
+            },
+            error => {
+                console.log(error);
+                this.setState({ isLoading: false });
+                alert("Email has already been registered");
+            }
+            );
+        }
+    };
 
   render() {
     const { history } = this.props;
@@ -72,6 +93,41 @@ export default class SignupScreen extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <Header />
+
+          {this.state.isLoading ?
+          <View
+            style={[
+              styles.loadingStyle,
+              {
+                position: "absolute",
+                backgroundColor: "white",
+                opacity: 0.9,
+                zIndex: 10,
+                top: "15%"
+              }
+            ]}
+          >
+            <View
+              style={{
+                alignContent: "center",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <ActivityIndicator size="large" color="#00205B" />
+              <Text
+                style={{
+                  color: "#00205B",
+                  fontSize: "1.3em",
+                  paddingTop: "3%"
+                }}
+              >
+                Processing
+              </Text>
+            </View>
+          </View>
+         : null}
+
           <View style={{ alignItems: "center", height: "80%" }}>
             <View style={{ alignItems: "center", margin: 30 }}>
               <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}> Create New Account </Text>
@@ -121,7 +177,7 @@ export default class SignupScreen extends React.Component {
                 <Text style={styles.subTitle}>Date of birth:</Text>
                 <TextInput
                   style={styles.inputView}
-                  placeholder="MM/DD/YY"
+                  placeholder="DD/MM/YY"
                   onChangeText={text => this.setState({ dob: text })}
                 />
               </View>

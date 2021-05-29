@@ -6,7 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
 import { getUserInfo, getUserInfo2 } from "./QuestionnaireModule_data.js";
 
-export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
+export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWorker}) {
     let gender_default = userInfo["gender"];
     let healthy_default = userInfo["healthy"];
     let english_default = userInfo["english"];
@@ -81,6 +81,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg}) {
             } else {
                 setDemoMsg(true);
             }
+            setRequireHCWorker(curLocation == "clinic" || 
+                curLocation == "hospital" ? true : false);
         }
     };
 
