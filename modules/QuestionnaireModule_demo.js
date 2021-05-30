@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Text, View, SafeAreaView, CheckBox } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles.js";
-import { getUserInfo, getUserInfo2 } from "./QuestionnaireModule_data.js";
+
 
 export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWorker}) {
     let gender_default = userInfo["gender"];
@@ -159,7 +159,8 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
                         >
                         {gender_default == "" ? <Picker.Item label={"Your gender:"} value="0"/> : null}
                         <Picker.Item 
-                            label={gender_default == "" ? "Male" : capitalize(gender_default)} 
+                            label={gender_default == "" ? "Male" : 
+                                (gender_default == "Not required" ? "Prefer not to say" : gender_default)} 
                             value={gender_default == "" ? "Male" : gender_default} />
                         <Picker.Item 
                             label={gender_default == "" ? "Female" : 
@@ -169,9 +170,9 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
                                 (gender_default == "Male" ? "Female" : 
                                 (gender_default == "Female" ? "Male" : "Male"))} />
                         <Picker.Item
-                            label={gender_default == "" ? "Not required" : 
-                                (gender_default == "Male" ? "Not required" :
-                                (gender_default == "Female" ? "Not required" : "Female"))} 
+                            label={gender_default == "" ? "Prefer not to say" : 
+                                (gender_default == "Male" ? "Prefer not to say" :
+                                (gender_default == "Female" ? "Prefer not to say" : "Female"))} 
                             value={gender_default == "" ? "Not required" : 
                                 (gender_default == "Male" ? "Not required" : 
                                 (gender_default == "Female" ? "Not required" : "Female"))} />

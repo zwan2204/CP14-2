@@ -1,12 +1,11 @@
 /** @format */
 
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { 
     Text, 
     View, 
     TouchableOpacity, 
     SafeAreaView, 
-    Image, 
     ScrollView, 
     FlatList,
     ActivityIndicator,
@@ -14,57 +13,47 @@ import {
 import {styles} from "../styles.js";
 import {QuestionDemo} from "../modules/QuestionnaireModule_demo.js";
 import {HealhcareWorkerLoginView} from "../modules/QuestionnaireModule_WorkerLogin";
-import getUserAge from "../modules/QuestionnaireModule_data";
 import {getUserInfo, updateUserInfo, getProjects} from "../modules/QuestionnaireModule_data";
 import HeaderSecond from "../screens/HeaderSecond";
 import Footer from "../screens/Footer";
 
 
 const QuestionAnswerPage = (props) => {
-    const userID = localStorage.getItem("userId");
-
-    /* adjust the scroll bar */
+    {/* Scroll bar*/}
     const [contentOffset, setContentOffset] = React.useState({ x: 0, y: 0 });
     const [contentSize, setContentSize] = React.useState(0);
     const [scrollViewHeight, setScrollViewHeight] = React.useState(0);
     const scrollElementHeightPercent = 45;
     const scrollPerc = (contentOffset.y / (contentSize - scrollViewHeight)) 
         * (100 - scrollElementHeightPercent);
-
-    /* 0 means on the page of personal information page, 1 means general question page
-    2 means specific question page */
+    
+    {/* common features for all sections */}
+    const [subTitle, setSubTitle] = useState("Demographic Information");
+    const [buttonText, setButtonText] = useState("Confirm");
+    //0 = personal information page, 1 = general question page, 2 = specific question page
     const [step, setStep] = useState(0);
 
-    /* this is used to set sub-title of the page */
-    const [subTitle, setSubTitle] = useState("Demographic Information");
-
-    /* this is used to set sub-title of the page */
-    const [buttonText, setButtonText] = useState("Confirm");
-
-    /* when data is loading */
+    //Whether the page is loading
     const [isLoading, setLoading] = useState(true);
 
-    /* retrieve user general information data */
-    const [getUserData, setGet] = useState(false);
-    const [userInfo, setDemoInfo] = useState({});
+    {/* User general information */}
+    const userID = localStorage.getItem("userId"); //get the current user's ID
+    const [getUserData, setGet] = useState(false); //true if successfully get user's data
+    const [userInfo, setDemoInfo] = useState({}); //store user's information: gender, age,...
 
-    useEffect(() => {
-        getUserInfo({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID);
-    }, []);
-
-    /* check the need of workers */
+    {/* Variables when a worker is needed */}
     const [requireHCWorker, setRequireHCWorker] = useState(false);
-    const [handDevice, setHandDevice] = useState(false);
-    const [needLogin, setNeedLogin] = useState(false);
+    const [handDevice, setHandDevice] = useState(false); //need to hand device to worker
+    const [needLogin, setNeedLogin] = useState(false); //worker needs to login
 
-    /* set up all types of questions and projects */
+    {/* Questions and projects */}
     const [eligibleProjects, setEProjects] = useState([]);
     const [removedProjects, setRemovedProjects] = useState({});
     const [removedProjectSizeZero, setSize] = useState(false);
     const [generalQuestions, setGeQuestions] = useState({});
     const [specificQuestions, setSpQuestions] = useState({});
     const [workerQuestions, setWrQuestions] = useState({});
-    let currentQuestions = 
+    let currentQuestions =  //the current questions showing on a section
         step == 1 ? generalQuestions :
         (step == 2 ? specificQuestions :
         (requireHCWorker && step == 3 ? workerQuestions : null));
@@ -72,7 +61,7 @@ const QuestionAnswerPage = (props) => {
     const [selectedId, setSelectedId] = useState(null);
     var num = 0; //current question index
 
-    /* messages: restrict moving to the next page */
+    {/* messages */}
     const [showingDemoMsg, setDemoMsg] = useState(true);
     const [showingNotCompleteMsg, setNotCompleteMsg] = useState(false);
     const [showingDataErrorMsg, setDataErrorMsg] = useState(false);
@@ -80,13 +69,21 @@ const QuestionAnswerPage = (props) => {
     const showingNoQuestionMsg = step == 1 && generalQuestions.length == 0 ? true :
         (step == 2 && specificQuestions.length == 0 ? true : allDiscard);
 
-    const { history } = props;
+    const { history } = props; //used to carry data when moving to other pages
+
+    {/* get user's information first before loading this page */}
+    useEffect(() => {
+        getUserInfo({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID);
+    }, []);
     
+    {/* moving between each page */}
     const stepForward = (isForward) => {
         let currentStep = step;
+        {/* moving forward (i.e. from general questions to specific questions ) */}
         if (isForward && currentStep < 4) {
             currentStep += 1;
         }
+        {/* moving backward */}
         if (!isForward && currentStep > 0) {
             currentStep -= 1;
         }
@@ -95,7 +92,9 @@ const QuestionAnswerPage = (props) => {
         switchContent(currentStep, isForward);
     }
 
+    {/* change the content of the page */}
     const switchContent = (step, isForward) => {
+        {/* if no projects are eligible, move to the last section */}
         if (eligibleProjects.length == 0 && isForward && step > 1) {
             history.push({
                 pathname: "/projectAvailable",
@@ -103,20 +102,21 @@ const QuestionAnswerPage = (props) => {
                 hcWorker: requireHCWorker
             });
         } else {
-            if (step == 0) {
+            if (step == 0) { //section 1: demographic info
                 setSubTitle("Demographic Information");
                 setButtonText("Confirm");
-            } else if (step == 1) {
+            } else if (step == 1) { //section 2: general questions
                 setSubTitle("General Questions");
                 setButtonText("Next");
-            } else if (step == 2) {
+            } else if (step == 2) { //section 3: specific questions
                 setSubTitle("Specific Questions");
                 setButtonText(requireHCWorker ? "Next" : "Submit");
-            } else if (step == 3 && requireHCWorker) {
+            } else if (step == 3 && requireHCWorker) { //extra section 3-1: worker questions
                 setSubTitle("Medical Condition");
                 setButtonText("Submit");
                 setHandDevice(true);
             } else if ((step == 3 && !requireHCWorker) || (step == 4 && requireHCWorker)) {
+                {/* convert the eligible projects to a string*/}
                 let eligibleProjects_string = "";
                 if (eligibleProjects.length > 0) {
                     for (let i = 0; i < eligibleProjects.length; i++) {
@@ -125,6 +125,7 @@ const QuestionAnswerPage = (props) => {
                     eligibleProjects_string = eligibleProjects_string.substring
                         (0, eligibleProjects_string.length - 1);
                 }
+                {/* move to the eligible project page */}
                 history.push({
                     pathname: "/projectAvailable",
                     projectIDs: eligibleProjects_string,
@@ -134,18 +135,21 @@ const QuestionAnswerPage = (props) => {
         }
     }
 
+    {/* if left answer ("Yes") is clicked */}
     const handleClickLeft = (item) => {
         makeASelection(item, false);
         item.stateYes = true;
         item.stateNo = false;
     }
 
+    {/* if right answer ("No") is clicked */}
     const handleClickRight = (item) => {
         makeASelection(item, true);
         item.stateYes = false;
         item.stateNo = true;
     }
 
+    {/* check eligible projects based on the selection */}
     const makeASelection = (item, inclusion) => {
         var tempList = removedProjects;
         var projectIDList = inclusion ? item.inclusionIDList : item.exclusionIDList;
@@ -207,6 +211,7 @@ const QuestionAnswerPage = (props) => {
         setRemovedProjects(tempList);
     }
 
+    {/* check whether a question should be removed from the questionnaire */}
     const removeThisQuestion = (item) => {
         if ((!item.stateYes) && (!item.stateNo) 
                 && removedProjects && removedProjectSizeZero) {
@@ -235,29 +240,32 @@ const QuestionAnswerPage = (props) => {
         }
     }
 
+    {/* check whether a project should be removed */}
     const getAvailableProjects = () => {
         let projectList = [];
         let removeList = removedProjects;
         let availabelList = eligibleProjects;
-
+        /* keep projects that are stored in the eligible project list */
         for (let index = 0; index < availabelList.length; index++) {
             if (removeList[availabelList[index]] == null && availabelList[index] != "") {
                 projectList.push(availabelList[index]);
             }
         }
-        
+        /* partially keep projects that are stored in the removed project list */
         let keyList = Object.keys(removeList)
         for (let index = 0; index < keyList.length; index++) {
             if (removeList[keyList[index]] == null && keyList[index] != "") {
                 projectList.push(keyList[index]);
             }
         }
-
+        /* remove duplicated projects */
         let unique = new Set(projectList);
         projectList = [...unique];
+
         return projectList;
     }
 
+    {/* how many questions that have not been answered by the user */}
     const setQuestionLeft = () => {
         let num = 0;
         for (let index = 0; index < currentQuestions.length; index++) {
@@ -268,6 +276,7 @@ const QuestionAnswerPage = (props) => {
         setNumQuestions(num);
     }
 
+    {/* check whether there is a question that has not been answered by the user */}
     const checkCompleteAllQuestions = () => {
         for (let i = 0; i < currentQuestions.length; i++) {
             if (currentQuestions[i].state == "notCompleted") {
@@ -279,6 +288,7 @@ const QuestionAnswerPage = (props) => {
         return true;
     }
 
+    {/* check whether all questions are discarded (questions belong to ineligible projects) */}
     const checkDiscardAllQuestions = () => {
         for (let i = 0; i < currentQuestions.length; i++) {
             if (currentQuestions[i].state != "discard") {
@@ -290,21 +300,26 @@ const QuestionAnswerPage = (props) => {
         return;
     }
 
+    {/* the design of a question, including its text and yes & no buttons */}
     const Item = ({item}) => {
         let content = null;
-
+        /* if this question belongs to an ineligible project, we don't need it */
         if (step != 0 && removeThisQuestion(item)) {
             item.state = "discard";
             content = null;
         } else {
+            /* if this question has not been answered, mark it */
             if (!item.stateYes && !item.stateNo) {
                 item.state = "notCompleted";
             } else {
-                item.state = "completed";
+                item.state = "completed"; // otherwise, it's answered by the user
             }
+            /* create style for the question */
             content =
                 <View style={[styles.item]}>
+                    {/* question text */}
                     <Text style={styles.questionSentence}>{item.question}</Text>
+
                     <View style={styles.tickContianer}>
                         {/* Yes button */}
                         <TouchableOpacity
@@ -328,7 +343,9 @@ const QuestionAnswerPage = (props) => {
                     </View>
                 </View>;
         }
+        
         num += 1;
+        /* if this is the last question, check eligible projects and questions */
         if (num == currentQuestions.length) {
             setEProjects(getAvailableProjects());
             checkDiscardAllQuestions();
@@ -346,30 +363,37 @@ const QuestionAnswerPage = (props) => {
         <SafeAreaView style={styles.container}>
             <HeaderSecond history={props.history} />
             
+            {/* System is loading data from the database, showing loading icon and messages */}
             {isLoading ?
             <View style={styles.loadingStyle}>
                 <ActivityIndicator size="large" color="#00205B"/>
                 {showingDataErrorMsg ?
+                    //fail to load data
                     <Text style={{color:"red", fontSize:"1.3em", paddingTop:"3%"}}>
                         The system does not response, please refresh the page
                     </Text>
                     :
+                    //normal
                     <Text style={{color:"#00205B", fontSize:"1.3em", paddingTop:"3%"}}>
                         Loading Questions
                     </Text>
                 }
             </View> 
             :
+            //normal content of the questionnaire
             <View style={{height: "80%"}}>
                 {handDevice ?
+                //if user is in the step 4 and a healthcare worker is required
                 <View style={styles.handDeviceContinaer}>
                     <View style={styles.opacityBackground}></View>
                     {needLogin ?
+                    //healthcare worker login
                     <HealhcareWorkerLoginView
                         setNeedLogin={setNeedLogin} setHandDevice={setHandDevice} 
                             stepForward={stepForward}>
                     </HealhcareWorkerLoginView>
                     :
+                    //ask the user to hand the device to the worker
                     <View style={styles.handDeviceInner}>
                         <View style={styles.handDeviceText}>
                             <Text style={{fontSize:"1.4em", paddingTop:"5%"}}>
@@ -377,6 +401,7 @@ const QuestionAnswerPage = (props) => {
                                 our staff members to examine your medical conditon.
                             </Text>
                         </View>
+                        {/* buttons */}
                         <View style={styles.handDeviceButtonContianer}>
                             <TouchableOpacity
                                 onPress={() => {setHandDevice(false), stepForward(false)}}
@@ -396,9 +421,10 @@ const QuestionAnswerPage = (props) => {
                     }
                 </View> : null}
                 
+                {/* the user is in other sections */}
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={() => console.log(requireHCWorker, userInfo.location)}>
+                    <Text style={styles.titleInfoP1}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -406,10 +432,9 @@ const QuestionAnswerPage = (props) => {
                     </Text>
                 </View>
                 
-                {/* This section contains all general questions and tick boxes */}
+                {/* This section contains all questions and tickboxes */}
                 <View style={[styles.questionPageContainer, {height:"70%"}]}>
                     <View style={{width:"80%"}}>
-                        {/* General question section */}
                         {/* Title bar information */}
                         <View style={styles.partABTitleBar}>
                             {step == 0 ? null : (numQuestions > 1 ? 
@@ -432,12 +457,14 @@ const QuestionAnswerPage = (props) => {
 
                         {/* Question contianer */}
                         {showingNoQuestionMsg && step != 0 ?
+                        //if there is no question
                         <View style={{maxHeight:"85%", width:"100%", paddingLeft:"5%"}}>
                             <Text style={{fontSize:"1.5em", color:"red", paddingLeft:"5%"}}>
                                 No questions for you in this section, please move to the next page.
                             </Text>
                         </View> 
                         :
+                        //otherwise, show all questions and tickboxes
                         <ScrollView 
                             style={{maxHeight:"85%", width:"100%", paddingLeft:"5%"}}
                             showsVerticalScrollIndicator = {false}
@@ -484,7 +511,7 @@ const QuestionAnswerPage = (props) => {
                         </View>
                     </View>
 
-                    {/* This section contains the process bar */}
+                    {/* process bar */}
                     <View style={styles.processBarContainer}>
                         <View style={[styles.processBarCircle , {backgroundColor:"#00205B"}]}>
                             <Text style={{color:"white", paddingLeft:5}}>
@@ -561,14 +588,15 @@ const QuestionAnswerPage = (props) => {
                     </View>
                 </View>
                 
-
-                {/* Button to next page */}
+                {/* Buttons moving forward or backward & message container*/}
                 <View style={styles.extraInformation}>
+                    {/* if a question has not been answered*/}
                     {showingNotCompleteMsg ? 
                     <Text style={styles.questionMsg}>
                         *Please complete all questions.
                     </Text> : null}
-
+                    
+                    {/* if the first four questions on the demo section are not filled */}
                     {showingDemoMsg && 
                     <Text style={styles.questionMsg}>
                         *Please complete the first four questions.
@@ -578,6 +606,7 @@ const QuestionAnswerPage = (props) => {
                         styles.buttonContainer,
                         {justifyContent: step > 0 ? "space-between" : "center"}]}>
                         
+                        {/* button moving back */}
                         {step > 0 && 
                         <TouchableOpacity 
                             style={[
@@ -589,20 +618,31 @@ const QuestionAnswerPage = (props) => {
                             <Text style={{color: "white"}}>Back</Text>
                         </TouchableOpacity>}
 
+                        {/* button moving forward */}
                         <TouchableOpacity
                             style={[
                                 styles.questionnaireButton, 
                                 {backgroundColor: showingDemoMsg ? "lightgrey" : "#00205B"}]}
                             onPress={() => {
-                                    //if no project matches the user's condition, do nothing:
+                                    //if there is an error message, then stop user moving forward: null
                                     showingDemoMsg ? null :
-                                    //if the current page is Demo, wash projects based on results.
-                                    (step == 0 ? getProjects({setGeQuestions, setSpQuestions, 
-                                            setWrQuestions, setEProjects, 
-                                            setLoading, userInfo}, history) : null,
-                                    //check questions are completed or not.
-                                    (step == 0 || checkCompleteAllQuestions() ?
-                                            (stepForward(true), updateUserInfo({userInfo}, userID)) : null))}}
+                                    //if the current page is Demo, get projects based on user's answers
+                                    (step == 0 ? 
+                                        (getProjects({
+                                            setGeQuestions, 
+                                            setSpQuestions, 
+                                            setWrQuestions, 
+                                            setEProjects, 
+                                            setLoading, 
+                                            userInfo},
+                                            history),
+                                        updateUserInfo({
+                                            userInfo}, 
+                                            userID), 
+                                        stepForward(true)) : null,
+                                    //check questions are completed or not
+                                    (step != 0 && checkCompleteAllQuestions()) ? 
+                                        stepForward(true): null)}}
                         >
                             <Text style={{color: "white"}}>{buttonText}</Text>
                         </TouchableOpacity>
