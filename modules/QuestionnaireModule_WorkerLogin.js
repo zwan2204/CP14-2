@@ -12,18 +12,24 @@ export function HealhcareWorkerLoginView({setNeedLogin, setHandDevice, stepForwa
     const[message, setMsg] = useState("");
     const[indentify, setIdentify] = useState(false);
 
+    {/* handle healthcare worker login */}
     const login = () => {
+        //if the email entered is empty
         if (email == "") {
             setMsg("Please enter your email address");
+        //if the password entered is empty
         } else if (password == "") {
             setMsg("Please enter your password");
         } else {
+            //identify the worker
             identifyWorker({setIdentify, setMsg, 
                 setNeedLogin, setHandDevice}, email, password);
         }
     }
 
+    {/* store and check email */}
     const setText = (text) => {
+        //check email format
         if (!text.includes("@") && text != "") {
             setMsg("Your email address is invalid");
         } else {
@@ -34,10 +40,12 @@ export function HealhcareWorkerLoginView({setNeedLogin, setHandDevice, stepForwa
 
     return (
         <View style={styles.handDeviceInner}>
+            {/* title */}
             <View style={{width:"100%", height:"25%", alignItems:"center", alignContent:"center", justifyContent:"center"}}>
                 <Text style={{fontSize:"1.4em", color:"#00205B"}}>Healthcare Worker Login</Text>
             </View>
 
+            {/* email and password texts */}
             <View style={{width:"100%", height:"35%", flexDirection:"column"}}>
                 <View style={{width:"100%", height:"50%", flexDirection:"row", alignContent:"center", justifyContent:"center", alignItems:"center"}}>
                     <Text style={{color:"grey", fontSize:"1.2em", width:"30%",height:30}}>Email:</Text>
@@ -57,10 +65,12 @@ export function HealhcareWorkerLoginView({setNeedLogin, setHandDevice, stepForwa
                 </View>
             </View>
 
+            {/* message container */}
             <View style={{width:"100%", height:"15%", alignContent:"center", alignItems:"center", justifyContent:"center"}}>
                 <Text style={{color:"red"}}>{message}</Text>
             </View>
 
+            {/* button container */}
             <View style={{width:"100%", height:"25%", alignContent:"center", alignItems:"center", justifyContent:"space-evenly", flexDirection:"row"}}>
                 <TouchableOpacity
                     onPress={() => {setHandDevice(false), stepForward(false)}}

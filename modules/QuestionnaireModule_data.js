@@ -1,9 +1,8 @@
 /** @format */
 
-import { useState } from "react";
 import axios from "axios";
-import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
-import { useHistory } from 'react-router-dom';
+import { DEPLOYEDHOST } from "../routes/urlMap";
+
 
 export const getProjects = (
   {
@@ -16,26 +15,26 @@ export const getProjects = (
   },
   history
 ) => {
+    //trun on loading
     setLoading(true);
-    let eligibleProjects = [];
 
+    let eligibleProjects = [];
+    //get projects from database
     axios.get(`${DEPLOYEDHOST}/api/project`).then(
         response => {
         let userAge = getAge(userInfo.age)
         for (let i = 0; i < Object.keys(response.data).length; i++) {
             let project = response.data[i];
-
+            //only recruiting projects are needed
             if (project.state == "Recruiting") {
+            //location is home/gp
             if (userInfo.location == "home" || userInfo.location == "gp") {
-                //location match
                 if (!project.workerNeed) {
-                    //age match
+                    //check age
                     const ageRange = project.ageGroup.split(",");
-
                     for (let i = 0; i < ageRange.length; i++) {
                         ageRange[i] = parseInt(ageRange[i]);
                     }
-
                     if (
                         (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
                         (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
@@ -43,7 +42,7 @@ export const getProjects = (
                         userAge >= ageRange[0] ||
                         userAge <= ageRange[1]
                     ) {
-                        //filter projects based on user's selections.
+                        //compare user's information and project requirements.
                         if (
                             (userInfo.gender == project.gender || 
                                 project.gender == "Not required") &&
@@ -61,13 +60,11 @@ export const getProjects = (
                     }
                 }
             }
-            if (
-                userInfo.location == "clinic" ||
-                userInfo.location == "hospital"
-            ) {
+            //location is clinic/hospital
+            if (userInfo.location == "clinic" || userInfo.location == "hospital") {
                 //location match
                 if (project.workerNeed) {
-                //age match
+                //check age
                 const ageRange = project.ageGroup.split(",");
 
                 for (let i = 0; i < ageRange.length; i++) {
@@ -95,12 +92,12 @@ export const getProjects = (
                         eligibleProjects.push(project._id);
                     } else {
                     }
-                } else {
-                }
+                } else {}
                 }
             }
             }
         }
+            //if no eligible project, jump to the last section
             if (eligibleProjects.length == 0) {
                 history.push({
                     pathname: "/projectAvailable",
@@ -125,11 +122,13 @@ export const getProjects = (
     );
 };
 
+{/* filter questions based on eligible projects */}
 export function washQuestions(questions, eligibleProjects) {
   let filteredQuestions = [];
 
   questions.forEach(item => {
     let shouldRemove = true;
+    //compare questions with inclusion projects 
     for (let index = 0; index < item.inclusionIDList.length; index++) {
       for (let index_2 = 0; index_2 < eligibleProjects.length; index_2++) {
         if (eligibleProjects[index_2] == item.inclusionIDList[index]) {
@@ -141,6 +140,7 @@ export function washQuestions(questions, eligibleProjects) {
         break;
       }
     }
+    //compare questions with exclusion projects 
     for (let index = 0; index < item.exclusionIDList.length; index++) {
       if (!shouldRemove) {
         break;
@@ -162,6 +162,7 @@ export function washQuestions(questions, eligibleProjects) {
   return filteredQuestions;
 }
 
+{/* load questions from the database */}
 export const getQuestions = ({
   setLoading,
   setGeQuestions,
@@ -172,14 +173,14 @@ export const getQuestions = ({
   let generalQuestions = [];
   let specificQuestions = [];
   let workerQuestions = [];
-  let filter = {}; //check duplicated questions
+  let filter = {}; //used to store duplicated questions
 
   axios.get(`${DEPLOYEDHOST}/api/question`).then(
     response => {
       for (let i = 0; i < Object.keys(response.data).length; i++) {
         let tempQuestion = {};
         let question = response.data[i];
-        //if the question already exists in the lists
+        //if the question already exists in the list
         if (filter[question.name] != null) {
           if (question.general) {
             for (let i = 0; i < generalQuestions.length; i++) {
@@ -275,6 +276,7 @@ export const getQuestions = ({
   );
 };
 
+{/* update the user's information on the database */}
 export const updateUserInfo = ({ userInfo }, userID) => {
   axios
     .put(`${DEPLOYEDHOST}/api/users/${userID}`, {
@@ -291,6 +293,7 @@ export const updateUserInfo = ({ userInfo }, userID) => {
     });
 };
 
+{/* update the user's contact methods on the database */}
 export const updateUserContact = (userID, contactMethoda, phoneNumber) => {
     axios
       .put(`${DEPLOYEDHOST}/api/users/contact/${userID}`, {
@@ -299,9 +302,10 @@ export const updateUserContact = (userID, contactMethoda, phoneNumber) => {
       })
       .then(error => {
         console.log(error);
-      });
-  };
+    });
+};
 
+{/* check whether the healthcare worker is registered in the system */}
 export const identifyWorker = (
   { setIdentify, setMsg, setNeedLogin, setHandDevice },
   email,
@@ -331,6 +335,7 @@ export const identifyWorker = (
     );
 };
 
+{/* retrieve the user's information from the database */}
 export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}, userID) => {
   let userInfo = {};
   axios.get(`${DEPLOYEDHOST}/api/users/${userID}`).then(
@@ -356,6 +361,7 @@ export const getUserInfo = ({setDemoInfo, setGet, setLoading, setDataErrorMsg}, 
   );
 };
 
+{/* convert DOB to date format and calculate the user's age */}
 const getAge = dateString => {
   var regroupData = dateString.split("/");
   var newDate = regroupData[2] + "/" + regroupData[1] + "/" + regroupData[0];

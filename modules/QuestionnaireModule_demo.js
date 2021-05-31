@@ -7,6 +7,7 @@ import { styles } from "../styles.js";
 
 
 export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWorker}) {
+    /* get user's information */
     let gender_default = userInfo["gender"];
     let healthy_default = userInfo["healthy"];
     let english_default = userInfo["english"];
@@ -16,6 +17,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
     let isLactating_default = userInfo["isLactating"];
     let isPlanning_default = userInfo["isPlanning"];
 
+    /* variables used to store user's selections on the page */
     const[gender, setGender_thisPage] = useState("");
     const[healthy, setHealthy_thisPage] = useState(healthy_default);
     const[english, setEnglish_thisPage] = useState(english_default);
@@ -25,13 +27,13 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
     const[isLactating, setLactating_thisPage] = useState(isLactating_default);
     const[isPlanning, setPlanning_thisPage] = useState(isPlanning_default);
     
-
+    /* handle picking a gender */
     const pickGender = gender => {
         if (gender !== 0) {
             let tempUserlist = userInfo;
             tempUserlist.gender = gender;
-            setDemoInfo(tempUserlist);
-            setGender_thisPage(gender);
+            setDemoInfo(tempUserlist); //store the selection for the questionnaire
+            setGender_thisPage(gender); //store the selection for temporarily using on this page
             if (userInfo.location != "" && userInfo.gender != "" &&
                 userInfo.location != "0" && userInfo.gender != "0") {
                 setDemoMsg(false);
@@ -41,6 +43,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         }
     };
 
+    /* handle picking a health state */
     const pickHealthy = healthy => {
         if (healthy !== 0) {
             if (healthy == "true") {
@@ -55,6 +58,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         }
     };
 
+    /* handle picking a English state */
     const pickEnglish = english => {
         if (english !== 0) {
             if (english == "true") {
@@ -69,6 +73,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         }
     };
 
+    /* handle picking a location */
     const pickCurLocation = curLocation => {
         if (curLocation !== 0) {
             let tempUserlist = userInfo;
@@ -86,6 +91,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         }
     };
 
+    /* handle ticking the pregnant box */
     const pickIsPregnant = () => {
         let tempUserlist = userInfo;
         let pick = isPregnant === undefined ? !isPregnant_default : !isPregnant;
@@ -95,6 +101,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         setPregnant_thisPage(pick);
     };
 
+    /* handle ticking the smoking box */
     const pickIsSmoking = () => {
         let tempUserlist = userInfo;
         let pick = isSmoking === undefined ? !isSmoking_default : !isSmoking;
@@ -104,6 +111,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         setSmoking_thisPage(pick);
     };
 
+    /* handle ticking the lactating box */
     const pickIsLactating = () => {
         let tempUserlist = userInfo;
         let pick = isLactating === undefined ? !isLactating_default : !isLactating;
@@ -113,6 +121,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         setLactating_thisPage(pick);
     };
 
+    /* handle ticking the planning box */
     const pickIsPlanning = () => {
         let tempUserlist = userInfo;
         let pick = isPlanning === undefined ? !isPlanning_default : !isPlanning;
@@ -121,20 +130,13 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
         setDemoInfo(tempUserlist);
         setPlanning_thisPage(pick);
     };
-
-    const capitalize = (str) => {
-        if (str == undefined || str == "") {
-            return null;
-        }
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
     
     return (
         <SafeAreaView style={styles.container}>
 
-            {userInfo["isPlanning"] === undefined ? null :
+            {userInfo["isPlanning"] === undefined ? null : //show content until we get data
             <View style={{flexDirection: "row"}}>
-  
+                {/* demo question texts */}
                 <View style={{flexDirection: "column", flex: 1, justifyContent:"space-around"}}>
                     <Text style={{paddingBottom:"4%", paddingLeft:"4%", fontSize:"1.5em"}}
                     onPress={()=>console.log(isLactating, isLactating_default)}>
@@ -151,6 +153,7 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
                     </Text>
                 </View>
   
+                {/* demo answer pickers */}
                 <View style={{flexDirection: "column", flex: 1, justifyContent:"space-around", alignItems:"flex-end"}}>
                     <Picker
                         style={{width:"35%", height:"15%", fontSize:"1em"}}
@@ -220,12 +223,15 @@ export function QuestionDemo({setDemoInfo, userInfo, setDemoMsg, setRequireHCWor
                 </View>
             </View>
             }
+
             {userInfo["isPlanning"] === undefined ? null :
             <View style={{height:"30%"}}>
+                {/* demo condition question text */}
                 <Text style={{paddingBottom:"2%", paddingLeft:"2%", fontSize:"1.5em", fontWeight:"bold"}}>
                     Please tick the medical condition/habits you have:
                 </Text>
-    
+
+                {/* demo condition question tickboxes */}
                 <View style={{flexDirection: "row", height:"60%",paddingLeft:"4%", width:"100%", flexWrap:"wrap"}}>
                     <View style={{flexDirection: "row", alignItems:"center", 
                             alignContent:"center", paddingRight:"5%", paddingBottom:"1%"}}>
