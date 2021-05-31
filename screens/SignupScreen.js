@@ -42,13 +42,17 @@ export default class SignupScreen extends React.Component {
         alert("Password must be 8 characters at a minimum");
     } else if (this.state.password === "") {
         alert("Password cannot be empty");
-    } else if (!this.state.email.includes("@") || !this.state.email.includes("com")) {
+    } else if (this.state.role === "Participant" && 
+            (!this.state.email.includes("@") || !this.state.email.includes("com"))) {
         alert("Email format is wrong");
-    } else if (this.state.dob[2] !== "/" || this.state.dob[5] !== "/") {
+    } else if (this.state.role === "Participant" && 
+            (this.state.dob[2] !== "/" || this.state.dob[5] !== "/")) {
         alert("Date of birth format is wrong");
-    } else if (isNaN(day) || isNaN(month) || isNaN(year)) {
+    } else if (this.state.role === "Participant" &&
+            (isNaN(day) || isNaN(month) || isNaN(year))) {
         alert("Date of birth only contains numbers and /");
-    } else if (month > 12 || month < 1 || day > 31 || day < 1) {
+    } else if (this.state.role === "Participant" && 
+            (month > 12 || month < 1 || day > 31 || day < 1)) {
         alert("Date of birth contains invalid numbers");
     } else if (this.state.fullName === "") {
         alert("Name cannot be empty");
@@ -328,7 +332,7 @@ export default class SignupScreen extends React.Component {
                 <TextInput
                   style={styles.inputView}
                   secureTextEntry={true}
-                  onChangeText={text => this.setState({ password: text })}
+                  onChangeText={text => this.setState({ confirmPassword: text })}
                 />
               </View>
 
