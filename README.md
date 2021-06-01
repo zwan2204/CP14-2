@@ -21,7 +21,7 @@ npm run start
 
 1. Fork the repository
 
-2. Login to the Amplify Console and choose Get started under Deploy. Grant Amplify permission to read from your GitHub account or organization that owns your repo.
+2. Login to the [Amplify Console](https://console.aws.amazon.com/amplify/home) and choose Get started under Deploy. Grant Amplify permission to read from your GitHub account or organization that owns your repo.
 
 3. The Amplify Console will detect that the amplify.yml file is in the repo. Choose Next.
 
