@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   Platform,
   TextInput as NativeTextInput,
   Image,
@@ -30,9 +29,8 @@ import * as DocumentPicker from "expo-document-picker";
 import { CheckBox } from "react-native-elements";
 import uuid from "react-native-uuid";
 import Footer from "./Footer";
-import HeaderSecond from "../screens/HeaderSecond";
 const ProjectUploading = (props) => {
-  const [image, setImage] = useState("");
+  const [file, setFile] = useState("");
   const [workerChecked, setWorkerChecked] = React.useState(false);
   const [generalChecked, setGeneralChecked] = React.useState(false);
   const [ApprovalNumber, setApprovalNumber] = useState("");
@@ -68,15 +66,26 @@ const ProjectUploading = (props) => {
   const [visible, setVisible] = React.useState(false);
   const [age, setAge] = useState("");
   const userId = localStorage.getItem("userId");
-  // const userId = "606d1642b2fff30342232416";
+
+  {
+    /*This file contains 4 status, 1. user wants to create a new project -> these three
+      variables are all empty. 2. user wants to edit a local project draft -> projectId will be assigned
+      a concrete value, others will be empty. 3. user wants to edit a pending project -> pendingProjectId 
+    will be assigned a value and others remain empty. 4. user wants to check an released project -> previewProjectId
+  will be assigned a value and others remain empty
+  Check ProjectManagement.js file to see how the different page transfer data.
+*/
+  }
   const projectId = props.location.projectKey;
   const pendingProjectId = props.location.pendingProjectKey;
   const previewProjectId = props.location.previewProjectKey;
 
-  // const userId = Local.getItem("userId");
+  //popup comment dialog window
   const showDialog = () => setVisible(true);
 
+  //hide comment dialog window
   const hideDialog = () => setVisible(false);
+
   const loadComment = () => {
     if (pendingProjectId) {
       axios.get(`${DEPLOYEDHOST}/api/comment/?pId=${pendingProjectId}`).then(
@@ -113,6 +122,10 @@ const ProjectUploading = (props) => {
     );
   };
 
+  {
+    /*   load project information, it will only do actual work if pendingProjectId is not null,
+  it means only the status on pending eidt, the data will be loaded.*/
+  }
   const pendingPage = () => {
     let inclusion = [];
     let exclution = [];
@@ -121,7 +134,7 @@ const ProjectUploading = (props) => {
         (response) => {
           setTitle(response.data.title);
           setDescription(response.data.description);
-          setImage(response.data.fileUpload);
+          setFile(response.data.fileUpload);
           setApprovalNumber(response.data.approvalNumber);
           setGovernanceNumber(response.data.governance);
           setLocation(response.data.location);
@@ -164,6 +177,10 @@ const ProjectUploading = (props) => {
     }
   };
 
+  {
+    /*   load project information, it will only do actual work if previewProjectId is not null,
+  it means only the status on preview checking, the data will be loaded.*/
+  }
   const getPreviewProjects = () => {
     if (previewProjectId) {
       let inclusion = [];
@@ -173,7 +190,7 @@ const ProjectUploading = (props) => {
         (response) => {
           setTitle(response.data.title);
           setDescription(response.data.description);
-          setImage(response.data.fileUpload);
+          setFile(response.data.fileUpload);
           setApprovalNumber(response.data.approvalNumber);
           setGovernanceNumber(response.data.governance);
           setLocation(response.data.location);
@@ -215,7 +232,11 @@ const ProjectUploading = (props) => {
     }
   };
 
-  const editPage = () => {
+  {
+    /*   load project information, it will only do actual work if projectId is not null,
+  it means only the status on draft editing, the data will be loaded.*/
+  }
+  const draftProjectLoading = () => {
     if (projectId) {
       const ediInfo = JSON.parse(localStorage.getItem(projectId));
       setApprovalNumber(ediInfo.approvalNumber);
@@ -226,7 +247,7 @@ const ProjectUploading = (props) => {
       setSubjectNo(ediInfo.subjectNo);
       setHealthy(ediInfo.isHealthy);
       setEnglishFluent(ediInfo.isEnglishFluent);
-      setImage(ediInfo.fileUpload);
+      setFile(ediInfo.fileUpload);
       setDuration(ediInfo.duration);
       setDate(ediInfo.date);
       setQuestion(ediInfo.InclusionCriteria);
@@ -241,6 +262,7 @@ const ProjectUploading = (props) => {
     }
   };
 
+  //delete local storage saving for draft project
   const deleteIncomplete = async (id) => {
     if (projectId) {
       try {
@@ -250,7 +272,8 @@ const ProjectUploading = (props) => {
     }
   };
 
-  const pickImage = async () => {
+  //can select a pdf file and post to node.js backend in a base64 type.
+  const pickFile = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
@@ -265,7 +288,7 @@ const ProjectUploading = (props) => {
         })
         .then(
           (response) => {
-            setImage(response.data.Location);
+            setFile(response.data.Location);
           },
           (error) => {
             console.log(error);
@@ -274,14 +297,16 @@ const ProjectUploading = (props) => {
     }
   };
 
+  //before the page rendering, methods ni useEffect will be running in advance
   useEffect(() => {
     getQuestion();
-    editPage();
+    draftProjectLoading();
     pendingPage();
     loadComment();
     getPreviewProjects();
   }, []);
 
+  //store project information in local storage for saving draft
   const storeData = async () => {
     const currentDate = moment().format("DD/MM/YY");
     let documentId = "";
@@ -303,7 +328,7 @@ const ProjectUploading = (props) => {
       ExclusionCriteria: exclusionQuesion,
       approvalNumber: ApprovalNumber,
       governance: Governance,
-      fileUpload: image,
+      fileUpload: file,
       isPregnant: isPregnant,
       isHealthy: isHealthy,
       isEnglishFluent: isEnglishFluent,
@@ -321,7 +346,8 @@ const ProjectUploading = (props) => {
     } catch (e) {}
   };
 
-  const addItem = (() => {
+  //Add question in question
+  const addQuestion = (() => {
     if (CriteriaType == "INCLUSION") {
       let key = Question.length;
       if (Question.length != 0) {
@@ -372,6 +398,7 @@ const ProjectUploading = (props) => {
     }
   })();
 
+  //upload project
   const projectUpload = () => {
     const currentDate = moment().format("DD/MM/YY");
     let tmpQuestion = [];
@@ -411,7 +438,7 @@ const ProjectUploading = (props) => {
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
-        fileUpload: image,
+        fileUpload: file,
         isPregnant: isPregnant,
         isSmoking: isSmoking,
         isLactating: isLactating,
@@ -429,6 +456,7 @@ const ProjectUploading = (props) => {
       );
   };
 
+  //update project used for pending editing
   const projectUpdate = () => {
     const currentDate = moment().format("DD/MM/YY");
     let tmpQuestion = [];
@@ -467,7 +495,7 @@ const ProjectUploading = (props) => {
         InclusionCriteria: tmpQuestion,
         ExclusionCriteria: tmpExclusionQuestion,
         approvalNumber: ApprovalNumber,
-        fileUpload: image,
+        fileUpload: file,
         isPregnant: isPregnant,
         isSmoking: isSmoking,
         isLactating: isLactating,
@@ -486,6 +514,7 @@ const ProjectUploading = (props) => {
       );
   };
 
+  //get all question previously uploaded for question bank
   const getQuestion = () => {
     let questions = [];
     axios.get(`${DEPLOYEDHOST}/api/question`).then(
@@ -506,16 +535,19 @@ const ProjectUploading = (props) => {
     );
   };
 
+  //remove a question in question preview
   const removeItem = (key) => {
     setQuestion(Question.slice().filter((item) => item.key !== key));
   };
 
+  //remove a question in question preview
   const removeExclusion = (key) => {
     setExclusionQuestion(
       exclusionQuesion.slice().filter((item) => item.key !== key)
     );
   };
 
+  //a card type list use to display added inclusion question in question preview
   const renderList = Question.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
@@ -534,6 +566,7 @@ const ProjectUploading = (props) => {
     );
   });
 
+  //a card type list use to display added exclusion question in question preview
   const renderExclusonList = exclusionQuesion.map((item) => {
     return (
       <Card style={styles.mycard} key={item.key}>
@@ -552,6 +585,7 @@ const ProjectUploading = (props) => {
     );
   });
 
+  //handle boolean type of radio button for "This question requires a healthcare worker to answer it"
   const workerCheck = () => {
     if (generalChecked) {
       setGeneralChecked(!generalChecked);
@@ -561,6 +595,7 @@ const ProjectUploading = (props) => {
     }
   };
 
+  //handle boolean type of radio button for "This question is a general question
   const generalCheck = () => {
     if (workerChecked) {
       setGeneralChecked(!generalChecked);
@@ -599,6 +634,10 @@ const ProjectUploading = (props) => {
         >
           log out
         </Button>
+        <Text style={{ color: "red", position: "absolute", fontSize: "3em" }}>
+          {" "}
+          Project - Version Beta
+        </Text>
       </View>
 
       {/* View of Body*/}
@@ -670,7 +709,7 @@ const ProjectUploading = (props) => {
               editable={previewProjectId ? false : true}
               mode="outlined"
               value={Title}
-              style={{ width: 800, height: 30, marginLeft: 10 }}
+              style={{ width: "60%", height: 30, marginLeft: 10 }}
               onChangeText={(text) => setTitle(text)}
             />
           </View>
@@ -977,10 +1016,10 @@ const ProjectUploading = (props) => {
               </View>
               <Button
                 disabled={previewProjectId ? true : false}
-                icon={image == "" ? "upload" : "check"}
+                icon={file == "" ? "upload" : "check"}
                 mode="contained"
                 style={{ margin: 10 }}
-                onPress={() => pickImage()}
+                onPress={() => pickFile()}
               >
                 File Upload
               </Button>
@@ -996,6 +1035,8 @@ const ProjectUploading = (props) => {
             Criteria
           </Text>
         </View>
+
+        {/*Basic demographic criteria*/}
         <Text
           style={{
             marginTop: 20,
@@ -1090,7 +1131,7 @@ const ProjectUploading = (props) => {
             defaultValue={gender == "Not required" ? null : gender}
             containerStyle={{
               height: 40,
-              width: 300,
+              width: "20%",
               marginTop: 8,
               marginRight: 10,
             }}
@@ -1186,6 +1227,7 @@ const ProjectUploading = (props) => {
           </View>
         </View>
 
+        {/* Inclusion Demographic criteria*/}
         <Text
           style={{
             marginTop: 20,
@@ -1244,7 +1286,7 @@ const ProjectUploading = (props) => {
           />
         </View>
 
-        {/* Question input area*/}
+        {/* General and specific criteria*/}
         <Text
           style={{
             display: previewProjectId ? "none" : "flex",
@@ -1266,8 +1308,6 @@ const ProjectUploading = (props) => {
               }),
             }}
           >
-            {/*First input bar*/}
-
             <DropDownPicker
               items={[
                 {
@@ -1282,7 +1322,7 @@ const ProjectUploading = (props) => {
               placeholder="Select Type"
               containerStyle={{
                 height: 40,
-                width: 140,
+                width: "15%",
                 marginRight: 10,
                 marginTop: 8,
               }}
@@ -1296,7 +1336,6 @@ const ProjectUploading = (props) => {
               onChangeItem={(item) => setCriteriaType(item.value)}
             />
 
-            {/*Second input bar*/}
             <DropDownPicker
               items={[
                 {
@@ -1339,7 +1378,7 @@ const ProjectUploading = (props) => {
               ]}
               containerStyle={{
                 height: 40,
-                width: 200,
+                width: "25%",
                 marginTop: 8,
                 marginRight: 10,
               }}
@@ -1439,7 +1478,7 @@ const ProjectUploading = (props) => {
               }}
             />
           </View>
-
+          {/*Question preview*/}
           <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 3 }}>
               <View style={{ flex: 1 }}>
@@ -1465,7 +1504,7 @@ const ProjectUploading = (props) => {
                       right: 0,
                     }}
                     onPress={() => {
-                      addItem();
+                      addQuestion();
                     }}
                   >
                     Add
