@@ -41,7 +41,7 @@ const ProjectPreview = (props) => {
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
   // const userId = "606d1642b2fff30342232416";
-  const projectId = props.location.projectKey;
+  const previewProjectId = props.location.projectKey;
   // const userId = Local.getItem("userId");
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const ProjectPreview = (props) => {
     let inclusion = [];
     let exclution = [];
 
-    axios.get(`${DEPLOYEDHOST}/api/project/${projectId}`).then(
+    axios.get(`${DEPLOYEDHOST}/api/project/${previewProjectId}`).then(
       (response) => {
         setTitle(response.data.title);
         setDescription(response.data.description);
@@ -190,7 +190,7 @@ const ProjectPreview = (props) => {
               alignItems: "center",
             }}
           >
-            <Text style={styles.subTitle}>Project titile: </Text>
+            <Text style={styles.subTitle}>Project title: </Text>
             <TextInput
               editable={false}
               mode="outlined"
@@ -349,68 +349,71 @@ const ProjectPreview = (props) => {
             Criteria
           </Text>
         </View>
-        <Text
-          style={{
-            marginTop: 20,
-            fontSize: 20,
-            color: "#00205B",
-          }}
-        >
-          Basic Demographic criteria
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+
+        <View>
           <Text
             style={{
-              fontSize: 15,
+              marginTop: 20,
+              fontSize: 20,
               color: "#00205B",
             }}
           >
-            Allow Gender:
+            Basic Demographic criteria
           </Text>
-          <TextInput
-            editable={false}
-            mode="outlined"
-            value={gender}
+          <View
             style={{
-              height: 30,
-              margin: 10,
+              flexDirection: "row",
+              alignItems: "center",
             }}
-          />
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          >
             <Text
               style={{
                 fontSize: 15,
                 color: "#00205B",
               }}
             >
-              Age group:
+              Allow Gender:
             </Text>
             <TextInput
               editable={false}
               mode="outlined"
-              value={age}
+              value={gender}
               style={{
                 height: 30,
                 margin: 10,
               }}
             />
-            <CheckBox
-              title="Need speek fluent english"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={isEnglishFluent}
-            />
-            <CheckBox
-              title="Should be health"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={isHealthy}
-            />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: "#00205B",
+                }}
+              >
+                Age group:
+              </Text>
+              <TextInput
+                editable={false}
+                mode="outlined"
+                value={age}
+                style={{
+                  height: 30,
+                  margin: 10,
+                }}
+              />
+              <CheckBox
+                title="Need speek fluent english"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={isEnglishFluent}
+              />
+              <CheckBox
+                title="Should be health"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={isHealthy}
+              />
+            </View>
           </View>
         </View>
 

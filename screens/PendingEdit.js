@@ -62,6 +62,7 @@ const PendingEdit = (props) => {
   const [maxAge, setMaxAge] = useState("null");
   const [comment, setComment] = useState({});
   const [commentDisplay, setCommentDisplay] = useState("");
+  const [commentDisplayArea, setCommentDisplayArea] = useState(false);
   const [visible, setVisible] = React.useState(false);
 
   const showDialog = () => setVisible(true);
@@ -84,6 +85,9 @@ const PendingEdit = (props) => {
             description: response.data[0].description,
             approvalNumber: response.data[0].approvalNumber,
             governance: response.data[0].governance,
+            date: response.data[0].date,
+            inclusion: response.data[0].inclusion,
+            exclusion: response.data[0].exclusion,
           });
         }
       },
@@ -454,6 +458,7 @@ const PendingEdit = (props) => {
                 comment.title == "" || comment.title == null ? true : false
               }
               onPress={() => {
+                setCommentDisplayArea(false);
                 showDialog();
                 setCommentDisplay(comment.title);
               }}
@@ -468,7 +473,7 @@ const PendingEdit = (props) => {
                       : "red",
                 }}
               >
-                Project titile:{" "}
+                Project title:{" "}
               </Text>
             </TouchableOpacity>
             <TextInput
@@ -487,6 +492,7 @@ const PendingEdit = (props) => {
                     : false
                 }
                 onPress={() => {
+                  setCommentDisplayArea(false);
                   showDialog();
                   setCommentDisplay(comment.description);
                 }}
@@ -544,6 +550,7 @@ const PendingEdit = (props) => {
                       : false
                   }
                   onPress={() => {
+                    setCommentDisplayArea(false);
                     showDialog();
                     setCommentDisplay(comment.approvalNumber);
                   }}
@@ -584,6 +591,7 @@ const PendingEdit = (props) => {
                       : false
                   }
                   onPress={() => {
+                    setCommentDisplayArea(false);
                     showDialog();
                     setCommentDisplay(comment.governance);
                   }}
@@ -619,6 +627,7 @@ const PendingEdit = (props) => {
                       : false
                   }
                   onPress={() => {
+                    setCommentDisplayArea(false);
                     showDialog();
                     setCommentDisplay(comment.location);
                   }}
@@ -661,6 +670,7 @@ const PendingEdit = (props) => {
                       : false
                   }
                   onPress={() => {
+                    setCommentDisplayArea(false);
                     showDialog();
                     setCommentDisplay(comment.subjectNo);
                   }}
@@ -703,6 +713,7 @@ const PendingEdit = (props) => {
                       : false
                   }
                   onPress={() => {
+                    setCommentDisplayArea(false);
                     showDialog();
                     setCommentDisplay(comment.duration);
                   }}
@@ -734,7 +745,29 @@ const PendingEdit = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Start Date: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.date == "" || comment.date == null ? true : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.date);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.date == "" || comment.date == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Start Date:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
                   mode="outlined"
                   value={Date}
@@ -1160,29 +1193,60 @@ const PendingEdit = (props) => {
                   </Button>
                 </View>
                 <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      color: "#00205B",
+                  <TouchableOpacity
+                    disabled={
+                      comment.inclusion == "" || comment.inclusion == null
+                        ? true
+                        : false
+                    }
+                    onPress={() => {
+                      setCommentDisplayArea(true);
+                      showDialog();
+                      setCommentDisplay(comment.inclusion);
                     }}
                   >
-                    Inclusion Questions:
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color:
+                          comment.inclusion == "" || comment.inclusion == null
+                            ? "#00205B"
+                            : "red",
+                      }}
+                    >
+                      Inclusion Questions:
+                    </Text>
+                  </TouchableOpacity>
                   <View>{renderList}</View>
                 </View>
 
                 <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      marginTop: 30,
-                      color: "#00205B",
+                  <TouchableOpacity
+                    disabled={
+                      comment.exclusion == "" || comment.exclusion == null
+                        ? true
+                        : false
+                    }
+                    onPress={() => {
+                      setCommentDisplayArea(true);
+                      showDialog();
+                      setCommentDisplay(comment.exclusion);
                     }}
                   >
-                    Exclusion Questions:
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color:
+                          comment.exclusion == "" || comment.exclusion == null
+                            ? "#00205B"
+                            : "red",
+                      }}
+                    >
+                      Exclusion Questions:
+                    </Text>
+                  </TouchableOpacity>
                   <View>{renderExclusonList}</View>
                 </View>
 
@@ -1216,7 +1280,7 @@ const PendingEdit = (props) => {
                 </Text>
                 <Text style={{ color: "gray" }}>
                   If a participant provides a positive answer("YES"), then
-                  he/she will be rejected from the project.
+                  he/she will be rejected from the projec
                 </Text>
               </View>
             </View>
@@ -1228,7 +1292,7 @@ const PendingEdit = (props) => {
               width: 600,
               position: "absolute",
               alignSelf: "center",
-              top: "20%",
+              top: commentDisplayArea == false ? "20%" : "70%",
             }}
             visible={visible}
             onDismiss={hideDialog}
