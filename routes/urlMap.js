@@ -8,8 +8,7 @@ export const PROJECT_MANAGEMENT_URL = "/projectManagement";
 export const WORKER_URL = "/worker";
 export const QUESTIONNAIRE_URL = "/questionnaire";
 export const PROJECT_APPROVAL_URL = "/projectApproval";
-export const PROJECT_PRIVIEW = "/projectPreview";
 export const PROJECT_AVAILABLE = "/projectAvailable";
-export const PENDING_EDIT = "/pendingEdit";
+
 export const LOCALHOST = "http://localhost:12345";
 export const DEPLOYEDHOST = "https://patient-backend-v4.herokuapp.com";
