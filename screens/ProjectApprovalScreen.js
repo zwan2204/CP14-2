@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  TextInput as NativeTextInput
+  TextInput as NativeTextInput,
 } from "react-native";
 import { styles } from "../styles.js";
 import { Button, Dialog, Portal, TextInput, Card } from "react-native-paper";
@@ -44,7 +44,7 @@ export default class ProjectApprovalScreen extends React.Component {
       inclusionQuestion: [],
       exclusionQuestion: [],
       projectInfo: [],
-      project: ""
+      project: "",
     };
   }
 
@@ -219,15 +219,15 @@ export default class ProjectApprovalScreen extends React.Component {
       .put(
         `${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`,
         {
-          state: "Pending"
+          state: "Pending",
         }
       )
       .then(
-        response => {
+        (response) => {
           history.push("/worker");
           console.log(response);
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -239,15 +239,15 @@ export default class ProjectApprovalScreen extends React.Component {
       .put(
         `${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`,
         {
-          state: "Authorized"
+          state: "Authorized",
         }
       )
       .then(
-        response => {
+        (response) => {
           history.push("/worker");
           console.log(response);
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -266,13 +266,13 @@ export default class ProjectApprovalScreen extends React.Component {
         approvalNumber: this.state.ethicsComment,
         governance: this.state.governanceComment,
         InclusionCriteria: this.state.InclusionComment,
-        ExclusionCriteria: this.state.ExclusionComment
+        ExclusionCriteria: this.state.ExclusionComment,
       })
       .then(
-        response => {
+        (response) => {
           this.updateState();
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -284,7 +284,7 @@ export default class ProjectApprovalScreen extends React.Component {
     axios
       .get(`${DEPLOYEDHOST}/api/project/${this.props.location.state.projectId}`)
       .then(
-        response => {
+        (response) => {
           this.setState({ project: response.data });
           for (
             let i = 0;
@@ -304,7 +304,7 @@ export default class ProjectApprovalScreen extends React.Component {
           this.setState({ exclusionQuestion: exclusionQuestions });
           console.log(this.state.inclusionQuestion);
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -313,7 +313,10 @@ export default class ProjectApprovalScreen extends React.Component {
   render() {
     const { history } = this.props;
 
-    if (this.state.projectState == "Authorized" || this.state.projectState == "Recruiting") {
+    if (
+      this.state.projectState == "Authorized" ||
+      this.state.projectState == "Recruiting"
+    ) {
       return (
         <SafeAreaView style={styles.container}>
           <HeaderSecond history={history} />
@@ -326,7 +329,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   fontSize: 35,
                   color: "grey",
                   flex: 1,
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                 }}
               >
                 Project Information
@@ -336,7 +339,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 style={{
                   backgroundColor: "white",
                   width: 120,
-                  height: 37
+                  height: 37,
                 }}
               >
                 Back
@@ -352,7 +355,7 @@ export default class ProjectApprovalScreen extends React.Component {
                     flexDirection: "column",
                   }}
                 >
-                  <Text style={styles.subTitle}>Project titile: </Text>
+                  <Text style={styles.subTitle}>Project title: </Text>
                   <View>
                     <Text
                       style={{
@@ -361,7 +364,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         marginHorizontal: 10,
                         borderWidth: 1,
                         borderColor: "black",
-                        borderRadius: 5
+                        borderRadius: 5,
                       }}
                     >
                       {" "}
@@ -382,7 +385,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         marginHorizontal: 10,
                         borderWidth: 1,
                         borderColor: "black",
-                        borderRadius: 5
+                        borderRadius: 5,
                       }}
                     >
                       {" "}
@@ -407,7 +410,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
                   >
                     {" "}
@@ -418,7 +421,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -430,7 +433,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
                   >
                     {" "}
@@ -441,7 +444,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
@@ -453,7 +456,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
                   >
                     {" "}
@@ -464,8 +467,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    paddingBottom: 20
-
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
@@ -477,7 +479,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
                   >
                     {" "}
@@ -487,8 +489,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    paddingBottom: 20
-
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Number:</Text>
@@ -498,7 +499,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 5,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
                   >
                     {" "}
@@ -509,12 +510,12 @@ export default class ProjectApprovalScreen extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>
                     Governance Approval Number:
-                    </Text>
+                  </Text>
                   <Text
                     multiline={true}
                     textAlignVertical="top"
@@ -523,7 +524,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 5,
                       borderWidth: 1,
                       borderColor: "black",
-                      borderRadius: 5
+                      borderRadius: 5,
                     }}
                   >
                     {" "}
@@ -544,22 +545,22 @@ export default class ProjectApprovalScreen extends React.Component {
                       top: 30,
                       fontSize: 20,
                       fontWeight: "bold",
-                      color: "#00205B"
+                      color: "#00205B",
                     }}
                   >
                     Question Preview
-                    </Text>
+                  </Text>
                 </View>
 
                 <View>
                   <Text
                     style={{
                       fontSize: 15,
-                      color: "black"
+                      color: "black",
                     }}
                   >
                     {" "}
-                        Inclusion Questions{" "}
+                    Inclusion Questions{" "}
                   </Text>
                   {this.state.inclusionQuestion.map((item, index) => {
                     return (
@@ -579,11 +580,11 @@ export default class ProjectApprovalScreen extends React.Component {
                     style={{
                       fontSize: 15,
                       marginTop: 30,
-                      color: "black"
+                      color: "black",
                     }}
                   >
                     Exclusion Questions
-                      </Text>
+                  </Text>
                   {this.state.exclusionQuestion.map((item, index) => {
                     return (
                       <View key={index}>
@@ -600,9 +601,8 @@ export default class ProjectApprovalScreen extends React.Component {
             </View>
           </View>
           <Footer />
-        </SafeAreaView >
+        </SafeAreaView>
       );
-
     } else {
       return (
         <SafeAreaView style={styles.container}>
@@ -616,7 +616,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   fontSize: 35,
                   color: "grey",
                   flex: 1,
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                 }}
               >
                 Project Information
@@ -625,7 +625,7 @@ export default class ProjectApprovalScreen extends React.Component {
                     fontSize: 10,
                     color: "red",
                     paddingLeft: 20,
-                    fontWeight: "normal"
+                    fontWeight: "normal",
                   }}
                 >
                   *You can leave comments by clicking a text field
@@ -636,7 +636,7 @@ export default class ProjectApprovalScreen extends React.Component {
                 style={{
                   backgroundColor: "white",
                   width: 120,
-                  height: 37
+                  height: 37,
                 }}
               >
                 Cancel
@@ -653,7 +653,7 @@ export default class ProjectApprovalScreen extends React.Component {
                     flexDirection: "column",
                   }}
                 >
-                  <Text style={styles.subTitle}>Project titile: </Text>
+                  <Text style={styles.subTitle}>Project title: </Text>
                   <View>
                     <Portal>
                       <Dialog
@@ -669,22 +669,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.titleComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ titleComment: text })
                           }
                         />
@@ -701,7 +701,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeTitleColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -729,22 +729,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.descriptionComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ descriptionComment: text })
                           }
                         />
@@ -763,7 +763,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeDescriptionColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -779,7 +779,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Location: </Text>
@@ -798,22 +798,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.locationComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ locationComment: text })
                           }
                         />
@@ -832,7 +832,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeLocationColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -846,7 +846,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
@@ -865,22 +865,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.subjectNoComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ subjectNoComment: text })
                           }
                         />
@@ -899,7 +899,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeSubjectNoColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -913,7 +913,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
@@ -932,22 +932,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.durationComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ durationComment: text })
                           }
                         />
@@ -966,7 +966,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeDurationColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -980,8 +980,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingBottom: 20
-
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
@@ -1001,22 +1000,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             marginHorizontal: 10,
                             borderWidth: 1,
                             borderColor: this.state.pendingComment,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.dateComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ dateComment: text })
                           }
                         />
@@ -1035,7 +1034,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 10,
                           borderWidth: 1,
                           borderColor: this.changeDateColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -1048,8 +1047,7 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingBottom: 20
-
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Number:</Text>
@@ -1068,22 +1066,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.ethicsComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ ethicsComment: text })
                           }
                         />
@@ -1100,7 +1098,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 5,
                           borderWidth: 1,
                           borderColor: this.changeEthicsColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -1114,12 +1112,12 @@ export default class ProjectApprovalScreen extends React.Component {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>
                     Governance Approval Number:
-                    </Text>
+                  </Text>
                   <View>
                     <Portal>
                       <Dialog
@@ -1135,22 +1133,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.governanceComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ governanceComment: text })
                           }
                         />
@@ -1168,7 +1166,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           marginHorizontal: 5,
                           borderWidth: 1,
                           borderColor: this.changeGovernanceColor(),
-                          borderRadius: 5
+                          borderRadius: 5,
                         }}
                       >
                         {" "}
@@ -1191,7 +1189,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         top: 30,
                         fontSize: 20,
                         fontWeight: "bold",
-                        color: "#00205B"
+                        color: "#00205B",
                       }}
                     >
                       Question Preview
@@ -1200,7 +1198,7 @@ export default class ProjectApprovalScreen extends React.Component {
                           fontSize: 5,
                           paddingLeft: 10,
                           color: "red",
-                          fontWeight: "normal"
+                          fontWeight: "normal",
                         }}
                       >
                         *Click the type of questions to comment
@@ -1223,22 +1221,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.inclusionComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ inclusionComment: text })
                           }
                         />
@@ -1251,7 +1249,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       <Text
                         style={{
                           fontSize: 15,
-                          color: this.changeInclusionColor()
+                          color: this.changeInclusionColor(),
                         }}
                       >
                         {" "}
@@ -1286,22 +1284,22 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderRadius: 5
+                            borderRadius: 5,
                           }}
-                          render={innerProps => (
+                          render={(innerProps) => (
                             <NativeTextInput
                               {...innerProps}
                               style={[
                                 innerProps.style,
                                 {
                                   paddingTop: 8,
-                                  paddingBottom: 8
-                                }
+                                  paddingBottom: 8,
+                                },
                               ]}
                             />
                           )}
                           value={this.state.exclusionComment}
-                          onChangeText={text =>
+                          onChangeText={(text) =>
                             this.setState({ exclusionComment: text })
                           }
                         />
@@ -1315,7 +1313,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         style={{
                           fontSize: 15,
                           marginTop: 30,
-                          color: this.changeExclusionColor()
+                          color: this.changeExclusionColor(),
                         }}
                       >
                         Exclusion Questions
@@ -1338,17 +1336,23 @@ export default class ProjectApprovalScreen extends React.Component {
             </View>
           </View>
 
-          <View style={{ flexDirection: "row", justifyContent: "center", padding: 30 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              padding: 30,
+            }}
+          >
             {this.state.descriptionComment === "" &&
-              this.state.titleComment === "" &&
-              this.state.exclusionComment === "" &&
-              this.state.inclusionComment === "" &&
-              this.state.durationComment == "" &&
-              this.state.governanceComment === "" &&
-              this.state.subjectNoComment === "" &&
-              this.state.dateComment === "" &&
-              this.state.locationComment === "" &&
-              this.state.ethicsComment === "" ? (
+            this.state.titleComment === "" &&
+            this.state.exclusionComment === "" &&
+            this.state.inclusionComment === "" &&
+            this.state.durationComment == "" &&
+            this.state.governanceComment === "" &&
+            this.state.subjectNoComment === "" &&
+            this.state.dateComment === "" &&
+            this.state.locationComment === "" &&
+            this.state.ethicsComment === "" ? (
               <View>
                 <Button mode="contained" onPress={this.authorizeProject}>
                   Authorize
@@ -1366,8 +1370,6 @@ export default class ProjectApprovalScreen extends React.Component {
           <Footer />
         </SafeAreaView>
       );
-
     }
-
   }
 }

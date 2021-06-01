@@ -216,8 +216,8 @@ const ProjectManagement = (props) => {
             onPress={() => {
               if (item.state == "Pending") {
                 props.history.push({
-                  pathname: "/pendingEdit",
-                  projectKey: item.key, // your data array of objects
+                  pathname: "/projectUpload",
+                  pendingProjectKey: item.key, // your data array of objects
                 });
               } else if (item.state == "Authorized") {
                 updateState(item.key);
@@ -253,8 +253,8 @@ const ProjectManagement = (props) => {
             labelStyle={{ fontSize: 10 }}
             onPress={() =>
               props.history.push({
-                pathname: "/projectPreview",
-                projectKey: item.key, // your data array of objects
+                pathname: "/projectUpload",
+                previewProjectKey: item.key, // your data array of objects
               })
             }
           >

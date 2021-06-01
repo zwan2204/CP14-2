@@ -13,9 +13,17 @@ import {
   Platform,
   TextInput as NativeTextInput,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import moment, { max } from "moment";
-import { Button, Card, TextInput } from "react-native-paper";
+import {
+  Button,
+  Card,
+  TextInput,
+  Paragraph,
+  Dialog,
+  Portal,
+} from "react-native-paper";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as DocumentPicker from "expo-document-picker";
@@ -53,10 +61,159 @@ const ProjectUploading = (props) => {
   const [gender, setGender] = useState("Not required");
   const [minAge, setMinAge] = useState("null");
   const [maxAge, setMaxAge] = useState("null");
+
+  const [comment, setComment] = useState({});
+  const [commentDisplay, setCommentDisplay] = useState("");
+  const [commentDisplayArea, setCommentDisplayArea] = useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [age, setAge] = useState("");
   const userId = localStorage.getItem("userId");
   // const userId = "606d1642b2fff30342232416";
   const projectId = props.location.projectKey;
+  const pendingProjectId = props.location.pendingProjectKey;
+  const previewProjectId = props.location.previewProjectKey;
+
   // const userId = Local.getItem("userId");
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
+  const loadComment = () => {
+    if (pendingProjectId) {
+      axios.get(`${DEPLOYEDHOST}/api/comment/?pId=${pendingProjectId}`).then(
+        (response) => {
+          if (response.data.length > 0) {
+            setComment({
+              commentId: response.data[0]._id,
+              title: response.data[0].title,
+              subjectNo: response.data[0].subjectNo,
+              location: response.data[0].location,
+              duration: response.data[0].duration,
+              description: response.data[0].description,
+              approvalNumber: response.data[0].approvalNumber,
+              governance: response.data[0].governance,
+              date: response.data[0].date,
+              inclusion: response.data[0].inclusion,
+              exclusion: response.data[0].exclusion,
+            });
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  };
+
+  const deleteComment = (commentId) => {
+    axios.delete(`${DEPLOYEDHOST}/api/comment/${commentId}`).then(
+      (response) => {},
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const pendingPage = () => {
+    let inclusion = [];
+    let exclution = [];
+    if (pendingProjectId) {
+      axios.get(`${DEPLOYEDHOST}/api/project/${pendingProjectId}`).then(
+        (response) => {
+          setTitle(response.data.title);
+          setDescription(response.data.description);
+          setImage(response.data.fileUpload);
+          setApprovalNumber(response.data.approvalNumber);
+          setGovernanceNumber(response.data.governance);
+          setLocation(response.data.location);
+          setSubjectNo(response.data.subjectNo);
+          setDuration(response.data.duration);
+          setDate(response.data.date);
+          setIsPregnant(response.data.isPregnant);
+          setIsSmoking(response.data.isSmoking);
+          setIsLactating(response.data.isLactating);
+          setPlanningPregnant(response.data.isPlanningPregnant);
+          setHealthy(response.data.needHealth);
+          setEnglishFluent(response.data.needEnglish);
+          setGender(response.data.gender);
+          setMinAge(response.data.ageGroup.split(",")[0]);
+          setMaxAge(response.data.ageGroup.split(",")[1]);
+
+          for (let i = 0; i < response.data.InclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.InclusionCriteria[i],
+            };
+            inclusion.push(criteria);
+          }
+
+          for (let i = 0; i < response.data.ExclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.ExclusionCriteria[i],
+            };
+            exclution.push(criteria);
+          }
+
+          setQuestion(inclusion);
+          setExclusionQuestion(exclution);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  };
+
+  const getPreviewProjects = () => {
+    if (previewProjectId) {
+      let inclusion = [];
+      let exclution = [];
+
+      axios.get(`${DEPLOYEDHOST}/api/project/${previewProjectId}`).then(
+        (response) => {
+          setTitle(response.data.title);
+          setDescription(response.data.description);
+          setImage(response.data.fileUpload);
+          setApprovalNumber(response.data.approvalNumber);
+          setGovernanceNumber(response.data.governance);
+          setLocation(response.data.location);
+          setSubjectNo(response.data.subjectNo);
+          setDuration(response.data.duration);
+          setDate(response.data.date);
+          setIsPregnant(response.data.isPregnant);
+          setHealthy(response.data.needHealth);
+          setEnglishFluent(response.data.needEnglish);
+          setIsSmoking(response.data.isSmoking);
+          setIsLactating(response.data.isLactating);
+          setPlanningPregnant(response.data.isPlanningPregnant);
+          setGender(response.data.gender);
+          setAge(response.data.ageGroup);
+
+          for (let i = 0; i < response.data.InclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.InclusionCriteria[i],
+            };
+            inclusion.push(criteria);
+          }
+
+          for (let i = 0; i < response.data.ExclusionCriteria.length; i++) {
+            let criteria = {
+              key: i,
+              description: response.data.ExclusionCriteria[i],
+            };
+            exclution.push(criteria);
+          }
+
+          setQuestion(inclusion);
+          setExclusionQuestion(exclution);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  };
 
   const editPage = () => {
     if (projectId) {
@@ -120,6 +277,9 @@ const ProjectUploading = (props) => {
   useEffect(() => {
     getQuestion();
     editPage();
+    pendingPage();
+    loadComment();
+    getPreviewProjects();
   }, []);
 
   const storeData = async () => {
@@ -269,6 +429,63 @@ const ProjectUploading = (props) => {
       );
   };
 
+  const projectUpdate = () => {
+    const currentDate = moment().format("DD/MM/YY");
+    let tmpQuestion = [];
+    let workerNeed = false;
+
+    for (let i = 0; i < Question.length; i++) {
+      if (Question[i].description.split("-")[0] == "Worker Need ") {
+        workerNeed = true;
+      }
+      tmpQuestion.push(Question[i].description);
+    }
+
+    let tmpExclusionQuestion = [];
+
+    for (let i = 0; i < exclusionQuesion.length; i++) {
+      if (exclusionQuesion[i].description.split("-")[0] == "Worker Need ") {
+        workerNeed = true;
+      }
+      tmpExclusionQuestion.push(exclusionQuesion[i].description);
+    }
+
+    axios
+      .put(`${DEPLOYEDHOST}/api/project/all/${pendingProjectId}`, {
+        title: Title,
+        description: Description,
+        location: Location,
+        subjectNo: SubjectNo,
+        duration: Duration,
+        createdDate: currentDate,
+        date: Date,
+        needHealth: isHealthy,
+        needEnglish: isEnglishFluent,
+        workerNeed: workerNeed,
+        state: "New Upload",
+        governance: Governance,
+        InclusionCriteria: tmpQuestion,
+        ExclusionCriteria: tmpExclusionQuestion,
+        approvalNumber: ApprovalNumber,
+        fileUpload: image,
+        isPregnant: isPregnant,
+        isSmoking: isSmoking,
+        isLactating: isLactating,
+        isPlanningPregnant: isPlanningPregnant,
+        gender: gender,
+        ageGroup: `${minAge},${maxAge}`,
+      })
+      .then(
+        (response) => {
+          deleteComment(comment.commentId);
+          props.history.push("/projectManagement");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
   const getQuestion = () => {
     let questions = [];
     axios.get(`${DEPLOYEDHOST}/api/question`).then(
@@ -305,7 +522,12 @@ const ProjectUploading = (props) => {
         <View style={styles.cardView}>
           <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
-            <Button onPress={() => removeItem(item.key)}>Delete</Button>
+            <Button
+              style={{ display: previewProjectId ? "none" : "flex" }}
+              onPress={() => removeItem(item.key)}
+            >
+              Delete
+            </Button>
           </Card.Actions>
         </View>
       </Card>
@@ -318,7 +540,12 @@ const ProjectUploading = (props) => {
         <View style={styles.cardView}>
           <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
-            <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
+            <Button
+              style={{ display: previewProjectId ? "none" : "flex" }}
+              onPress={() => removeExclusion(item.key)}
+            >
+              Delete
+            </Button>
           </Card.Actions>
         </View>
       </Card>
@@ -346,7 +573,33 @@ const ProjectUploading = (props) => {
   return (
     <SafeAreaView style={styles.root}>
       {/*View of Header*/}
-      <HeaderSecond history={props.history} />
+      <View
+        style={{
+          height: 140,
+          backgroundColor: "#00205B",
+          flexDirection: "row",
+        }}
+      >
+        <Image
+          style={{ width: 200, height: 100, marginLeft: 100, marginTop: 20 }}
+          source={require("../assets/header.png")}
+        />
+
+        <Button
+          mode="text"
+          style={{
+            backgroundColor: "white",
+            width: 120,
+            height: 37,
+            position: "absolute",
+            bottom: 30,
+            right: 30,
+          }}
+          onPress={() => props.history.push("/Homepage")}
+        >
+          log out
+        </Button>
+      </View>
 
       {/* View of Body*/}
       <View style={{ margin: 35 }}>
@@ -390,8 +643,31 @@ const ProjectUploading = (props) => {
               alignItems: "center",
             }}
           >
-            <Text style={styles.subTitle}>Project titile: </Text>
+            <TouchableOpacity
+              disabled={
+                comment.title == "" || comment.title == null ? true : false
+              }
+              onPress={() => {
+                setCommentDisplayArea(false);
+                showDialog();
+                setCommentDisplay(comment.title);
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  marginLeft: 10,
+                  color:
+                    comment.title == "" || comment.title == null
+                      ? "#00205B"
+                      : "red",
+                }}
+              >
+                Project title:{" "}
+              </Text>
+            </TouchableOpacity>
             <TextInput
+              editable={previewProjectId ? false : true}
               mode="outlined"
               value={Title}
               style={{ width: 800, height: 30, marginLeft: 10 }}
@@ -400,8 +676,34 @@ const ProjectUploading = (props) => {
           </View>
           <View style={{ flex: 6, flexDirection: "row" }}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.subTitle}>Project description: </Text>
+              <TouchableOpacity
+                disabled={
+                  comment.description == "" || comment.description == null
+                    ? true
+                    : false
+                }
+                onPress={() => {
+                  setCommentDisplayArea(false);
+                  showDialog();
+                  setCommentDisplay(comment.description);
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginLeft: 10,
+
+                    color:
+                      comment.description == "" || comment.description == null
+                        ? "#00205B"
+                        : "red",
+                  }}
+                >
+                  Project description:{" "}
+                </Text>
+              </TouchableOpacity>
               <TextInput
+                editable={previewProjectId ? false : true}
                 mode="outlined"
                 multiline={true}
                 textAlignVertical="top"
@@ -432,8 +734,35 @@ const ProjectUploading = (props) => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>Ethics Approval Number:</Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.approvalNumber == "" ||
+                    comment.approvalNumber == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.approvalNumber);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.approvalNumber == "" ||
+                        comment.approvalNumber == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Ethics Approval Number:
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
+                  editable={previewProjectId ? false : true}
                   mode="outlined"
                   value={ApprovalNumber}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
@@ -447,8 +776,33 @@ const ProjectUploading = (props) => {
                   marginTop: 15,
                 }}
               >
-                <Text style={styles.subTitle}>Governance Approval Number:</Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.governance == "" || comment.governance == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.governance);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.governance == "" || comment.governance == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Governance Approval Number:
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
+                  editable={previewProjectId ? false : true}
                   mode="outlined"
                   value={Governance}
                   style={{ flex: 1, height: 30, marginHorizontal: 10 }}
@@ -458,8 +812,33 @@ const ProjectUploading = (props) => {
             </View>
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.subTitle}>Location: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.location == "" || comment.location == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.location);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.location == "" || comment.location == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Location:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
+                  editable={previewProjectId ? false : true}
                   mode="outlined"
                   value={Location}
                   style={{
@@ -477,8 +856,33 @@ const ProjectUploading = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Number of Subjects: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.subjectNo == "" || comment.subjectNo == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.subjectNo);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.subjectNo == "" || comment.subjectNo == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Number of Subjects:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
+                  editable={previewProjectId ? false : true}
                   mode="outlined"
                   value={SubjectNo}
                   style={{
@@ -496,8 +900,33 @@ const ProjectUploading = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Study Duration: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.duration == "" || comment.duration == null
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.duration);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.duration == "" || comment.duration == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Study Duration:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
+                  editable={previewProjectId ? false : true}
                   mode="outlined"
                   value={Duration}
                   style={{ height: 30, margin: 10, flex: 1 }}
@@ -511,8 +940,31 @@ const ProjectUploading = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.subTitle}>Start Date: </Text>
+                <TouchableOpacity
+                  disabled={
+                    comment.date == "" || comment.date == null ? true : false
+                  }
+                  onPress={() => {
+                    setCommentDisplayArea(false);
+                    showDialog();
+                    setCommentDisplay(comment.date);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginLeft: 10,
+                      color:
+                        comment.date == "" || comment.date == null
+                          ? "#00205B"
+                          : "red",
+                    }}
+                  >
+                    Start Date:{" "}
+                  </Text>
+                </TouchableOpacity>
                 <TextInput
+                  editable={previewProjectId ? false : true}
                   mode="outlined"
                   value={Date}
                   style={{
@@ -524,6 +976,7 @@ const ProjectUploading = (props) => {
                 />
               </View>
               <Button
+                disabled={previewProjectId ? true : false}
                 icon={image == "" ? "upload" : "check"}
                 mode="contained"
                 style={{ margin: 10 }}
@@ -552,8 +1005,66 @@ const ProjectUploading = (props) => {
         >
           Basic Demographic criteria
         </Text>
+        <View style={{ display: previewProjectId ? "flex" : "none" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 15,
+                color: "#00205B",
+              }}
+            >
+              Allow Gender:
+            </Text>
+            <TextInput
+              editable={false}
+              mode="outlined"
+              value={gender}
+              style={{
+                height: 30,
+                margin: 10,
+              }}
+            />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: "#00205B",
+                }}
+              >
+                Age group:
+              </Text>
+              <TextInput
+                editable={false}
+                mode="outlined"
+                value={age}
+                style={{
+                  height: 30,
+                  margin: 10,
+                }}
+              />
+              <CheckBox
+                title="Need speek fluent english"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={isEnglishFluent}
+              />
+              <CheckBox
+                title="Should be health"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={isHealthy}
+              />
+            </View>
+          </View>
+        </View>
         <View
           style={{
+            display: previewProjectId ? "none" : "flex",
             flexDirection: "row",
             alignItems: "center",
             ...(Platform.OS !== "android" && {
@@ -692,7 +1203,9 @@ const ProjectUploading = (props) => {
             uncheckedIcon="circle-o"
             checked={isPregnant}
             onPress={() => {
-              setIsPregnant(!isPregnant);
+              if (!previewProjectId) {
+                setIsPregnant(!isPregnant);
+              }
             }}
           />
 
@@ -702,7 +1215,9 @@ const ProjectUploading = (props) => {
             uncheckedIcon="circle-o"
             checked={isSmoking}
             onPress={() => {
-              setIsSmoking(!isSmoking);
+              if (!previewProjectId) {
+                setIsSmoking(!isSmoking);
+              }
             }}
           />
           <CheckBox
@@ -711,7 +1226,9 @@ const ProjectUploading = (props) => {
             uncheckedIcon="circle-o"
             checked={isLactating}
             onPress={() => {
-              setIsLactating(!isLactating);
+              if (!previewProjectId) {
+                setIsLactating(!isLactating);
+              }
             }}
           />
           <CheckBox
@@ -720,13 +1237,17 @@ const ProjectUploading = (props) => {
             uncheckedIcon="circle-o"
             checked={isPlanningPregnant}
             onPress={() => {
-              setPlanningPregnant(!isPlanningPregnant);
+              if (!previewProjectId) {
+                setPlanningPregnant(!isPlanningPregnant);
+              }
             }}
           />
         </View>
 
+        {/* Question input area*/}
         <Text
           style={{
+            display: previewProjectId ? "none" : "flex",
             marginTop: 20,
             fontSize: 20,
             color: "#00205B",
@@ -734,11 +1255,11 @@ const ProjectUploading = (props) => {
         >
           General and specific criteria
         </Text>
-        {/* Question input area*/}
         <View>
           <View
             style={{
               marginLeft: 4,
+              display: previewProjectId ? "none" : "flex",
               flexDirection: "row",
               ...(Platform.OS !== "android" && {
                 zIndex: 10,
@@ -765,7 +1286,6 @@ const ProjectUploading = (props) => {
                 marginRight: 10,
                 marginTop: 8,
               }}
-              style={{ backgroundColor: "#fafafa" }}
               selectedLabelStyle={{
                 color: "red",
               }}
@@ -819,7 +1339,7 @@ const ProjectUploading = (props) => {
               ]}
               containerStyle={{
                 height: 40,
-                width: 180,
+                width: 200,
                 marginTop: 8,
                 marginRight: 10,
               }}
@@ -867,14 +1387,26 @@ const ProjectUploading = (props) => {
               mode="outlined"
               value={CriteriaDetail}
               placeholder="Criteria detail"
-              style={{ height: 37, width: 500, marginRight: 10, paddingTop: 3 }}
+              style={{
+                height: 37,
+                width: 500,
+                marginRight: 10,
+                paddingTop: 3,
+              }}
               onChangeText={(text) => {
                 setCriteriaDetail(text),
                   setQuestionPreview(`${QuestionPrefix} ${text}`);
               }}
             />
           </View>
-          <Card style={{ margin: 5, padding: 8, width: 880 }}>
+          <Card
+            style={{
+              display: previewProjectId ? "none" : "flex",
+              margin: 5,
+              padding: 8,
+              width: 880,
+            }}
+          >
             <View style={styles.cardView}>
               <Text>{questionPreview}</Text>
             </View>
@@ -883,6 +1415,7 @@ const ProjectUploading = (props) => {
             style={{
               flexDirection: "row",
               marginVertical: 20,
+              display: previewProjectId ? "none" : "flex",
             }}
           >
             <CheckBox
@@ -906,6 +1439,7 @@ const ProjectUploading = (props) => {
               }}
             />
           </View>
+
           <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 3 }}>
               <View style={{ flex: 1 }}>
@@ -924,6 +1458,7 @@ const ProjectUploading = (props) => {
                   <Button
                     mode="contained"
                     style={{
+                      display: previewProjectId ? "none" : "flex",
                       width: 68,
                       top: 20,
                       position: "absolute",
@@ -937,29 +1472,60 @@ const ProjectUploading = (props) => {
                   </Button>
                 </View>
                 <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      color: "#00205B",
+                  <TouchableOpacity
+                    disabled={
+                      comment.inclusion == "" || comment.inclusion == null
+                        ? true
+                        : false
+                    }
+                    onPress={() => {
+                      setCommentDisplayArea(true);
+                      showDialog();
+                      setCommentDisplay(comment.inclusion);
                     }}
                   >
-                    Inclusion Questions:
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color:
+                          comment.inclusion == "" || comment.inclusion == null
+                            ? "#00205B"
+                            : "red",
+                      }}
+                    >
+                      Inclusion Questions:
+                    </Text>
+                  </TouchableOpacity>
                   <View>{renderList}</View>
                 </View>
 
                 <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      marginTop: 30,
-                      color: "#00205B",
+                  <TouchableOpacity
+                    disabled={
+                      comment.exclusion == "" || comment.exclusion == null
+                        ? true
+                        : false
+                    }
+                    onPress={() => {
+                      setCommentDisplayArea(true);
+                      showDialog();
+                      setCommentDisplay(comment.exclusion);
                     }}
                   >
-                    Exclusion Questions:
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color:
+                          comment.exclusion == "" || comment.exclusion == null
+                            ? "#00205B"
+                            : "red",
+                      }}
+                    >
+                      Exclusion Questions:
+                    </Text>
+                  </TouchableOpacity>
                   <View>{renderExclusonList}</View>
                 </View>
 
@@ -999,8 +1565,51 @@ const ProjectUploading = (props) => {
             </View>
           </View>
         </View>
+
+        <Portal>
+          <Dialog
+            style={{
+              width: 600,
+              position: "absolute",
+              alignSelf: "center",
+              top: commentDisplayArea == false ? "20%" : "70%",
+            }}
+            visible={visible}
+            onDismiss={hideDialog}
+          >
+            <Dialog.Title>Comment</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>{commentDisplay}</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>Back</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          display: pendingProjectId ? "flex" : "none",
+        }}
+      >
+        <Button
+          mode="contained"
+          style={{ width: 150, alignSelf: "center", margin: 20 }}
+          onPress={() => projectUpdate()}
+        >
+          Update
+        </Button>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          display: pendingProjectId || previewProjectId ? "none" : "flex",
+        }}
+      >
         <Button
           mode="contained"
           style={{ width: 150, alignSelf: "center", margin: 20 }}

@@ -10,9 +10,8 @@ import QuestionAnswerPage from "../screens/QuestionAnswerPage";
 import ProjectManagement from "../screens/ProjectManagement";
 import ProtectedRoute from "./protetctedRoute";
 import ProjectApprovalScreen from "../screens/ProjectApprovalScreen";
-import ProjectPreview from "../screens/ProjectPreview";
 import ProjectAvailable from "../screens/ProjectAvailable";
-import PendingEdit from "../screens/PendingEdit";
+
 import {
   LOGIN_URL,
   REGISTER_URL,
@@ -25,7 +24,7 @@ import {
   PROJECT_APPROVAL_URL,
   PROJECT_PRIVIEW,
   PROJECT_AVAILABLE,
-  PENDING_EDIT
+  PENDING_EDIT,
 } from "./urlMap";
 
 const Routes = () => (
@@ -43,9 +42,8 @@ const Routes = () => (
         path={PROJECT_MANAGEMENT_URL}
         component={ProjectManagement}
       />
-      <Route exact path={PENDING_EDIT} component={PendingEdit} />
+
       <Route exact path={PROJECT_AVAILABLE} component={ProjectAvailable} />
-      <Route exact path={PROJECT_PRIVIEW} component={ProjectPreview} />
       <Route exact path={REGISTER_URL} component={SignupScreen} />
       <Route exact path={WORKER_URL} component={WorkerScreen} />
       <Route exact path={QUESTIONNAIRE_URL} component={QuestionAnswerPage} />

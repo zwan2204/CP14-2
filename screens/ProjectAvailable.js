@@ -6,7 +6,7 @@ import { styles } from "../styles.js";
 import axios from "axios";
 import HeaderSecond from "../screens/HeaderSecond";
 import Footer from "../screens/Footer";
-import { Icon } from 'react-native-elements'
+import { Icon } from "react-native-elements";
 import { updateUserContact } from "../modules/QuestionnaireModule_data";
 
 import {
@@ -15,17 +15,17 @@ import {
   Dialog,
   Portal,
   Paragraph,
-  TextInput
+  TextInput,
 } from "react-native-paper";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 
-const ProjectAvailable = props => {
+const ProjectAvailable = (props) => {
   const userID = localStorage.getItem("userId");
   const projectList = props.location.projectIDs;
   const hcWorker = props.location.hcWorker;
   const [projectAvailable, setProjectAvailable] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
-  const [title, setTitile] = useState("");
+  const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
@@ -37,7 +37,9 @@ const ProjectAvailable = props => {
   const { history } = props;
   const isEmpty = projectList == "" || projectList == undefined;
 
-  const [visible, setVisible] = React.useState(projectList == "" || projectList == undefined);
+  const [visible, setVisible] = React.useState(
+    projectList == "" || projectList == undefined
+  );
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
@@ -48,7 +50,7 @@ const ProjectAvailable = props => {
   const loadProjects = () => {
     let p = [];
     axios.get(`${DEPLOYEDHOST}/api/project/set/${projectList}`).then(
-      response => {
+      (response) => {
         for (let i = 0; i < Object.keys(response.data).length; i++) {
           let project = {
             id: response.data[i]._id,
@@ -57,20 +59,21 @@ const ProjectAvailable = props => {
             location: response.data[i].location,
             duration: response.data[i].duration,
             date: response.data[i].date,
-            numLeft: parseInt(response.data[i].subjectNo) - 
-                parseInt(response.data[i].currentNumParticipant)
+            numLeft:
+              parseInt(response.data[i].subjectNo) -
+              parseInt(response.data[i].currentNumParticipant),
           };
           p.push(project);
         }
         setProjectAvailable(p);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  const renderList = item => {
+  const renderList = (item) => {
     const backgroundColor = item.id === selectedId ? "#00205B" : "white";
     const color = item.id === selectedId ? "white" : "black";
     return (
@@ -83,11 +86,11 @@ const ProjectAvailable = props => {
           margin: 5,
           shadowOffset: { width: 2, height: 2 },
           shadowColor: "grey",
-          shadowOpacity: 0.3
+          shadowOpacity: 0.3,
         }}
         onPress={() => {
           setSelectedId(item.id),
-            setTitile(item.title),
+            setTitle(item.title),
             setDuration(item.duration),
             setLocation(item.location),
             setDescription(item.description),
@@ -109,14 +112,14 @@ const ProjectAvailable = props => {
             style={{
               flexDirection: "row",
               width: "100%",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <Text
               style={{ color: color, margin: 3, flex: 1, textAlign: "left" }}
             >
-                {/* the current number / total number */}
-                Remaining slots: {item.numLeft}
+              {/* the current number / total number */}
+              Remaining slots: {item.numLeft}
             </Text>
 
             <Text
@@ -133,47 +136,42 @@ const ProjectAvailable = props => {
   const checkAndSendNumber = () => {
     if (!byEmail && !byPhone) {
       setMsg("Please choose your prefered method of contact");
-
     } else if (byEmail && !byPhone) {
       hideDialog();
       updateUserContact(userID, "email", "");
       history.push({
-        pathname: "/"
+        pathname: "/",
       });
-
     } else if (byEmail && byPhone) {
       let number = parseInt(phoneNum);
       if (isNaN(number)) {
         setMsg("Numbers only");
-
       } else if (phoneNum.length != 14) {
         setMsg("Please check your phone number again");
       } else {
         hideDialog();
         updateUserContact(userID, "both", phoneNum);
         history.push({
-          pathname: "/"
+          pathname: "/",
         });
       }
     } else if (phoneNum == "" && byPhone) {
       setMsg("Please enter your phone number");
-
     } else if (phoneNum != "" && byPhone) {
       let number = parseInt(phoneNum);
       if (isNaN(number)) {
         setMsg("Numbers only");
-
       } else if (phoneNum.length != 14) {
         setMsg("Please check your phone number again");
       } else {
         hideDialog();
         updateUserContact(userID, "phone", phoneNum);
         history.push({
-          pathname: "/"
+          pathname: "/",
         });
       }
     }
-  }
+  };
 
   const choosePhone = () => {
     setByPhone(!byPhone);
@@ -200,32 +198,40 @@ const ProjectAvailable = props => {
         </View>
 
         <View style={[styles.questionPageContainer, { height: "70%" }]}>
-          {isEmpty ?
-            <View style={{
-              width: "82%", flexDirection: "row",
-              justifyContent: "center", paddingTop: "5%"
-            }}>
+          {isEmpty ? (
+            <View
+              style={{
+                width: "82%",
+                flexDirection: "row",
+                justifyContent: "center",
+                paddingTop: "5%",
+              }}
+            >
               <Text style={{ fontSize: "1.2em" }}>
-                Sorry, there is no project for you. You can leave your contact information
-            </Text>
+                Sorry, there is no project for you. You can leave your contact
+                information
+              </Text>
               <Text
-                style={{ fontSize: "1.2em", color: "red", paddingLeft: 10, paddingRight: 10 }}
+                style={{
+                  fontSize: "1.2em",
+                  color: "red",
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                }}
                 onPress={showDialog}
               >
                 here
-            </Text>
-              <Text style={{ fontSize: "1.2em" }}>
-                again
-            </Text>
+              </Text>
+              <Text style={{ fontSize: "1.2em" }}>again</Text>
             </View>
-            :
+          ) : (
             <View
               style={{
                 width: "82%",
                 flexDirection: "row",
                 paddingTop: "2%",
                 height: "100%",
-                paddingLeft: "5%"
+                paddingLeft: "5%",
               }}
             >
               {/* This section contains the process bar */}
@@ -235,7 +241,7 @@ const ProjectAvailable = props => {
                   renderItem={({ item }) => {
                     return renderList(item);
                   }}
-                  keyExtractor={item => item.id}
+                  keyExtractor={(item) => item.id}
                 />
               </ScrollView>
 
@@ -243,40 +249,40 @@ const ProjectAvailable = props => {
                 <View style={{ flexDirection: "row", margin: 10 }}>
                   <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
                     Title:
-                </Text>
+                  </Text>
                   <Text style={{ flex: 1 }}>{title}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", margin: 10 }}>
                   <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
                     Study Duration:
-                </Text>
+                  </Text>
                   <Text style={{ flex: 1 }}>{duration}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", margin: 10 }}>
                   <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
                     Location:
-                </Text>
+                  </Text>
                   <Text style={{ flex: 1 }}>{location}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", margin: 10 }}>
                   <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
                     Start date:
-                </Text>
+                  </Text>
                   <Text style={{ flex: 1 }}>{date}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", margin: 10 }}>
                   <Text style={{ fontWeight: "bold", paddingRight: 10 }}>
                     Description:
-                </Text>
+                  </Text>
                   <Text style={{ flex: 1 }}>{description}</Text>
                 </View>
               </ScrollView>
             </View>
-          }
+          )}
 
           {/* This section contains the process bar */}
           <View style={styles.processBarContainer}>
@@ -288,7 +294,7 @@ const ProjectAvailable = props => {
                 style={{
                   position: "absolute",
                   paddingLeft: 30,
-                  color: "#00205B"
+                  color: "#00205B",
                 }}
               >
                 Demographic Information
@@ -322,7 +328,7 @@ const ProjectAvailable = props => {
               <View
                 style={[
                   styles.processBarCircle,
-                  { backgroundColor: "#00205B" }
+                  { backgroundColor: "#00205B" },
                 ]}
               >
                 <Text style={{ color: "white", paddingLeft: 5 }}>4</Text>
@@ -345,14 +351,14 @@ const ProjectAvailable = props => {
           </View>
         </View>
 
-        {isEmpty ? null :
+        {isEmpty ? null : (
           <View
             style={{
               width: "100%",
               height: "10%",
               alignItems: "center",
               justifyContent: "center",
-              alignContent: "center"
+              alignContent: "center",
             }}
           >
             <Button
@@ -365,38 +371,43 @@ const ProjectAvailable = props => {
               onPress={() => console.log("")}
             >
               Join
-          </Button>
+            </Button>
           </View>
-        }
+        )}
       </View>
-
 
       <Portal>
         <Dialog
           style={{ width: 500, alignSelf: "center" }}
           // visible={projectList == "" || projectList == undefined}
           visible={visible}
-          onDismiss={hideDialog}>
-
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          onDismiss={hideDialog}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Dialog.Title>Sorry, no eligible projects for you</Dialog.Title>
-            <Icon name={'close'} onPress={hideDialog} />
+            <Icon name={"close"} onPress={hideDialog} />
           </View>
 
           <Dialog.Content>
             <Paragraph style={{ paddingBottom: 20, fontSize: "1em" }}>
-              If you still want to join us,
-              please choose the preferred method of contact below. We will email/phone
-              you once there is an eligible project.
-                    </Paragraph>
+              If you still want to join us, please choose the preferred method
+              of contact below. We will email/phone you once there is an
+              eligible project.
+            </Paragraph>
 
-            <View style={{
-              flexDirection: "row", alignItems: "center",
-              alignContent: "center", paddingRight: "5%"
-            }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                alignContent: "center",
+                paddingRight: "5%",
+              }}
+            >
               <Text style={{ fontSize: "1.2em", paddingRight: 20, width: 120 }}>
                 By Phone
-                        </Text>
+              </Text>
               <CheckBox
                 style={{ height: "1.5em", width: "1.5em" }}
                 value={byPhone}
@@ -404,38 +415,50 @@ const ProjectAvailable = props => {
               />
             </View>
 
-            {byPhone ?
+            {byPhone ? (
               <TextInput
                 mode="outlined"
                 maxLength={14}
                 style={{ height: 30, width: "60%", padding: "2%" }}
                 value={phoneNum}
-                onChangeText={text => (setNumber(text))}
+                onChangeText={(text) => setNumber(text)}
               />
-              : null}
+            ) : null}
 
-            <View style={{
-              flexDirection: "row", alignItems: "center",
-              alignContent: "center", paddingRight: "5%", paddingTop: "3%"
-            }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                alignContent: "center",
+                paddingRight: "5%",
+                paddingTop: "3%",
+              }}
+            >
               <Text style={{ fontSize: "1.2em", paddingRight: 20, width: 120 }}>
                 By Email
-                        </Text>
+              </Text>
               <CheckBox
                 style={{ height: "1.5em", width: "1.5em" }}
                 value={byEmail}
                 onValueChange={chooseEmail}
               />
             </View>
-
           </Dialog.Content>
 
-          <View style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Text style={{ color: "red" }}>{msg}</Text>
           </View>
 
           <Dialog.Actions>
-            <Button onPress={checkAndSendNumber}>Consent to be contacted</Button>
+            <Button onPress={checkAndSendNumber}>
+              Consent to be contacted
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
