@@ -522,7 +522,12 @@ const ProjectUploading = (props) => {
         <View style={styles.cardView}>
           <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
-            <Button onPress={() => removeItem(item.key)}>Delete</Button>
+            <Button
+              style={{ display: previewProjectId ? "none" : "flex" }}
+              onPress={() => removeItem(item.key)}
+            >
+              Delete
+            </Button>
           </Card.Actions>
         </View>
       </Card>
@@ -535,7 +540,12 @@ const ProjectUploading = (props) => {
         <View style={styles.cardView}>
           <Text style={{ width: "75%" }}>{item.description}</Text>
           <Card.Actions style={{ position: "absolute", right: 0 }}>
-            <Button onPress={() => removeExclusion(item.key)}>Delete</Button>
+            <Button
+              style={{ display: previewProjectId ? "none" : "flex" }}
+              onPress={() => removeExclusion(item.key)}
+            >
+              Delete
+            </Button>
           </Card.Actions>
         </View>
       </Card>
