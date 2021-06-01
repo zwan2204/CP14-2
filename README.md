@@ -25,10 +25,17 @@ npm run start
 
 3. The Amplify Console will detect that the amplify.yml file is in the repo. Choose Next.
 
-![redirects setting](https://imgur.com/SsLvGga)
+4. Go to rewrites and redirects setting, add following setting:
+Source address: </^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf)$)([^.]+$)/>
+Target address: /index.html
+Type: 200
 
+5. Go to build setting, make sure the node version is >= 12.13.0 
+```bash
+nvm use 12
+```
 
-4. Review your settings and choose Save and deploy. Your app will now be deployed to a https://branchname.xxxxxx.amplifyapp.com URL.
+6. Review your settings and choose Save and deploy. Your app will now be deployed to a https://branchname.xxxxxx.amplifyapp.com URL.
 
 ## Backend Repository
 [Backend](https://github.com/zihanmo/CP14-2-Backend)
