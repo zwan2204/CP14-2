@@ -26,10 +26,11 @@ npm run start
 3. The Amplify Console will detect that the amplify.yml file is in the repo. Choose Next.
 
 4. Go to rewrites and redirects setting, add following setting:
+```bash
 Source address: </^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf)$)([^.]+$)/>
 Target address: /index.html
 Type: 200
-
+```
 5. Go to build setting, make sure the node version is >= 12.13.0 
 ```bash
 nvm use 12
