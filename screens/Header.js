@@ -15,7 +15,7 @@ export default class Header extends React.Component {
     return (
       <View
         style={{
-          height: "15%",
+          height: 150,
           width: "100%",
           backgroundColor: "#00205B",
           flexDirection: "row",
@@ -30,7 +30,6 @@ export default class Header extends React.Component {
           }}
           source={require("../assets/header.png")}
         />
-        <Text style={{ color: "red", position: "absolute", fontSize: "3em" }}> Project - Version Beta</Text>
       </View>
     );
   }

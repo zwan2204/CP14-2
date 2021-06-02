@@ -37,8 +37,8 @@ export default class ProjectApprovalScreen extends React.Component {
       subjectNoComment: "",
       durationComment: "",
       dateComment: "",
-      inclusionComment: "",
-      exclusionComment: "",
+      inclusion: "",
+      exclusion: "",
       projectId: this.props.location.state.projectId,
       projectState: this.props.location.state.projectState,
       inclusionQuestion: [],
@@ -265,8 +265,8 @@ export default class ProjectApprovalScreen extends React.Component {
         date: this.state.dateComment,
         approvalNumber: this.state.ethicsComment,
         governance: this.state.governanceComment,
-        InclusionCriteria: this.state.InclusionComment,
-        ExclusionCriteria: this.state.ExclusionComment,
+        Inclusion: this.state.InclusionComment,
+        Exclusion: this.state.ExclusionComment,
       })
       .then(
         (response) => {
@@ -1344,15 +1344,15 @@ export default class ProjectApprovalScreen extends React.Component {
             }}
           >
             {this.state.descriptionComment === "" &&
-            this.state.titleComment === "" &&
-            this.state.exclusionComment === "" &&
-            this.state.inclusionComment === "" &&
-            this.state.durationComment == "" &&
-            this.state.governanceComment === "" &&
-            this.state.subjectNoComment === "" &&
-            this.state.dateComment === "" &&
-            this.state.locationComment === "" &&
-            this.state.ethicsComment === "" ? (
+              this.state.titleComment === "" &&
+              this.state.exclusionComment === "" &&
+              this.state.inclusionComment === "" &&
+              this.state.durationComment == "" &&
+              this.state.governanceComment === "" &&
+              this.state.subjectNoComment === "" &&
+              this.state.dateComment === "" &&
+              this.state.locationComment === "" &&
+              this.state.ethicsComment === "" ? (
               <View>
                 <Button mode="contained" onPress={this.authorizeProject}>
                   Authorize

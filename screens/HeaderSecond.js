@@ -25,6 +25,7 @@ export default class HeaderSecond extends React.Component {
         }}
       >
         <Image
+          onClick={() => history.push("Homepage")}
           style={{ width: this.state.width, height: "80%", left: "10%" }}
           onLayout={(e) => {
             this.setState({ width: e.nativeEvent.layout.height * 2 });
@@ -45,10 +46,6 @@ export default class HeaderSecond extends React.Component {
         >
           log out
         </Button>
-        <Text style={{ color: "red", position: "absolute", fontSize: "3em" }}>
-          {" "}
-          Project - Version Beta
-        </Text>
       </View>
     );
   }
