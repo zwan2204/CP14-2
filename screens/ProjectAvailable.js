@@ -1,14 +1,7 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  FlatList,
-  ScrollView,
-  CheckBox,
-} from "react-native";
+import { Text, View, SafeAreaView, FlatList, ScrollView, CheckBox, Linking } from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
 import HeaderSecond from "../screens/HeaderSecond";
@@ -371,7 +364,10 @@ const ProjectAvailable = (props) => {
             <Button
               mode="contained"
               style={{ width: 100 }}
-              //remove the console.log(), and place your consent website link here
+              //remove the console.log(""), and place your consent website link/
+              //your consent page in React Native format here. i.e
+              //onPress={() => Linking.openURL('http://google.com')}
+              //you can get the current project's ID by calling item.id
               onPress={() => console.log("")}
             >
               Join
