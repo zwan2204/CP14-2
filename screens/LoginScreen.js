@@ -120,7 +120,7 @@ export default class LoginScreen extends React.Component {
               <Text
                 style={{ color: "red", fontSize: "1.3em", paddingTop: "3%" }}
               >
-                *Beta Version: The first time you log in, it might take a bit
+                *The first time you log in, it might take a bit
                 long time to activate the server.
               </Text>
             </View>
