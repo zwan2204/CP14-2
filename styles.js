@@ -262,9 +262,10 @@ export const styles = StyleSheet.create(
     },
 
     subTitle: {
-      fontSize: 20,
+      fontSize: "1.5em",
       color: "#00205B",
-      marginLeft: 10
+      marginLeft: 10,
+      flex: 0.5
     },
 
     questionCardStyle: {

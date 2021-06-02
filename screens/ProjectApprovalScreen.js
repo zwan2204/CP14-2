@@ -130,65 +130,65 @@ export default class ProjectApprovalScreen extends React.Component {
 
   changeTitleColor = () => {
     if (this.state.titleComment == "") {
-      return "black";
+      return "";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeDescriptionColor = () => {
     if (this.state.descriptionComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeDurationColor = () => {
     if (this.state.durationComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeDateColor = () => {
     if (this.state.dateComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeEthicsColor = () => {
     if (this.state.ethicsComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeGovernanceColor = () => {
     if (this.state.governanceComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeLocationColor = () => {
     if (this.state.locationComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
   changeSubjectNoColor = () => {
     if (this.state.subjectNoComment == "") {
-      return "black";
+      return " ";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
@@ -196,7 +196,7 @@ export default class ProjectApprovalScreen extends React.Component {
     if (this.state.inclusionComment == "") {
       return "#00205B";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
@@ -204,7 +204,7 @@ export default class ProjectApprovalScreen extends React.Component {
     if (this.state.exclusionComment == "") {
       return "#00205B";
     } else {
-      return "red";
+      return "tomato";
     }
   };
 
@@ -265,8 +265,8 @@ export default class ProjectApprovalScreen extends React.Component {
         date: this.state.dateComment,
         approvalNumber: this.state.ethicsComment,
         governance: this.state.governanceComment,
-        Inclusion: this.state.InclusionComment,
-        Exclusion: this.state.ExclusionComment,
+        Inclusion: this.state.inclusionComment,
+        Exclusion: this.state.exclusionComment,
       })
       .then(
         (response) => {
@@ -321,7 +321,7 @@ export default class ProjectApprovalScreen extends React.Component {
         <SafeAreaView style={styles.container}>
           <HeaderSecond history={history} />
 
-          <View style={{ padding: 10, width: "100%" }}>
+          <View style={{ padding: 10, flex: 1 }}>
             {/* first row view */}
             <View style={{ flexDirection: "row", paddingBottom: 20 }}>
               <Text
@@ -346,9 +346,9 @@ export default class ProjectApprovalScreen extends React.Component {
               </Button>
             </View>
             {/*Project basic information upload area*/}
-            <View style={{ flex: 1, flexDirection: "row", width: "100%" }}>
+            <View style={{ flex: 1, flexDirection: "row" }}>
               {/*Title and description view*/}
-              <View style={{ flex: 1.3 }}>
+              <View style={{ flex: 1 }}>
                 <View
                   style={{
                     marginBottom: 10,
@@ -357,179 +357,159 @@ export default class ProjectApprovalScreen extends React.Component {
                 >
                   <Text style={styles.subTitle}>Project title: </Text>
                   <View>
-                    <Text
+                    <Card
                       style={{
+                        fontSize: "1.1em",
                         padding: 10,
-                        height: 60,
                         marginHorizontal: 10,
-                        borderWidth: 1,
-                        borderColor: "black",
-                        borderRadius: 5,
                       }}
                     >
-                      {" "}
-                      {this.state.project.title}{" "}
-                    </Text>
+                      <Text>
+                        {" "}
+                        {this.state.project.title}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
 
                 <View>
                   <Text style={styles.subTitle}>Project description: </Text>
                   <View>
-                    <Text
-                      multiline={true}
-                      textAlignVertical="top"
+                    <Card
                       style={{
+                        fontSize: "1.1em",
                         padding: 10,
-                        height: 250,
                         marginHorizontal: 10,
-                        borderWidth: 1,
-                        borderColor: "black",
-                        borderRadius: 5,
                       }}
                     >
-                      {" "}
-                      {this.state.project.description}{" "}
-                    </Text>
+                      <Text>
+                        {" "}
+                        {this.state.project.description}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
               </View>
 
               {/* Other info view*/}
-              <View style={{ marginTop: 30, flexDirection: "column", flex: 1 }}>
+              <View style={{ flex: 1 }}>
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Location: </Text>
-                  <Text
+                  <Card
                     style={{
-                      padding: 5,
+                      fontSize: "1.1em",
+                      padding: 10,
                       marginHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
                     }}
                   >
-                    {" "}
-                    {this.state.project.location}{" "}
-                  </Text>
+                    <Text>
+                      {" "}
+                      {this.state.project.location}{" "}</Text>
+                  </Card>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
-                  <Text
-                    multiline={true}
-                    textAlignVertical="top"
+                  <Card
                     style={{
-                      padding: 5,
+                      fontSize: "1.1em",
+                      padding: 10,
                       marginHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
                     }}
                   >
-                    {" "}
-                    {this.state.project.subjectNo}{" "}
-                  </Text>
+                    <Text>
+                      {" "}
+                      {this.state.project.subjectNo}{" "}</Text>
+                  </Card>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
-                  <Text
-                    multiline={true}
-                    textAlignVertical="top"
+                  <Card
                     style={{
-                      padding: 5,
+                      fontSize: "1.1em",
+                      padding: 10,
                       marginHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
                     }}
                   >
-                    {" "}
-                    {this.state.project.duration}{" "}
-                  </Text>
+                    <Text>
+                      {" "}
+                      {this.state.project.duration}{" "}</Text>
+                  </Card>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
-                  <Text
-                    multiline={true}
-                    textAlignVertical="top"
+                  <Card
                     style={{
-                      padding: 5,
+                      padding: 10,
                       marginHorizontal: 10,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
+                      fontSize: "1.1em"
                     }}
                   >
-                    {" "}
-                    {this.state.project.date}{" "}
-                  </Text>
+                    <Text>
+                      {" "}
+                      {this.state.project.date}{" "}</Text>
+                  </Card>
                 </View>
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Number:</Text>
-                  <Text
+                  <Card
                     style={{
-                      padding: 5,
-                      marginHorizontal: 5,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
+                      padding: 10,
+                      marginHorizontal: 10,
+                      fontSize: "1.1em"
                     }}
                   >
-                    {" "}
-                    {this.state.project.approvalNumber}{" "}
-                  </Text>
+                    <Text>
+                      {" "}
+                      {this.state.project.approvalNumber}{" "}</Text>
+                  </Card>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>
                     Governance Approval Number:
                   </Text>
-                  <Text
-                    multiline={true}
-                    textAlignVertical="top"
+                  <Card
                     style={{
-                      padding: 5,
-                      marginHorizontal: 5,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      borderRadius: 5,
+                      padding: 10,
+                      marginHorizontal: 10,
+                      fontSize: "1.1em"
                     }}
                   >
-                    {" "}
-                    {this.state.project.governance}{" "}
-                  </Text>
+                    <Text>
+                      {" "}
+                      {this.state.project.governance}{" "}</Text>
+                  </Card>
                 </View>
               </View>
             </View>
@@ -609,7 +589,7 @@ export default class ProjectApprovalScreen extends React.Component {
           <HeaderSecond history={history} />
 
           {/* first row view */}
-          <View style={{ padding: 10, width: "100%" }}>
+          <View style={{ padding: 10, flex: 1 }}>
             <View style={{ flexDirection: "row", paddingBottom: 20 }}>
               <Text
                 style={{
@@ -644,9 +624,9 @@ export default class ProjectApprovalScreen extends React.Component {
             </View>
 
             {/*Project basic information upload area*/}
-            <View style={{ flex: 1, flexDirection: "row", width: "100%" }}>
+            <View style={{ flex: 1, flexDirection: "row" }}>
               {/*Title and description view*/}
-              <View style={{ flex: 1.3 }}>
+              <View style={{ flex: 1 }}>
                 <View
                   style={{
                     marginBottom: 10,
@@ -693,27 +673,24 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal}>
-                      <Text
-                        style={{
-                          padding: 10,
-                          height: 60,
-                          marginHorizontal: 10,
-                          borderWidth: 1,
-                          borderColor: this.changeTitleColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal}
+                      style={{
+                        fontSize: "1.1em",
+                        padding: 10,
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeTitleColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.title}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.title}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
 
                 <View>
                   <Text style={styles.subTitle}>Project description: </Text>
-
                   <View>
                     <Portal>
                       <Dialog
@@ -753,37 +730,32 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal1}>
-                      <Text
-                        multiline={true}
-                        textAlignVertical="top"
-                        style={{
-                          padding: 10,
-                          height: 250,
-                          marginHorizontal: 10,
-                          borderWidth: 1,
-                          borderColor: this.changeDescriptionColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal1}
+                      style={{
+                        fontSize: "1.1em",
+                        padding: 10,
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeDescriptionColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.description}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.description}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
               </View>
 
-              <View style={{ flex: 1, marginTop: 30, flexDirection: "column" }}>
+              <View style={{ flex: 1 }}>
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Location: </Text>
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <Portal>
                       <Dialog
                         style={{ width: 500, alignSelf: "center" }}
@@ -822,35 +794,30 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal4}>
-                      <Text
-                        multiline={true}
-                        textAlignVertical="top"
-                        style={{
-                          padding: 5,
-                          height: 30,
-                          marginHorizontal: 10,
-                          borderWidth: 1,
-                          borderColor: this.changeLocationColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal4}
+                      style={{
+                        fontSize: "1.1em",
+                        padding: 10,
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeLocationColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.location}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.location}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Number of Subjects: </Text>
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <Portal>
                       <Dialog
                         style={{ width: 500, alignSelf: "center" }}
@@ -889,35 +856,30 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal5}>
-                      <Text
-                        multiline={true}
-                        textAlignVertical="top"
-                        style={{
-                          padding: 5,
-                          height: 30,
-                          marginHorizontal: 10,
-                          borderWidth: 1,
-                          borderColor: this.changeSubjectNoColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal5}
+                      style={{
+                        padding: 10,
+                        fontSize: "1.1em",
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeSubjectNoColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.subjectNo}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.subjectNo}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Study Duration: </Text>
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <Portal>
                       <Dialog
                         style={{ width: 500, alignSelf: "center" }}
@@ -956,35 +918,30 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal6}>
-                      <Text
-                        multiline={true}
-                        textAlignVertical="top"
-                        style={{
-                          padding: 5,
-                          height: 30,
-                          marginHorizontal: 10,
-                          borderWidth: 1,
-                          borderColor: this.changeDurationColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal6}
+                      style={{
+                        padding: 10,
+                        fontSize: "1.1em",
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeDurationColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.duration}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.duration}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Start Date: </Text>
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <Portal>
                       <Dialog
                         style={{ width: 500, alignSelf: "center" }}
@@ -999,7 +956,6 @@ export default class ProjectApprovalScreen extends React.Component {
                             height: 100,
                             marginHorizontal: 10,
                             borderWidth: 1,
-                            borderColor: this.state.pendingComment,
                             borderRadius: 5,
                           }}
                           render={(innerProps) => (
@@ -1024,34 +980,29 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal7}>
-                      <Text
-                        multiline={true}
-                        textAlignVertical="top"
-                        style={{
-                          padding: 5,
-                          height: 30,
-                          marginHorizontal: 10,
-                          borderWidth: 1,
-                          borderColor: this.changeDateColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal7}
+                      style={{
+                        padding: 10,
+                        fontSize: "1.1em",
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeDateColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.date}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.date}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>Ethics Approval Number:</Text>
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <Portal>
                       <Dialog
                         style={{ width: 500, alignSelf: "center" }}
@@ -1090,35 +1041,32 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal2}>
-                      <Text
-                        style={{
-                          padding: 5,
-                          height: 30,
-                          marginHorizontal: 5,
-                          borderWidth: 1,
-                          borderColor: this.changeEthicsColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal2}
+                      style={{
+                        padding: 10,
+                        fontSize: "1.1em",
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeEthicsColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.approvalNumber}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.approvalNumber}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
                     paddingBottom: 20,
                   }}
                 >
                   <Text style={styles.subTitle}>
                     Governance Approval Number:
                   </Text>
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <Portal>
                       <Dialog
                         style={{ width: 500, alignSelf: "center" }}
@@ -1157,22 +1105,19 @@ export default class ProjectApprovalScreen extends React.Component {
                         </Dialog.Actions>
                       </Dialog>
                     </Portal>
-                    <TouchableOpacity onPress={this.showModal3}>
-                      <Text
-                        multiline={true}
-                        textAlignVertical="top"
-                        style={{
-                          padding: 5,
-                          marginHorizontal: 5,
-                          borderWidth: 1,
-                          borderColor: this.changeGovernanceColor(),
-                          borderRadius: 5,
-                        }}
-                      >
+                    <Card
+                      onPress={this.showModal3}
+                      style={{
+                        padding: 10,
+                        fontSize: "1.1em",
+                        marginHorizontal: 10,
+                        backgroundColor: this.changeGovernanceColor(),
+                      }}
+                    >
+                      <Text>
                         {" "}
-                        {this.state.project.governance}{" "}
-                      </Text>
-                    </TouchableOpacity>
+                        {this.state.project.governance}{" "}</Text>
+                    </Card>
                   </View>
                 </View>
               </View>
