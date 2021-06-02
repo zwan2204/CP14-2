@@ -1,7 +1,15 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { Text, View, SafeAreaView, FlatList, ScrollView, CheckBox, Linking } from "react-native";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  FlatList,
+  ScrollView,
+  CheckBox,
+  Linking,
+} from "react-native";
 import { styles } from "../styles.js";
 import axios from "axios";
 import HeaderSecond from "../screens/HeaderSecond";
@@ -30,6 +38,7 @@ const ProjectAvailable = (props) => {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [fileUpload, setFileUpload] = useState("");
   const [byPhone, setByPhone] = useState(false);
   const [byEmail, setByEmail] = useState(false);
   const [phoneNum, setNumber] = useState("+61 0");
@@ -59,6 +68,7 @@ const ProjectAvailable = (props) => {
             location: response.data[i].location,
             duration: response.data[i].duration,
             date: response.data[i].date,
+            fileUpload: response.data[i].fileUpload,
             numLeft:
               parseInt(response.data[i].subjectNo) -
               parseInt(response.data[i].currentNumParticipant),
@@ -94,7 +104,8 @@ const ProjectAvailable = (props) => {
             setDuration(item.duration),
             setLocation(item.location),
             setDescription(item.description),
-            setDate(item.date);
+            setDate(item.date),
+            setFileUpload(item.fileUpload);
         }}
       >
         {/* <View style={styles.cardView}> */}
@@ -279,6 +290,24 @@ const ProjectAvailable = (props) => {
                     Description:
                   </Text>
                   <Text style={{ flex: 1 }}>{description}</Text>
+                </View>
+                <View
+                  style={{
+                    display: fileUpload ? "flex" : "none",
+                    flexDirection: "row",
+                    margin: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      paddingRight: 10,
+                      color: "blue",
+                    }}
+                    onPress={() => window.open(fileUpload)}
+                  >
+                    Protocal Link
+                  </Text>
                 </View>
               </ScrollView>
             </View>

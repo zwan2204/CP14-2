@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import { TextInputMask } from "react-native-masked-text";
+import HeaderSecond from "../screens/HeaderSecond";
 import {
   SafeAreaView,
   StyleSheet,
@@ -608,37 +609,7 @@ const ProjectUploading = (props) => {
   return (
     <SafeAreaView style={styles.root}>
       {/*View of Header*/}
-      <View
-        style={{
-          height: 140,
-          backgroundColor: "#00205B",
-          flexDirection: "row",
-        }}
-      >
-        <Image
-          style={{ width: 200, height: 100, marginLeft: 100, marginTop: 20 }}
-          source={require("../assets/header.png")}
-        />
-
-        <Button
-          mode="text"
-          style={{
-            backgroundColor: "white",
-            width: 120,
-            height: 37,
-            position: "absolute",
-            bottom: 30,
-            right: 30,
-          }}
-          onPress={() => props.history.push("/Homepage")}
-        >
-          log out
-        </Button>
-        <Text style={{ color: "red", position: "absolute", fontSize: "3em" }}>
-          {" "}
-          Project - Version Beta
-        </Text>
-      </View>
+      <HeaderSecond history={props.history} />
 
       {/* View of Body*/}
       <View style={{ margin: 35 }}>

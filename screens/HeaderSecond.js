@@ -7,7 +7,7 @@ export default class HeaderSecond extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0
+      width: 0,
     };
   }
 
@@ -16,17 +16,17 @@ export default class HeaderSecond extends React.Component {
     return (
       <View
         style={{
-          height: "15%",
+          height: 150,
           width: "100%",
           backgroundColor: "#00205B",
           flexDirection: "row",
           alignContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <Image
           style={{ width: this.state.width, height: "80%", left: "10%" }}
-          onLayout={e => {
+          onLayout={(e) => {
             this.setState({ width: e.nativeEvent.layout.height * 2 });
           }}
           source={require("../assets/header.png")}
@@ -39,7 +39,7 @@ export default class HeaderSecond extends React.Component {
             height: 37,
             position: "absolute",
             bottom: 30,
-            right: 30
+            right: 30,
           }}
           onPress={() => history.push("/Homepage")}
         >
