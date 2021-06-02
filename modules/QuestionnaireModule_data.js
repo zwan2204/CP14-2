@@ -46,12 +46,14 @@ export const getProjects = (
                         if (
                             (userInfo.gender == project.gender || 
                                 project.gender == "Not required") &&
-                            userInfo.healthy == project.needHealth &&
+                            (userInfo.healthy == project.needHealth ||
+                                !project.needHealth) &&
+                            (userInfo.english == project.needEnglish ||
+                                !project.needEnglish) &&
                             userInfo.isSmoking == project.isSmoking &&
                             userInfo.isPregnant == project.isPregnant &&
                             userInfo.isLactating == project.isLactating &&
-                            userInfo.isPlanning == project.isPlanningPregnant &&
-                            userInfo.english == project.needEnglish
+                            userInfo.isPlanning == project.isPlanningPregnant
                         ) {
                             eligibleProjects.push(project._id);
                         } else {
@@ -82,12 +84,14 @@ export const getProjects = (
                     if (
                         (userInfo.gender == project.gender || 
                             project.gender == "Not required") &&
-                        userInfo.healthy == project.needHealth &&
+                        (userInfo.healthy == project.needHealth ||
+                            !project.needHealth) &&
+                        (userInfo.english == project.needEnglish ||
+                            !project.needEnglish) &&
                         userInfo.isSmoking == project.isSmoking &&
                         userInfo.isPregnant == project.isPregnant &&
                         userInfo.isLactating == project.isLactating &&
-                        userInfo.isPlanning == project.isPlanningPregnant &&
-                        userInfo.english == project.needEnglish
+                        userInfo.isPlanning == project.isPlanningPregnant
                     ) {
                         eligibleProjects.push(project._id);
                     } else {
