@@ -5,8 +5,13 @@ import { Route, Redirect } from "react-router-dom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LOGIN_URL } from "./urlMap";
 
-const isAdmin = () => {
-  const role = localStorage.getItem("role");
+export const isAdmin = () => {
+  const role = localStorage.getItem("role") || "";
+  return role === "Admin" || role === "Project Manager";
+};
+
+export const isAdmin2 = () => {
+  const role = "Admin";
   return role === "Admin" || role === "Project Manager";
 };
 
