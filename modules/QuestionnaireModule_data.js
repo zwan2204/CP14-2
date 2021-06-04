@@ -184,6 +184,7 @@ export const getQuestions = ({
       for (let i = 0; i < Object.keys(response.data).length; i++) {
         let tempQuestion = {};
         let question = response.data[i];
+        let exist = false;
         //if the question already exists in the list
         if (filter[question.name] != null) {
           if (question.general) {
@@ -194,6 +195,7 @@ export const getQuestions = ({
                 } else {
                   generalQuestions[i]["exclusionIDList"].push(question.project);
                 }
+                exist = true;
               }
             }
           } else if (!question.general) {
@@ -208,6 +210,7 @@ export const getQuestions = ({
                     question.project
                   );
                 }
+                exist = true;
               }
             }
           } else if (question.worker) {
@@ -218,11 +221,14 @@ export const getQuestions = ({
                 } else {
                   workerQuestions[i]["exclusionIDList"].push(question.project);
                 }
+                exist = true;
               }
             }
           }
-        } else if (question.general) {
+        }
+        if (!exist && question.general) {
           //create a new question adding to the general list
+          console.log("aaa" + question.name);
           filter[question.name] = 1;
           tempQuestion["ID"] = question._id;
           tempQuestion["question"] = question.name;
@@ -268,6 +274,7 @@ export const getQuestions = ({
           workerQuestions.push(tempQuestion);
         }
       }
+        console.log("ggg: " + generalQuestions.length);
       //remove all questions that are not in the eligibale Projects list.
       setGeQuestions(washQuestions(generalQuestions, eligibleProjects));
       setSpQuestions(washQuestions(specificQuestions, eligibleProjects));
