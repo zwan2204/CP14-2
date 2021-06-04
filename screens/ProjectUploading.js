@@ -298,7 +298,7 @@ const ProjectUploading = (props) => {
     }
   };
 
-  //before the page rendering, methods ni useEffect will be running in advance
+  //before the page rendering, methods in useEffect will be running in advance
   useEffect(() => {
     getQuestion();
     draftProjectLoading();
@@ -1060,7 +1060,7 @@ const ProjectUploading = (props) => {
                 }}
               />
               <CheckBox
-                title="Need speek fluent english"
+                title="Need speak fluent english"
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
                 checked={isEnglishFluent}
@@ -1178,7 +1178,7 @@ const ProjectUploading = (props) => {
               }}
             />
             <CheckBox
-              title="Need speek fluent english"
+              title="Need speak fluent english"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={isEnglishFluent}
