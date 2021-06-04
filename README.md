@@ -27,7 +27,7 @@ npm run start
 
 4. Go to rewrites and redirects setting, add following setting:
 ```bash
-Source address: </^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf)$)([^.]+$)/>
+Source address: </^[^.]+$|\.(?!(css|gif|ico|jpg|json|js|png|txt|svg|woff|ttf)$)([^.]+$)/>
 Target address: /index.html
 Type: 200
 ```
