@@ -102,8 +102,8 @@ const ProjectUploading = (props) => {
               approvalNumber: response.data[0].approvalNumber,
               governance: response.data[0].governance,
               date: response.data[0].date,
-              inclusion: response.data[0].inclusion,
-              exclusion: response.data[0].exclusion,
+              inclusion: response.data[0].Inclusion,
+              exclusion: response.data[0].Exclusion,
             });
           }
         },
