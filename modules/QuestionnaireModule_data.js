@@ -163,6 +163,7 @@ export function washQuestions(questions, eligibleProjects) {
       filteredQuestions.push(item);
     }
   });
+  console.log(filteredQuestions);
   return filteredQuestions;
 }
 
@@ -184,6 +185,7 @@ export const getQuestions = ({
       for (let i = 0; i < Object.keys(response.data).length; i++) {
         let tempQuestion = {};
         let question = response.data[i];
+        let exist = false;
         //if the question already exists in the list
         if (filter[question.name] != null) {
           if (question.general) {
@@ -194,6 +196,7 @@ export const getQuestions = ({
                 } else {
                   generalQuestions[i]["exclusionIDList"].push(question.project);
                 }
+                exist = true;
               }
             }
           } else if (!question.general) {
@@ -208,6 +211,7 @@ export const getQuestions = ({
                     question.project
                   );
                 }
+                exist = true;
               }
             }
           } else if (question.worker) {
@@ -218,11 +222,14 @@ export const getQuestions = ({
                 } else {
                   workerQuestions[i]["exclusionIDList"].push(question.project);
                 }
+                exist = true;
               }
             }
           }
-        } else if (question.general) {
+        }
+        if (!exist && question.general) {
           //create a new question adding to the general list
+          console.log("aaa" + question.name);
           filter[question.name] = 1;
           tempQuestion["ID"] = question._id;
           tempQuestion["question"] = question.name;
@@ -236,7 +243,7 @@ export const getQuestions = ({
           tempQuestion["stateNo"] = false;
           tempQuestion["state"] = "notCompleted";
           generalQuestions.push(tempQuestion);
-        } else if (!question.general && !question.worker) {
+        } else if (!exist && !question.general && !question.worker) {
           //create a new question adding to the specific list
           filter[question.name] = 1;
           tempQuestion["ID"] = question._id;
@@ -251,7 +258,7 @@ export const getQuestions = ({
           tempQuestion["stateNo"] = false;
           tempQuestion["state"] = "notCompleted";
           specificQuestions.push(tempQuestion);
-        } else if (!question.general && question.worker) {
+        } else if (!exist && !question.general && question.worker) {
           //create a new question adding to the worker list
           filter[question.name] = 1;
           tempQuestion["ID"] = question._id;

@@ -424,7 +424,7 @@ const QuestionAnswerPage = (props) => {
                 {/* the user is in other sections */}
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1}>
+                    <Text style={styles.titleInfoP1} onPress={()=>console.log(currentQuestions, eligibleProjects)}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>

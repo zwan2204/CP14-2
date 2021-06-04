@@ -102,8 +102,8 @@ const ProjectUploading = (props) => {
               approvalNumber: response.data[0].approvalNumber,
               governance: response.data[0].governance,
               date: response.data[0].date,
-              inclusion: response.data[0].inclusion,
-              exclusion: response.data[0].exclusion,
+              inclusion: response.data[0].Inclusion,
+              exclusion: response.data[0].Exclusion,
             });
           }
         },
@@ -298,7 +298,7 @@ const ProjectUploading = (props) => {
     }
   };
 
-  //before the page rendering, methods ni useEffect will be running in advance
+  //before the page rendering, methods in useEffect will be running in advance
   useEffect(() => {
     getQuestion();
     draftProjectLoading();
@@ -1060,7 +1060,7 @@ const ProjectUploading = (props) => {
                 }}
               />
               <CheckBox
-                title="Need speek fluent english"
+                title="Need speak fluent english"
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
                 checked={isEnglishFluent}
@@ -1178,7 +1178,7 @@ const ProjectUploading = (props) => {
               }}
             />
             <CheckBox
-              title="Need speek fluent english"
+              title="Need speak fluent english"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={isEnglishFluent}

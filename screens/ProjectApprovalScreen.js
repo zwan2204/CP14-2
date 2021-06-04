@@ -364,9 +364,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         marginHorizontal: 10,
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.title}{" "}</Text>
+                      <Text> {this.state.project.title} </Text>
                     </Card>
                   </View>
                 </View>
@@ -381,9 +379,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         marginHorizontal: 10,
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.description}{" "}</Text>
+                      <Text> {this.state.project.description} </Text>
                     </Card>
                   </View>
                 </View>
@@ -405,9 +401,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                     }}
                   >
-                    <Text>
-                      {" "}
-                      {this.state.project.location}{" "}</Text>
+                    <Text> {this.state.project.location} </Text>
                   </Card>
                 </View>
 
@@ -425,9 +419,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                     }}
                   >
-                    <Text>
-                      {" "}
-                      {this.state.project.subjectNo}{" "}</Text>
+                    <Text> {this.state.project.subjectNo} </Text>
                   </Card>
                 </View>
 
@@ -445,9 +437,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       marginHorizontal: 10,
                     }}
                   >
-                    <Text>
-                      {" "}
-                      {this.state.project.duration}{" "}</Text>
+                    <Text> {this.state.project.duration} </Text>
                   </Card>
                 </View>
 
@@ -462,12 +452,10 @@ export default class ProjectApprovalScreen extends React.Component {
                     style={{
                       padding: 10,
                       marginHorizontal: 10,
-                      fontSize: "1.1em"
+                      fontSize: "1.1em",
                     }}
                   >
-                    <Text>
-                      {" "}
-                      {this.state.project.date}{" "}</Text>
+                    <Text> {this.state.project.date} </Text>
                   </Card>
                 </View>
                 <View
@@ -481,12 +469,10 @@ export default class ProjectApprovalScreen extends React.Component {
                     style={{
                       padding: 10,
                       marginHorizontal: 10,
-                      fontSize: "1.1em"
+                      fontSize: "1.1em",
                     }}
                   >
-                    <Text>
-                      {" "}
-                      {this.state.project.approvalNumber}{" "}</Text>
+                    <Text> {this.state.project.approvalNumber} </Text>
                   </Card>
                 </View>
 
@@ -503,12 +489,10 @@ export default class ProjectApprovalScreen extends React.Component {
                     style={{
                       padding: 10,
                       marginHorizontal: 10,
-                      fontSize: "1.1em"
+                      fontSize: "1.1em",
                     }}
                   >
-                    <Text>
-                      {" "}
-                      {this.state.project.governance}{" "}</Text>
+                    <Text> {this.state.project.governance} </Text>
                   </Card>
                 </View>
               </View>
@@ -682,9 +666,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeTitleColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.title}{" "}</Text>
+                      <Text> {this.state.project.title} </Text>
                     </Card>
                   </View>
                 </View>
@@ -739,9 +721,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeDescriptionColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.description}{" "}</Text>
+                      <Text> {this.state.project.description} </Text>
                     </Card>
                   </View>
                 </View>
@@ -803,9 +783,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeLocationColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.location}{" "}</Text>
+                      <Text> {this.state.project.location} </Text>
                     </Card>
                   </View>
                 </View>
@@ -865,9 +843,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeSubjectNoColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.subjectNo}{" "}</Text>
+                      <Text> {this.state.project.subjectNo} </Text>
                     </Card>
                   </View>
                 </View>
@@ -927,9 +903,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeDurationColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.duration}{" "}</Text>
+                      <Text> {this.state.project.duration} </Text>
                     </Card>
                   </View>
                 </View>
@@ -989,9 +963,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeDateColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.date}{" "}</Text>
+                      <Text> {this.state.project.date} </Text>
                     </Card>
                   </View>
                 </View>
@@ -1050,9 +1022,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeEthicsColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.approvalNumber}{" "}</Text>
+                      <Text> {this.state.project.approvalNumber} </Text>
                     </Card>
                   </View>
                 </View>
@@ -1114,9 +1084,7 @@ export default class ProjectApprovalScreen extends React.Component {
                         backgroundColor: this.changeGovernanceColor(),
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.project.governance}{" "}</Text>
+                      <Text> {this.state.project.governance} </Text>
                     </Card>
                   </View>
                 </View>
@@ -1140,7 +1108,7 @@ export default class ProjectApprovalScreen extends React.Component {
                       Question Preview
                       <Text
                         style={{
-                          fontSize: 5,
+                          fontSize: 10,
                           paddingLeft: 10,
                           color: "red",
                           fontWeight: "normal",
@@ -1289,15 +1257,15 @@ export default class ProjectApprovalScreen extends React.Component {
             }}
           >
             {this.state.descriptionComment === "" &&
-              this.state.titleComment === "" &&
-              this.state.exclusionComment === "" &&
-              this.state.inclusionComment === "" &&
-              this.state.durationComment == "" &&
-              this.state.governanceComment === "" &&
-              this.state.subjectNoComment === "" &&
-              this.state.dateComment === "" &&
-              this.state.locationComment === "" &&
-              this.state.ethicsComment === "" ? (
+            this.state.titleComment === "" &&
+            this.state.exclusionComment === "" &&
+            this.state.inclusionComment === "" &&
+            this.state.durationComment == "" &&
+            this.state.governanceComment === "" &&
+            this.state.subjectNoComment === "" &&
+            this.state.dateComment === "" &&
+            this.state.locationComment === "" &&
+            this.state.ethicsComment === "" ? (
               <View>
                 <Button mode="contained" onPress={this.authorizeProject}>
                   Authorize
