@@ -185,6 +185,10 @@ export const styles = StyleSheet.create(
     questionnaireButton: {
       width: "35%",
       height: "100%",
+      maxHeight: 45,
+      maxWidth: 110,
+      minHeight: 30,
+      minWidth: 90,
       borderRadius: 8,
       alignContent: "center",
       alignItems: "center",
@@ -262,10 +266,10 @@ export const styles = StyleSheet.create(
     },
 
     subTitle: {
-      fontSize: "1.5em",
+      fontSize: "1.3em",
       color: "#00205B",
       marginLeft: 10,
-      flex: 0.5
+      flex: 1
     },
 
     questionCardStyle: {
@@ -274,11 +278,19 @@ export const styles = StyleSheet.create(
     },
 
     loadingStyle: {
-      height: "80%",
+      flex: 1,
       width: "100%",
       alignContent: "center",
       alignItems: "center",
       justifyContent: "center"
+    },
+
+    loadingStyleLogin: {
+        height: "60%",
+        width: "100%",
+        alignContent: "center",
+        alignItems: "center",
+        justifyContent: "center"
     },
 
     handDeviceInner: {

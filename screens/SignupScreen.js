@@ -132,9 +132,9 @@ export default class SignupScreen extends React.Component {
             </View>
             : null}
 
-          <View style={{ alignItems: "center", height: "80%" }}>
+          <View style={{ alignItems: "center", flex: 1 }}>
             <View style={{ alignItems: "center", margin: 30 }}>
-              <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }}> Create New Account </Text>
+              <Text style={{ color: "#00205B", fontSize: "1.3em", fontWeight: "bold" }}> Create New Account </Text>
             </View>
 
             <View style={{ alignItems: "center", flexDirection: "column", justifyContent: "center", width: "40%" }} >
@@ -252,7 +252,7 @@ export default class SignupScreen extends React.Component {
         <SafeAreaView style={styles.container}>
           <Header />
 
-          <View style={{ alignItems: "center", height: "80%" }} >
+          <View style={{ alignItems: "center", flex: 1 }} >
 
             <View style={{ alignItems: "center", margin: 30 }}>
               <Text style={{ color: "#00205B", fontSize: 20, fontWeight: "bold" }} > Create New Account </Text>

@@ -90,13 +90,13 @@ export default class LoginScreen extends React.Component {
         {this.state.isLoading ? (
           <View
             style={[
-              styles.loadingStyle,
+              styles.loadingStyleLogin,
               {
                 position: "absolute",
                 backgroundColor: "white",
                 opacity: 0.9,
                 zIndex: 1,
-                top: "15%"
+                top: 150
               }
             ]}
           >
@@ -117,19 +117,13 @@ export default class LoginScreen extends React.Component {
               >
                 Identifying your information
               </Text>
-              <Text
-                style={{ color: "red", fontSize: "1.3em", paddingTop: "3%" }}
-              >
-                *The first time you log in, it might take a bit
-                long time to activate the server.
-              </Text>
             </View>
           </View>
         ) : null}
 
         <View
           style={{
-            height: "80%",
+            flex: 1,
             width: "100%",
             flexDirection: "column",
             alignItems: "center"
