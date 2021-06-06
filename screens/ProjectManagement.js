@@ -25,12 +25,14 @@ const ProjectManagement = (props) => {
   const [releasedProject, setReleasedProject] = useState([]);
   const [incompleteProject, setIncompleteProject] = useState([]);
   const userId = localStorage.getItem("userId");
-  // const userId = "606d1642b2fff30342232416";
+
+  //before the page rendering, methods in useEffect will be running in advance
   useEffect(() => {
     getProjects();
     getLocalStorage();
   }, []);
 
+  //use to show and hide draft project table
   const toggleIncompleteVisibility = () => {
     if (incompleteDrop == "flex") {
       setIncompleteDrop("none");
@@ -38,7 +40,7 @@ const ProjectManagement = (props) => {
       setIncompleteDrop("flex");
     }
   };
-
+  //use to show and hide the table of project which waiting for releasing
   const toggleUnreleasedVisibility = () => {
     if (unreleasedDrop == "flex") {
       setUnreleasedDrop("none");
@@ -47,6 +49,7 @@ const ProjectManagement = (props) => {
     }
   };
 
+  //use to show and hide the released project table
   const toggleReleasedVisibility = () => {
     if (releasedDrop == "flex") {
       setReleasedDrop("none");
@@ -55,6 +58,7 @@ const ProjectManagement = (props) => {
     }
   };
 
+  //delete one project and refresh the project display pool
   const deleteProject = (projectId) => {
     axios.delete(`${DEPLOYEDHOST}/api/project/${projectId}`).then(
       (response) => {
@@ -66,6 +70,7 @@ const ProjectManagement = (props) => {
     );
   };
 
+  //remove draft project from local storage
   const deleteIncomplete = async (id) => {
     try {
       await AsyncStorage.removeItem(id);
@@ -73,6 +78,7 @@ const ProjectManagement = (props) => {
     } catch (e) {}
   };
 
+  //get all projects for this project manager in database
   const getProjects = () => {
     let unreleasedProjects = [];
     let releasedProjects = [];
@@ -101,6 +107,7 @@ const ProjectManagement = (props) => {
     );
   };
 
+  //get draft for this project manager, it also return the remaining task for each project.
   const getLocalStorage = async () => {
     let keys = [];
     let values = [];
@@ -149,6 +156,7 @@ const ProjectManagement = (props) => {
     }
   };
 
+  //when project manager click release button for a project, update the state of this project to recruiting
   const updateState = (id) => {
     axios
       .put(`${DEPLOYEDHOST}/api/project/${id}`, {
@@ -164,6 +172,7 @@ const ProjectManagement = (props) => {
       );
   };
 
+  //render draft project in data table
   const incompleteRender = incompleteProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${incompleteDrop}` }}>
@@ -200,6 +209,7 @@ const ProjectManagement = (props) => {
     );
   });
 
+  //render pending and new upload project in data table
   const unreleasedRender = unreleasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${unreleasedDrop}` }}>
@@ -240,6 +250,7 @@ const ProjectManagement = (props) => {
     );
   });
 
+  //render recruiting project in data table
   const releasedRender = releasedProject.map((item) => {
     return (
       <DataTable.Row key={item.key} style={{ display: `${releasedDrop}` }}>
@@ -302,6 +313,7 @@ const ProjectManagement = (props) => {
           </Button>
         </View>
 
+        {/*Table to display draft project*/}
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Incomplete Projects</DataTable.Title>
@@ -322,6 +334,7 @@ const ProjectManagement = (props) => {
           {incompleteRender}
         </DataTable>
 
+        {/*Table to display pending and new upload project*/}
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Unreleased Projects</DataTable.Title>
@@ -342,6 +355,7 @@ const ProjectManagement = (props) => {
           {unreleasedRender}
         </DataTable>
 
+        {/*Table to display recruiting project*/}
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Released Projects</DataTable.Title>
