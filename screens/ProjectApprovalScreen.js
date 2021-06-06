@@ -15,10 +15,18 @@ import axios from "axios";
 import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import HeaderSecond from "../screens/HeaderSecond";
 import Footer from "../screens/Footer";
+
+/*
+  This is the Project Approval Page for NSWHP staff
+  There are TWO major actions within this page that can be taken by a staff
+  1. Leave comment for a piece of information that is wrong or requires more additional information
+  2. AUTHORIZE a project with 0 comment / PENDING a project with one/more comment(s)
+*/
 export default class ProjectApprovalScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // Visibility control for comment box
       isModalVisible: false,
       isModalVisible1: false,
       isModalVisible2: false,
@@ -29,6 +37,7 @@ export default class ProjectApprovalScreen extends React.Component {
       isModalVisible7: false,
       isModalVisible8: false,
       isModalVisible9: false,
+      // Comment for each information
       titleComment: "",
       descriptionComment: "",
       ethicsComment: "",
@@ -39,8 +48,10 @@ export default class ProjectApprovalScreen extends React.Component {
       dateComment: "",
       inclusionComment: "",
       exclusionComment: "",
+      // Passed project information from /worker page
       projectId: this.props.location.state.projectId,
       projectState: this.props.location.state.projectState,
+      // List stores project criteria
       inclusionQuestion: [],
       exclusionQuestion: [],
       projectInfo: [],
@@ -48,6 +59,7 @@ export default class ProjectApprovalScreen extends React.Component {
     };
   }
 
+  // Visibility control
   showModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
@@ -128,6 +140,7 @@ export default class ProjectApprovalScreen extends React.Component {
     this.setState({ isModalVisible9: !this.state.isModalVisible9 });
   };
 
+  // Box colour control: if a comment has been left, the background colour will be changed to 'tomato'
   changeTitleColor = () => {
     if (this.state.titleComment == "") {
       return "";
@@ -212,6 +225,9 @@ export default class ProjectApprovalScreen extends React.Component {
     this.getProjectInfo();
   }
 
+  /*
+    Function to pending a project and change its state into "Pending"
+  */
   updateState = () => {
     const { history } = this.props;
 
@@ -233,6 +249,9 @@ export default class ProjectApprovalScreen extends React.Component {
       );
   };
 
+  /*
+    Function to authorize a project and change its state into "Authorized"
+  */
   authorizeProject = () => {
     const { history } = this.props;
     axios
@@ -253,6 +272,9 @@ export default class ProjectApprovalScreen extends React.Component {
       );
   };
 
+  /*
+    Function to store all comments for this project in the database
+  */
   leaveComment = () => {
     axios
       .post(`${DEPLOYEDHOST}/api/comment/`, {
@@ -278,6 +300,9 @@ export default class ProjectApprovalScreen extends React.Component {
       );
   };
 
+  /*
+    Function to retrieve the project information
+  */
   getProjectInfo = () => {
     let inclusionQuestions = [];
     let exclusionQuestions = [];
@@ -310,9 +335,13 @@ export default class ProjectApprovalScreen extends React.Component {
       );
   };
 
+  /*
+    Page rendering content
+  */
   render() {
     const { history } = this.props;
 
+    // Rendering for projects in the "Authorized Projects" list
     if (
       this.state.projectState == "Authorized" ||
       this.state.projectState == "Recruiting"
@@ -568,6 +597,8 @@ export default class ProjectApprovalScreen extends React.Component {
         </SafeAreaView>
       );
     } else {
+
+      // Rendering for projects in the "New Uploaded Projects" list
       return (
         <SafeAreaView style={styles.container}>
           <HeaderSecond history={history} />
@@ -1249,6 +1280,7 @@ export default class ProjectApprovalScreen extends React.Component {
             </View>
           </View>
 
+          {/* Toggle button if any comment is left */}
           <View
             style={{
               flexDirection: "row",
@@ -1257,15 +1289,15 @@ export default class ProjectApprovalScreen extends React.Component {
             }}
           >
             {this.state.descriptionComment === "" &&
-            this.state.titleComment === "" &&
-            this.state.exclusionComment === "" &&
-            this.state.inclusionComment === "" &&
-            this.state.durationComment == "" &&
-            this.state.governanceComment === "" &&
-            this.state.subjectNoComment === "" &&
-            this.state.dateComment === "" &&
-            this.state.locationComment === "" &&
-            this.state.ethicsComment === "" ? (
+              this.state.titleComment === "" &&
+              this.state.exclusionComment === "" &&
+              this.state.inclusionComment === "" &&
+              this.state.durationComment == "" &&
+              this.state.governanceComment === "" &&
+              this.state.subjectNoComment === "" &&
+              this.state.dateComment === "" &&
+              this.state.locationComment === "" &&
+              this.state.ethicsComment === "" ? (
               <View>
                 <Button mode="contained" onPress={this.authorizeProject}>
                   Authorize

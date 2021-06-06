@@ -9,6 +9,13 @@ import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import HeaderSecond from "../screens/HeaderSecond.js";
 import Footer from "../screens/Footer";
 
+/*
+  This is the page for NSWHP staff
+  There are three types of project lists in this page
+  1. "New Uploaded Projects", "New Upload" state projects that have not been processed by any staff
+  2. "Pending information Projects", "Pending" state projects with further required inforamtion by correspongding project manager
+  3. "Athourized Projects", "Athourize" & "Recruiting" state projects that have been authorzied by the staff & released by the manager
+*/
 export default class WorkerPage extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +36,9 @@ export default class WorkerPage extends React.Component {
     this.getProjects();
   }
 
+  /*
+    Function to retrieve three types of projects and put them into corresponding lists
+  */
   getProjects = () => {
     let unauthorizedProjects = [];
     let authorizedProjects = [];
@@ -66,6 +76,9 @@ export default class WorkerPage extends React.Component {
     );
   };
 
+  /*
+    Function to toggle new uploaded project list & icon
+  */
   setPendingIsShow = () => {
     this.setState({ pendingIsShow: !this.state.pendingIsShow });
     if (this.state.pendingIcon === "chevron-right") {
@@ -75,6 +88,9 @@ export default class WorkerPage extends React.Component {
     }
   };
 
+  /*
+    Function to toggle authorized project list & icon
+  */
   setReviewedIsShow = () => {
     this.setState({ reviewedIsShow: !this.state.reviewedIsShow });
     if (this.state.reviewedIcon === "chevron-right") {
@@ -84,6 +100,9 @@ export default class WorkerPage extends React.Component {
     }
   };
 
+  /*
+    Function to toggle pending information project list & icon
+  */
   setInfoIsShow = () => {
     this.setState({ infoIsShow: !this.state.infoIsShow });
     if (this.state.infoIcon === "chevron-right") {
@@ -93,17 +112,23 @@ export default class WorkerPage extends React.Component {
     }
   };
 
+  /*
+    Page rendering content
+  */
   render() {
+    // Pass props
     const { history } = this.props;
     return (
       <SafeAreaView style={styles.container}>
+        {/* View of Header */}
         <HeaderSecond history={history} />
-        {/* pending projects */}
+        {/* View of the main body */}
         <View style={{ height: "100%" }}>
           <View style={{ margin: 20 }}>
             <Text style={{ fontSize: 35, color: "grey", paddingBottom: 30 }}>
               Project list
             </Text>
+            {/* View of New Uploaded Projects */}
             <DataTable>
               <DataTable.Header>
                 <DataTable.Title>New Uploaded Projects</DataTable.Title>
@@ -155,7 +180,7 @@ export default class WorkerPage extends React.Component {
               )}
             </DataTable>
           </View>
-
+          {/* View of Pending information Projects */}
           <View style={{ margin: 20 }}>
             <DataTable>
               <DataTable.Header>
@@ -196,7 +221,7 @@ export default class WorkerPage extends React.Component {
             </DataTable>
           </View>
 
-          {/* pending projects */}
+          {/* View of Authorized Projects */}
           <View style={{ margin: 20 }}>
             <DataTable>
               <DataTable.Header>
@@ -250,6 +275,7 @@ export default class WorkerPage extends React.Component {
             </DataTable>
           </View>
         </View>
+        {/* Import Footer */}
         <Footer />
       </SafeAreaView>
     );

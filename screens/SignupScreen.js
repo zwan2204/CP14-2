@@ -10,6 +10,10 @@ import { DEPLOYEDHOST, LOCALHOST } from "../routes/urlMap";
 import Header from "../screens/Header";
 import Footer from "../screens/Footer";
 
+/*
+  This is the Signup page
+  Users in the system should choose their role first and then filling out the registration
+*/
 export default class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -26,10 +30,16 @@ export default class SignupScreen extends React.Component {
     };
   }
 
+  /*
+    Function to set role
+  */
   pickRole = role => {
     this.setState({ role: role });
   };
 
+  /*
+    Function to register in the database
+  */
   userSignup = () => {
     const { history } = this.props;
     let day = parseInt(this.state.dob.substring(0, 2));
@@ -91,8 +101,12 @@ export default class SignupScreen extends React.Component {
     }
   };
 
+  /*
+    Page rendering content
+  */
   render() {
     const { history } = this.props;
+    {/* Rendering for participant role */ }
     if (this.state.role == "Participant") {
       return (
         <SafeAreaView style={styles.container}>
@@ -248,6 +262,7 @@ export default class SignupScreen extends React.Component {
         </SafeAreaView>
       );
     } else {
+      {/* Rendering for non participant role */ }
       return (
         <SafeAreaView style={styles.container}>
           <Header />
