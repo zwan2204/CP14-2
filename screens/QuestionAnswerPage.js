@@ -325,7 +325,7 @@ const QuestionAnswerPage = (props) => {
                         <TouchableOpacity
                             onPress={() => {
                                 handleClickLeft(item), 
-                                setSelectedId(item.question + item.stateYes)}}
+                                setSelectedId(item.ID + item.stateYes)}}
                             style={
                                 item.stateYes ? styles.hightlightTickBox : styles.tickBox}
                         >
@@ -335,7 +335,7 @@ const QuestionAnswerPage = (props) => {
                         <TouchableOpacity 
                             onPress={() => {
                                 handleClickRight(item), 
-                                setSelectedId(item.question + item.stateYes)}} 
+                                setSelectedId(item.ID + item.stateYes)}} 
                             style={
                                 item.stateNo ? styles.hightlightTickBox : styles.tickBox}
                         >
@@ -381,7 +381,7 @@ const QuestionAnswerPage = (props) => {
             </View> 
             :
             //normal content of the questionnaire
-            <View style={{height: "80%"}}>
+            <View style={{flex:1}}>
                 {handDevice ?
                 //if user is in the step 4 and a healthcare worker is required
                 <View style={styles.handDeviceContinaer}>
@@ -424,7 +424,7 @@ const QuestionAnswerPage = (props) => {
                 {/* the user is in other sections */}
                 {/* title information */}
                 <View style={{flexDirection: "row", height:"12%"}}>
-                    <Text style={styles.titleInfoP1} onPress={()=>console.log(currentQuestions, eligibleProjects)}>
+                    <Text style={styles.titleInfoP1}>
                         Questionnaire
                     </Text>
                     <Text style={styles.titleInfoP2}>
@@ -638,7 +638,7 @@ const QuestionAnswerPage = (props) => {
                                             history),
                                         updateUserInfo({
                                             userInfo}, 
-                                            userID), 
+                                            userID),
                                         stepForward(true)) : null,
                                     //check questions are completed or not
                                     (step != 0 && checkCompleteAllQuestions()) ? 

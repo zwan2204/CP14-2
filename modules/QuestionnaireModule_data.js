@@ -39,8 +39,7 @@ export const getProjects = (
                         (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
                         (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
                         (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                        userAge >= ageRange[0] ||
-                        userAge <= ageRange[1]
+                        (userAge >= ageRange[0] && userAge <= ageRange[1])
                     ) {
                         //compare user's information and project requirements.
                         if (
@@ -77,8 +76,7 @@ export const getProjects = (
                     (isNaN(ageRange[0]) && isNaN(ageRange[1])) ||
                     (isNaN(ageRange[0]) && userAge <= ageRange[1]) ||
                     (userAge >= ageRange[0] && isNaN(ageRange[1])) ||
-                    userAge >= ageRange[0] ||
-                    userAge <= ageRange[1]
+                    (userAge >= ageRange[0] && userAge <= ageRange[1])
                 ) {
                     //filter projects based on user's selections.
                     if (
@@ -120,7 +118,7 @@ export const getProjects = (
                 });
             }
         },
-            error => {
+        error => {
             console.log(error);
         }
     );
@@ -163,7 +161,6 @@ export function washQuestions(questions, eligibleProjects) {
       filteredQuestions.push(item);
     }
   });
-  console.log(filteredQuestions);
   return filteredQuestions;
 }
 
@@ -199,7 +196,7 @@ export const getQuestions = ({
                 exist = true;
               }
             }
-          } else if (!question.general) {
+          } else if (!question.general && !question.worker) {
             for (let i = 0; i < specificQuestions.length; i++) {
               if (question.name == specificQuestions[i]["question"]) {
                 if (question.inclusion) {
@@ -229,7 +226,6 @@ export const getQuestions = ({
         }
         if (!exist && question.general) {
           //create a new question adding to the general list
-          console.log("aaa" + question.name);
           filter[question.name] = 1;
           tempQuestion["ID"] = question._id;
           tempQuestion["question"] = question.name;
@@ -383,6 +379,5 @@ const getAge = dateString => {
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
-  console.log(age);
   return age;
 };
